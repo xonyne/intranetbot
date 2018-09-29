@@ -3353,11 +3353,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\gast.xonyne-PC\\source\\repos\\AzureADConsoleApplication\\AzureADConsoleApplication\\AzureADConsoleApplication.csproj",
+      "projectUniqueName": "C:\\Users\\gast.xonyne-PC\\Source\\Repos\\intranetbot\\AzureADConsoleApplication\\AzureADConsoleApplication\\AzureADConsoleApplication.csproj",
       "projectName": "AzureADConsoleApplication",
-      "projectPath": "C:\\Users\\gast.xonyne-PC\\source\\repos\\AzureADConsoleApplication\\AzureADConsoleApplication\\AzureADConsoleApplication.csproj",
+      "projectPath": "C:\\Users\\gast.xonyne-PC\\Source\\Repos\\intranetbot\\AzureADConsoleApplication\\AzureADConsoleApplication\\AzureADConsoleApplication.csproj",
       "packagesPath": "C:\\Users\\gast.xonyne-PC\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\gast.xonyne-PC\\source\\repos\\AzureADConsoleApplication\\AzureADConsoleApplication\\obj\\",
+      "outputPath": "C:\\Users\\gast.xonyne-PC\\Source\\Repos\\intranetbot\\AzureADConsoleApplication\\AzureADConsoleApplication\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
