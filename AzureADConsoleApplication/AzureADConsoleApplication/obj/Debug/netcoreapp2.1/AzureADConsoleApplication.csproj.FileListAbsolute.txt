@@ -1,0 +1,11 @@
+C:\Users\gast.xonyne-PC\source\repos\AzureADConsoleApplication\AzureADConsoleApplication\bin\Debug\netcoreapp2.1\AzureADConsoleApplication.deps.json
+C:\Users\gast.xonyne-PC\source\repos\AzureADConsoleApplication\AzureADConsoleApplication\bin\Debug\netcoreapp2.1\AzureADConsoleApplication.runtimeconfig.json
+C:\Users\gast.xonyne-PC\source\repos\AzureADConsoleApplication\AzureADConsoleApplication\bin\Debug\netcoreapp2.1\AzureADConsoleApplication.runtimeconfig.dev.json
+C:\Users\gast.xonyne-PC\source\repos\AzureADConsoleApplication\AzureADConsoleApplication\bin\Debug\netcoreapp2.1\AzureADConsoleApplication.dll
+C:\Users\gast.xonyne-PC\source\repos\AzureADConsoleApplication\AzureADConsoleApplication\bin\Debug\netcoreapp2.1\AzureADConsoleApplication.pdb
+C:\Users\gast.xonyne-PC\source\repos\AzureADConsoleApplication\AzureADConsoleApplication\obj\Debug\netcoreapp2.1\AzureADConsoleApplication.csprojAssemblyReference.cache
+C:\Users\gast.xonyne-PC\source\repos\AzureADConsoleApplication\AzureADConsoleApplication\obj\Debug\netcoreapp2.1\AzureADConsoleApplication.csproj.CoreCompileInputs.cache
+C:\Users\gast.xonyne-PC\source\repos\AzureADConsoleApplication\AzureADConsoleApplication\obj\Debug\netcoreapp2.1\AzureADConsoleApplication.AssemblyInfoInputs.cache
+C:\Users\gast.xonyne-PC\source\repos\AzureADConsoleApplication\AzureADConsoleApplication\obj\Debug\netcoreapp2.1\AzureADConsoleApplication.AssemblyInfo.cs
+C:\Users\gast.xonyne-PC\source\repos\AzureADConsoleApplication\AzureADConsoleApplication\obj\Debug\netcoreapp2.1\AzureADConsoleApplication.dll
+C:\Users\gast.xonyne-PC\source\repos\AzureADConsoleApplication\AzureADConsoleApplication\obj\Debug\netcoreapp2.1\AzureADConsoleApplication.pdb
