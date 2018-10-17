@@ -28,12 +28,10 @@ namespace MicrosoftGraphAspNetCoreConnectSample.Controllers
             _graphSdkHelper = graphSdkHelper;
         }
 
-
-
         [AllowAnonymous]
         // Load user's profile.
         // Get events in all the current user's mail folders.
-        public async Task<List<ResultsItem>> Index()
+        public async Task<IActionResult> Calendar()
         {
             List<ResultsItem> items = new List<ResultsItem>();
 
@@ -42,28 +40,15 @@ namespace MicrosoftGraphAspNetCoreConnectSample.Controllers
                 // Get user's id for token cache.
                 var identifier = User.FindFirst(Startup.ObjectIdentifierType)?.Value;
 
-            // Initialize the GraphServiceClient.
-            var graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
+                // Initialize the GraphServiceClient.
+                var graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
 
+                // Get events.
+                IUserEventsCollectionPage events = await graphClient.Me.Events.Request().GetAsync();
 
-
-            // Get events.
-            IUserEventsCollectionPage events = await graphClient.Me.Events.Request().GetAsync();
-
-            if (events?.Count > 0)
-            {
-                foreach (Event current in events)
-                {
-                    items.Add(new ResultsItem
-                    {
-                        Display = current.Subject,
-                        Id = current.Id
-                    });
-                }
+                items = await GraphService.getCalendarEvents(graphClient);
             }
-            
-            }
-            return items;
+            return View(items);
         }
     }
 }

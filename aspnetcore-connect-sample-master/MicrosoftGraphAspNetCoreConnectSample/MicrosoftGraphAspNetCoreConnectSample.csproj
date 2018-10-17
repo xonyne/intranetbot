@@ -23,7 +23,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Content Update="Views\Home\Calendar.cshtml">
+    <Content Update="Views\Calendar\Calendar.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>

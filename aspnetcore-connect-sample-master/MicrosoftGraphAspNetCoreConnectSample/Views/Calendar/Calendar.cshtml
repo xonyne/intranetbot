@@ -1,0 +1,45 @@
+﻿@model List<MicrosoftGraphAspNetCoreConnectSample.Models.ResultsItem>;
+
+@{
+    ViewData["Title"] = "My Calendar Events";
+}
+<h2>My Calendar Events</h2>
+@if (!User.Identity.IsAuthenticated)
+{
+    <br />
+    <p>Choose <b>Sign in</b> at the top of the page and sign in with your work or school account.</p>
+}
+@if (User.Identity.IsAuthenticated)
+{
+    <table style="border: 1px solid green;">
+        <tr>
+            <th style="border: 1px solid green; padding: 5px;">Subject</th>
+            <th style="border: 1px solid green; padding: 5px;">Location</th>
+            <th style="border: 1px solid green; padding: 5px;">Start</th>
+            <th style="border: 1px solid green; padding: 5px;">End</th>
+            <th style="border: 1px solid green; padding: 5px;">Attendees</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+        <tr style="border: 1px solid green;">
+            <td style="border: 1px solid green; padding: 5px;">
+                @Html.DisplayFor(modelItem => item.Subject)<br />
+            </td>
+            <td style="border: 1px solid green;padding: 5px;">
+                @Html.DisplayFor(modelItem => item.Location)<br />
+            </td>
+            <td style="border: 1px solid green;padding: 5px;">
+                @Html.DisplayFor(modelItem => item.Start)<br />
+            </td>
+            <td style="border: 1px solid green;padding: 5px;">
+                @Html.DisplayFor(modelItem => item.End)<br />
+            </td>
+            <td style="border: 1px solid green;padding: 5px;">
+                @Html.DisplayFor(modelItem => item.Attendees)<br />
+            </td>
+        </tr>
+        }
+    </table>
+
+    
+}

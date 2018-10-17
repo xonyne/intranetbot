@@ -13,6 +13,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using MicrosoftGraphAspNetCoreConnectSample.Models;
+using System.Text;
 
 namespace MicrosoftGraphAspNetCoreConnectSample.Helpers
 {
@@ -245,10 +247,64 @@ namespace MicrosoftGraphAspNetCoreConnectSample.Helpers
             await graphClient.Me.SendMail(email, true).Request().PostAsync();
         }
 
+        // Load user's profile.
         // Get events in all the current user's mail folders.
-        public static async Task<string> GetMyEvents(GraphServiceClient graphClient)
-        { return ""; }
+        public static async Task<List<ResultsItem>> getCalendarEvents(GraphServiceClient graphClient)
+        {
+            List<ResultsItem> items = new List<ResultsItem>();
+                // Get events.
+                IUserEventsCollectionPage events = await graphClient.Me.Events.Request().GetAsync();
+
+                if (events?.Count > 0)
+                {
+                    foreach (Event current in events)
+                    {
+                    items.Add(new ResultsItem
+                    {
+                        Id = current.Id,
+                        Subject = current.Subject,
+                        Attendees = getAttendeeEmailAddressesAsString(current.Attendees,", "),
+                        Start = current.Start.DateTime,
+                        End = current.End.DateTime,
+                        Location = getAddressFromLocation(current.Location)
+                    });
+                    }
+                }
+
+            return items;
+
+        }
+
+        private static String getAddressFromLocation(Location location)
+        {
+            String street = String.IsNullOrEmpty(location.Address.Street) ? "" : location.Address.Street;
+            String postalCode = String.IsNullOrEmpty(location.Address.PostalCode) ? "" : ", " + location.Address.PostalCode + "-";
+            String city = String.IsNullOrEmpty(location.Address.City) ? "" : location.Address.City;
+            return street + postalCode + city;
+        }
+
+        private static String getAttendeeEmailAddressesAsString(this IEnumerable<Attendee> collection, String seperator)
+        {
+            using (var enumerator = collection.GetEnumerator())
+            {
+                if (!enumerator.MoveNext())
+                {
+                    return String.Empty;
+                }
+
+                var builder = new StringBuilder().Append(enumerator.Current.EmailAddress.Address);
+
+                while (enumerator.MoveNext())
+                {
+                    builder.Append(seperator).Append(enumerator.Current.EmailAddress.Address);
+                }
+
+                return builder.ToString();
+            }
+        }
 
     }
-        }
+
+    }
+ 
  
