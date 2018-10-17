@@ -278,7 +278,7 @@ namespace MicrosoftGraphAspNetCoreConnectSample.Helpers
         private static String getAddressFromLocation(Location location)
         {
             String street = String.IsNullOrEmpty(location.Address.Street) ? "" : location.Address.Street;
-            String postalCode = String.IsNullOrEmpty(location.Address.PostalCode) ? "" : ", " + location.Address.PostalCode + "-";
+            String postalCode = String.IsNullOrEmpty(location.Address.PostalCode) ? "" : ", " + location.Address.PostalCode + " ";
             String city = String.IsNullOrEmpty(location.Address.City) ? "" : location.Address.City;
             return street + postalCode + city;
         }
