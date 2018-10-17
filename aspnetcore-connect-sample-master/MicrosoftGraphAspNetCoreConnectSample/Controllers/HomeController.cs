@@ -96,6 +96,12 @@ namespace MicrosoftGraphAspNetCoreConnectSample.Controllers
         }
 
         [AllowAnonymous]
+        public IActionResult Calendar()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
         public IActionResult Error()
         {
             return View();

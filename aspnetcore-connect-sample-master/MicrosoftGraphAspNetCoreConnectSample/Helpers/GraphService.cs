@@ -247,9 +247,8 @@ namespace MicrosoftGraphAspNetCoreConnectSample.Helpers
 
         // Get events in all the current user's mail folders.
         public static async Task<string> GetMyEvents(GraphServiceClient graphClient)
-        {
-            return "";
-        }
+        { return ""; }
+
     }
         }
  

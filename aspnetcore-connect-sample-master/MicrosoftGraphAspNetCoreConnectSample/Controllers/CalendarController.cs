@@ -15,13 +15,13 @@ using MicrosoftGraphAspNetCoreConnectSample.Models;
 
 namespace MicrosoftGraphAspNetCoreConnectSample.Controllers
 {
-    public class EventsController : Controller
+    public class CalendarController : Controller
     {
         private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _env;
         private readonly IGraphSdkHelper _graphSdkHelper;
 
-        public EventsController(IConfiguration configuration, IHostingEnvironment hostingEnvironment, IGraphSdkHelper graphSdkHelper)
+        public CalendarController(IConfiguration configuration, IHostingEnvironment hostingEnvironment, IGraphSdkHelper graphSdkHelper)
         {
             _configuration = configuration;
             _env = hostingEnvironment;
@@ -33,9 +33,19 @@ namespace MicrosoftGraphAspNetCoreConnectSample.Controllers
         [AllowAnonymous]
         // Load user's profile.
         // Get events in all the current user's mail folders.
-        public async Task<List<ResultsItem>> GetMyEvents(GraphServiceClient graphClient)
+        public async Task<List<ResultsItem>> Index()
         {
             List<ResultsItem> items = new List<ResultsItem>();
+
+            if (User.Identity.IsAuthenticated)
+            {
+                // Get user's id for token cache.
+                var identifier = User.FindFirst(Startup.ObjectIdentifierType)?.Value;
+
+            // Initialize the GraphServiceClient.
+            var graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
+
+
 
             // Get events.
             IUserEventsCollectionPage events = await graphClient.Me.Events.Request().GetAsync();
@@ -50,6 +60,8 @@ namespace MicrosoftGraphAspNetCoreConnectSample.Controllers
                         Id = current.Id
                     });
                 }
+            }
+            
             }
             return items;
         }

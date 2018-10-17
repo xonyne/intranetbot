@@ -11,5 +11,6 @@
 }
 @if (User.Identity.IsAuthenticated)
 {
+    <p>Calendar events</p>
     @Html.Partial("_ResultsPartial")
 }
