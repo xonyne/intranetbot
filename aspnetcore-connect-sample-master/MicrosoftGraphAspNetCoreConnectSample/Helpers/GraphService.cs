@@ -12,6 +12,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace MicrosoftGraphAspNetCoreConnectSample.Helpers
 {
@@ -243,5 +244,12 @@ namespace MicrosoftGraphAspNetCoreConnectSample.Helpers
 
             await graphClient.Me.SendMail(email, true).Request().PostAsync();
         }
+
+        // Get events in all the current user's mail folders.
+        public static async Task<string> GetMyEvents(GraphServiceClient graphClient)
+        {
+            return "";
+        }
     }
-}
+        }
+ 

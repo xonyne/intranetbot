@@ -1,0 +1,15 @@
+﻿@model MicrosoftGraphAspNetCoreConnectSample.Models.ResultsViewModel;
+
+@{
+    ViewData["Title"] = "My Events";
+}
+<h2>My Events</h2>
+@if (!User.Identity.IsAuthenticated)
+{
+    <br />
+    <p>Choose <b>Sign in</b> at the top of the page and sign in with your work or school account.</p>
+}
+@if (User.Identity.IsAuthenticated)
+{
+    @Html.Partial("_ResultsPartial")
+}
