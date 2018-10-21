@@ -13,10 +13,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using MicrosoftGraphAspNetCoreConnectSample.Models;
+using PersonalIntranetBot.Models;
 using System.Text;
 
-namespace MicrosoftGraphAspNetCoreConnectSample.Helpers
+namespace PersonalIntranetBot.Helpers
 {
     public static class GraphService
     {

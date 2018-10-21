@@ -1,9 +1,11 @@
-﻿@model List<MicrosoftGraphAspNetCoreConnectSample.Models.ResultsItem>;
+﻿@model List<PersonalIntranetBot.Models.ResultsItem>;
 
 @{
-    ViewData["Title"] = "My Calendar Events";
+    ViewData["Title"] = "My calendar events";
 }
-<h2>My Calendar Events</h2>
+
+<h2>My calendar events</h2>
+
 @if (!User.Identity.IsAuthenticated)
 {
     <br />

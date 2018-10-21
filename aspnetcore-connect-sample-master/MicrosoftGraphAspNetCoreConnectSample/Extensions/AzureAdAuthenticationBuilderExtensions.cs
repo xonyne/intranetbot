@@ -7,10 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
-using MicrosoftGraphAspNetCoreConnectSample.Helpers;
+using PersonalIntranetBot.Helpers;
 using Microsoft.Identity.Client;
 
-namespace MicrosoftGraphAspNetCoreConnectSample.Extensions
+namespace PersonalIntranetBot.Extensions
 {
     public static class AzureAdAuthenticationBuilderExtensions
     {        

@@ -1,4 +1,4 @@
-﻿namespace MicrosoftGraphAspNetCoreConnectSample.Extensions
+﻿namespace PersonalIntranetBot.Extensions
 {
     public class AzureAdOptions
     {

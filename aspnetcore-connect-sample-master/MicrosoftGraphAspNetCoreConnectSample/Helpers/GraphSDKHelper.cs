@@ -6,7 +6,7 @@
 using System.Net.Http.Headers;
 using Microsoft.Graph;
 
-namespace MicrosoftGraphAspNetCoreConnectSample.Helpers
+namespace PersonalIntranetBot.Helpers
 {
     public class GraphSdkHelper : IGraphSdkHelper
     {

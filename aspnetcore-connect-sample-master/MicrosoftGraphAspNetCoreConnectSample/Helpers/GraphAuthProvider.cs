@@ -10,9 +10,9 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Identity.Client;
 using Microsoft.Graph;
 using System.Linq;
-using MicrosoftGraphAspNetCoreConnectSample.Extensions;
+using PersonalIntranetBot.Extensions;
 
-namespace MicrosoftGraphAspNetCoreConnectSample.Helpers
+namespace PersonalIntranetBot.Helpers
 {
     public class GraphAuthProvider : IGraphAuthProvider
     {

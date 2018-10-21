@@ -3,7 +3,7 @@
 *  See LICENSE in the source repository root for complete license information. 
 */
 
-namespace MicrosoftGraphAspNetCoreConnectSample.Models
+namespace PersonalIntranetBot.Models
 {
     internal class EventDTO
     {

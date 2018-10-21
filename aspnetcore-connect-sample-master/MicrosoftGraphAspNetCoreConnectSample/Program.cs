@@ -6,7 +6,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore;
 
-namespace MicrosoftGraphAspNetCoreConnectSample
+namespace PersonalIntranetBot
 {
     public class Program
     {

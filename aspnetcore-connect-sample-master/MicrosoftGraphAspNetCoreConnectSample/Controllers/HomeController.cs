@@ -6,12 +6,12 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MicrosoftGraphAspNetCoreConnectSample.Helpers;
+using PersonalIntranetBot.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
 using Microsoft.AspNetCore.Hosting;
 
-namespace MicrosoftGraphAspNetCoreConnectSample.Controllers
+namespace PersonalIntranetBot.Controllers
 {
     public class HomeController : Controller
     {

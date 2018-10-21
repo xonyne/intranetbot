@@ -10,10 +10,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MicrosoftGraphAspNetCoreConnectSample.Extensions;
-using MicrosoftGraphAspNetCoreConnectSample.Helpers;
+using PersonalIntranetBot.Extensions;
+using PersonalIntranetBot.Helpers;
 
-namespace MicrosoftGraphAspNetCoreConnectSample
+namespace PersonalIntranetBot
 {
     public class Startup
     {

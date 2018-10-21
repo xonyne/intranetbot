@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace MicrosoftGraphAspNetCoreConnectSample.Models
+namespace PersonalIntranetBot.Models
 {
 
     // An entity, such as a user, group, or message.
