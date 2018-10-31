@@ -263,13 +263,16 @@ namespace PersonalIntranetBot.Helpers
                     {
                         Id = current.Id,
                         Subject = current.Subject,
-                        Attendees = getAttendeeEmailAddressesAsString(current.Attendees,", "),
-                        Start = current.Start.DateTime,
-                        End = current.End.DateTime,
-                        Location = getAddressFromLocation(current.Location)
+                        Attendees = getAttendeeEmailAddressesAsString(current.Attendees, ", "),
+                        Start = DateTime.Parse(current.Start.DateTime),
+                        End = DateTime.Parse(current.End.DateTime),
+                        Location = getAddressFromLocation(current.Location),
+                        GoogleMapsURL = getGoogleMapsURL(getAddressFromLocation(current.Location)),
+                        LinkedIdProfileURLs = getLinkedInProfileURLs(getAttendeeEmailAddressesAsString(current.Attendees, ", ")),
                     });
                     }
                 }
+                BingWebSearchService.getSearchResultsFromQueryString("Till Jakob isolutions");
 
             return items;
 
@@ -301,6 +304,32 @@ namespace PersonalIntranetBot.Helpers
 
                 return builder.ToString();
             }
+        }
+
+        private static String getGoogleMapsURL(String destination)
+        {
+            String baseURL = "https://www.google.com/maps/dir/?api=1&";
+            String destinationEncoded = "destination=" + System.Uri.EscapeDataString(destination) + "&";
+            String travelmode = "travelmode=transit";
+            return baseURL + destinationEncoded + travelmode;
+        }
+
+        private static Dictionary<string,string> getLinkedInProfileURLs(String emailAddresses)
+        {
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            string[] arrAddresses = emailAddresses.Split(',');
+            foreach (string address in arrAddresses)
+            {
+                if (!String.IsNullOrEmpty(address))
+                {
+                // get first part of email address and replace . by space (split first and last name)
+                string name = address.Split("@")[0].Replace(".", " ");
+                // get second part of email address and get only company name
+                string company = address.Split("@")[1].Split(".")[0];
+                results.Add(name, company);
+                }
+            }
+            return results;
         }
 
     }

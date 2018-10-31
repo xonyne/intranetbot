@@ -20,6 +20,8 @@
             <th style="border: 1px solid green; padding: 5px;">Start</th>
             <th style="border: 1px solid green; padding: 5px;">End</th>
             <th style="border: 1px solid green; padding: 5px;">Attendees</th>
+            <th style="border: 1px solid green; padding: 5px;">Travel information</th>
+            <th style="border: 1px solid green; padding: 5px;">LinkedIn Profile Information</th>
         </tr>
         @foreach (var item in Model)
         {
@@ -38,6 +40,17 @@
             </td>
             <td style="border: 1px solid green;padding: 5px;">
                 @Html.DisplayFor(modelItem => item.Attendees)<br />
+            </td>
+            <td style="border: 1px solid green;padding: 5px;">
+                <a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" target="_blank">Show me the way!</a><br />
+            </td>
+            <td style="border: 1px solid green;padding: 5px;">
+                @foreach (var linkedInItem in item.LinkedIdProfileURLs)
+                {
+                    @Html.DisplayFor(modelItem => linkedInItem.Key)
+                    @Html.DisplayFor(modelItem => linkedInItem.Value)
+                    <br />
+                }
             </td>
         </tr>
         }

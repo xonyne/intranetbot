@@ -84,24 +84,6 @@ namespace PersonalIntranetBot.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult About()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        public IActionResult Contact()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        public IActionResult Calendar()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
         public IActionResult Error()
         {
             return View();

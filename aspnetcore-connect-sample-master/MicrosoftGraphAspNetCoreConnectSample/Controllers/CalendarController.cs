@@ -12,6 +12,7 @@ using Microsoft.Graph;
 using Microsoft.AspNetCore.Hosting;
 using System.Collections.Generic;
 using PersonalIntranetBot.Models;
+using System;
 
 namespace PersonalIntranetBot.Controllers
 {
