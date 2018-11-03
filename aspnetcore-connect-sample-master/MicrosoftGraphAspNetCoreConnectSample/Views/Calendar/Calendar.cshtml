@@ -21,7 +21,7 @@
             <th style="border: 1px solid green; padding: 5px;">End</th>
             <th style="border: 1px solid green; padding: 5px;">Attendees</th>
             <th style="border: 1px solid green; padding: 5px;">Travel information</th>
-            <th style="border: 1px solid green; padding: 5px;">LinkedIn Profile Information</th>
+            <th style="border: 1px solid green; padding: 5px;">LinkedIn profile information</th>
         </tr>
         @foreach (var item in Model)
         {
@@ -45,12 +45,19 @@
                 <a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" target="_blank">Show me the way!</a><br />
             </td>
             <td style="border: 1px solid green;padding: 5px;">
-                @foreach (var linkedInItem in item.LinkedIdProfileURLs)
-                {
-                    @Html.DisplayFor(modelItem => linkedInItem.Key)
-                    @Html.DisplayFor(modelItem => linkedInItem.Value)
-                    <br />
-                }
+                <ul>
+                    @foreach (var linkedInItem in item.LinkedIdProfileURLs)
+                    {
+                        @if (linkedInItem.Value == "")
+                        {
+                            <li>No profile found for: @Html.DisplayFor(modelItem => linkedInItem.Key)</li>
+                        }
+                        else
+                        {
+                            <li><a href="@Html.DisplayFor(modelItem => linkedInItem.Value)" target="_blank">@Html.DisplayFor(modelItem => linkedInItem.Key)</a></li>
+                        }
+                    }
+                </ul>
             </td>
         </tr>
         }

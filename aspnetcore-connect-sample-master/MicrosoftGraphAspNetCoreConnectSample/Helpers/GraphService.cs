@@ -251,7 +251,7 @@ namespace PersonalIntranetBot.Helpers
         // Get events in all the current user's mail folders.
         public static async Task<List<ResultsItem>> getCalendarEvents(GraphServiceClient graphClient)
         {
-            List<ResultsItem> items = new List<ResultsItem>();
+                List<ResultsItem> items = new List<ResultsItem>();
                 // Get events.
                 IUserEventsCollectionPage events = await graphClient.Me.Events.Request().GetAsync();
 
@@ -263,7 +263,7 @@ namespace PersonalIntranetBot.Helpers
                     {
                         Id = current.Id,
                         Subject = current.Subject,
-                        Attendees = getAttendeeEmailAddressesAsString(current.Attendees, ", "),
+                        AttendeeEmailAddresses = getAttendeeEmailAddresses(getAttendeeEmailAddressesAsString(current.Attendees, ", ")),
                         Start = DateTime.Parse(current.Start.DateTime),
                         End = DateTime.Parse(current.End.DateTime),
                         Location = getAddressFromLocation(current.Location),
@@ -272,7 +272,6 @@ namespace PersonalIntranetBot.Helpers
                     });
                     }
                 }
-                BingWebSearchService.getSearchResultsFromQueryString("Till Jakob isolutions");
 
             return items;
 
@@ -280,10 +279,13 @@ namespace PersonalIntranetBot.Helpers
 
         private static String getAddressFromLocation(Location location)
         {
-            String street = String.IsNullOrEmpty(location.Address.Street) ? "" : location.Address.Street;
-            String postalCode = String.IsNullOrEmpty(location.Address.PostalCode) ? "" : ", " + location.Address.PostalCode + " ";
-            String city = String.IsNullOrEmpty(location.Address.City) ? "" : location.Address.City;
-            return street + postalCode + city;
+            if (location.Address != null) {
+                String street = String.IsNullOrEmpty(location.Address.Street) ? "" : location.Address.Street;
+                String postalCode = String.IsNullOrEmpty(location.Address.PostalCode) ? "" : ", " + location.Address.PostalCode + " ";
+                String city = String.IsNullOrEmpty(location.Address.City) ? "" : location.Address.City;
+                return street + postalCode + city;
+            }
+            return "";
         }
 
         private static String getAttendeeEmailAddressesAsString(this IEnumerable<Attendee> collection, String seperator)
@@ -322,15 +324,24 @@ namespace PersonalIntranetBot.Helpers
             {
                 if (!String.IsNullOrEmpty(address))
                 {
-                // get first part of email address and replace . by space (split first and last name)
-                string name = address.Split("@")[0].Replace(".", " ");
-                // get second part of email address and get only company name
-                string company = address.Split("@")[1].Split(".")[0];
-                results.Add(name, company);
+                    // get first part of email address and replace . by space (split first and last name)
+                    string name = address.Split("@")[0].Replace(".", " ");
+                    // get second part of email address and get only company name
+                    string company = address.Split("@")[1].Split(".")[0];
+                    string linkedInProfileURL = BingWebSearchService.getLinkedInProfileURLFromNameAndCompany(name, company);
+                    results.Add(name + "(" + company + ")", linkedInProfileURL);
                 }
             }
             return results;
         }
+
+        private static List<string> getAttendeeEmailAddresses(String emailAddresses)
+        {
+            return new List<string>();
+        }
+
+
+
 
     }
 

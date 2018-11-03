@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using PersonalIntranetBot.Models;
 using System.Text;
 using System.Net;
-
+using static PersonalIntranetBot.Models.BingSearchResults;
 
 namespace PersonalIntranetBot.Helpers
 {
@@ -30,33 +30,12 @@ namespace PersonalIntranetBot.Helpers
          * dashboard.
          */
         const string uriBase = "https://api.cognitive.microsoft.com/bing/v7.0/search";
-        
+
         // Returns search results with headers.
         struct SearchResult
         {
             public String jsonResult;
             public Dictionary<String, String> relevantHeaders;
-        }
-
-        public static void getSearchResultsFromQueryString(String queryString)
-        {
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
-            if (accessKey.Length == 32)
-            {
-                Console.WriteLine("Searching the Web for: " + queryString);
-                SearchResult result = BingWebSearch(queryString);
-                Console.WriteLine("\nRelevant HTTP Headers:\n");
-                foreach (var header in result.relevantHeaders)
-                    Console.WriteLine(header.Key + ": " + header.Value);
-
-                Console.WriteLine("\nJSON Response:\n");
-                Console.WriteLine(JsonPrettyPrint(result.jsonResult));
-            }
-            else
-            {
-                Console.WriteLine("Invalid Bing Search API subscription key!");
-                Console.WriteLine("Please paste yours into the source code.");
-            }
         }
 
         /// <summary>
@@ -89,77 +68,53 @@ namespace PersonalIntranetBot.Helpers
             return searchResult;
         }
 
-        /// <summary>
-        /// Formats the JSON string by adding line breaks and indents.
-        /// </summary>
-        /// <param name="json">The raw JSON string.</param>
-        /// <returns>The formatted JSON string.</returns>
-        static string JsonPrettyPrint(string json)
+        public static string getLinkedInProfileURLFromNameAndCompany(string name, string company)
         {
-            if (string.IsNullOrEmpty(json))
-                return string.Empty;
-
-            json = json.Replace(Environment.NewLine, "").Replace("\t", "");
-
-            StringBuilder sb = new StringBuilder();
-            bool quote = false;
-            bool ignore = false;
-            char last = ' ';
-            int offset = 0;
-            int indentLength = 2;
-
-            foreach (char ch in json)
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            if (accessKey.Length == 32)
             {
-                switch (ch)
-                {
-                    case '"':
-                        if (!ignore) quote = !quote;
-                        break;
-                    case '\\':
-                        if (quote && last != '\\') ignore = true;
-                        break;
-                }
+                // add linked
+                string linkedInSearchString = "linkedin";
+                string searchString = String.Join(" ", new[] { name, company, linkedInSearchString });
+                Console.WriteLine("Searching the Web for: " + searchString);
+                SearchResult result = BingWebSearch(searchString);
+                Console.WriteLine("\nRelevant HTTP Headers:\n");
+                foreach (var header in result.relevantHeaders)
+                    Console.WriteLine(header.Key + ": " + header.Value);
 
-                if (quote)
+                Console.WriteLine("\nJSON Response:\n");
+                BingSearchResults bingSearchResult = new BingSearchResults(result.jsonResult);
+                
+                foreach (BingSearchResultItem item in bingSearchResult.results)
                 {
-                    sb.Append(ch);
-                    if (last == '\\' && ignore) ignore = false;
+                    Console.WriteLine(" *** Bing Web Search Result ***");
+                    Console.WriteLine("Id: " + item.Id);
+                    Console.WriteLine("Name: " + item.Description);
+                    Console.WriteLine("URL: " + item.URL);
                 }
-                else
-                {
-                    switch (ch)
-                    {
-                        case '{':
-                        case '[':
-                            sb.Append(ch);
-                            sb.Append(Environment.NewLine);
-                            sb.Append(new string(' ', ++offset * indentLength));
-                            break;
-                        case ']':
-                        case '}':
-                            sb.Append(Environment.NewLine);
-                            sb.Append(new string(' ', --offset * indentLength));
-                            sb.Append(ch);
-                            break;
-                        case ',':
-                            sb.Append(ch);
-                            sb.Append(Environment.NewLine);
-                            sb.Append(new string(' ', offset * indentLength));
-                            break;
-                        case ':':
-                            sb.Append(ch);
-                            sb.Append(' ');
-                            break;
-                        default:
-                            if (quote || ch != ' ') sb.Append(ch);
-                            break;
-                    }
-                }
-                last = ch;
+                
+                return findLinkedInProfileURLFromBingSearchResults(bingSearchResult, name);
             }
-            return sb.ToString().Trim();
+            else
+            {
+                Console.WriteLine("Invalid Bing Search API subscription key!");
+                Console.WriteLine("Please paste yours into the source code.");
+            }
+            return "";
         }
 
+        static string findLinkedInProfileURLFromBingSearchResults(BingSearchResults searchResult, String personName) {
+            foreach (BingSearchResultItem item in searchResult.results) {
+                // we assume for now that all descriptions with this string in it refer to a profile page
+                string linkedInProfileSearchString = "/in/".ToLower();
+                string personNameSearchString = personName.Replace(" ", "-").ToLower();
+                string searchResultURL = item.URL.ToLower();
+                if (searchResultURL.Contains(personNameSearchString) && searchResultURL.Contains(linkedInProfileSearchString)) {
+                    return item.URL;
+                }
+            }
+            return "";
+        }
 
     }
 }
