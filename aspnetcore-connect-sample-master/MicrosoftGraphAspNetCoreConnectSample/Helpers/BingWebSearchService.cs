@@ -107,7 +107,7 @@ namespace PersonalIntranetBot.Helpers
             foreach (BingSearchResultItem item in searchResult.results) {
                 // we assume for now that all descriptions with this string in it refer to a profile page
                 string linkedInProfileSearchString = "/in/".ToLower();
-                string personNameSearchString = personName.Replace(" ", "-").ToLower();
+                string personNameSearchString = personName.Trim().Replace(" ", "-").ToLower();
                 string searchResultURL = item.URL.ToLower();
                 if (searchResultURL.Contains(personNameSearchString) && searchResultURL.Contains(linkedInProfileSearchString)) {
                     return item.URL;

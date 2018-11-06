@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using PersonalIntranetBot.Models;
 using System.Text;
+using System.Threading;
 
 namespace PersonalIntranetBot.Helpers
 {
@@ -263,7 +264,7 @@ namespace PersonalIntranetBot.Helpers
                     {
                         Id = current.Id,
                         Subject = current.Subject,
-                        AttendeeEmailAddresses = getAttendeeEmailAddresses(getAttendeeEmailAddressesAsString(current.Attendees, ", ")),
+                        AttendeeEmailAddresses = getAttendeeEmailAddressesAsString(current.Attendees, ", "),
                         Start = DateTime.Parse(current.Start.DateTime),
                         End = DateTime.Parse(current.End.DateTime),
                         Location = getAddressFromLocation(current.Location),
@@ -329,6 +330,8 @@ namespace PersonalIntranetBot.Helpers
                     // get second part of email address and get only company name
                     string company = address.Split("@")[1].Split(".")[0];
                     string linkedInProfileURL = BingWebSearchService.getLinkedInProfileURLFromNameAndCompany(name, company);
+                    // artificial slow down, because Bing does not allow more than 5 requests per second.
+                    Thread.Sleep(500);
                     results.Add(name + "(" + company + ")", linkedInProfileURL);
                 }
             }
