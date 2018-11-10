@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersonalIntranetBot", "MicrosoftGraphAspNetCoreConnectSample\PersonalIntranetBot.csproj", "{8CFC9CD3-FFB9-4EED-8734-4678333D41C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalIntranetBot.UnitTests", "PersonalIntranetBot.UnitTests\PersonalIntranetBot.UnitTests.csproj", "{79CF9A3F-CE8D-4E3F-AD09-07AA89591D5C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{8CFC9CD3-FFB9-4EED-8734-4678333D41C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CFC9CD3-FFB9-4EED-8734-4678333D41C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CFC9CD3-FFB9-4EED-8734-4678333D41C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79CF9A3F-CE8D-4E3F-AD09-07AA89591D5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79CF9A3F-CE8D-4E3F-AD09-07AA89591D5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79CF9A3F-CE8D-4E3F-AD09-07AA89591D5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79CF9A3F-CE8D-4E3F-AD09-07AA89591D5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

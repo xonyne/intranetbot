@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.Collections.Generic;
 using PersonalIntranetBot.Models;
 using System;
+using PersonalIntranetBot.Services;
 
 namespace PersonalIntranetBot.Controllers
 {
@@ -34,7 +35,7 @@ namespace PersonalIntranetBot.Controllers
         // Get events in all the current user's mail folders.
         public async Task<IActionResult> Calendar()
         {
-            List<ResultsItem> items = new List<ResultsItem>();
+            List<OutlookEventsViewModel> items = new List<OutlookEventsViewModel>();
 
             if (User.Identity.IsAuthenticated)
             {
@@ -47,7 +48,7 @@ namespace PersonalIntranetBot.Controllers
                 // Get events.
                 IUserEventsCollectionPage events = await graphClient.Me.Events.Request().GetAsync();
 
-                items = await GraphService.getCalendarEvents(graphClient);
+                items = await PersonalIntranetBotService.GetOutlookCalendarEvents(graphClient);
             }
             return View(items);
         }

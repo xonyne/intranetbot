@@ -248,104 +248,10 @@ namespace PersonalIntranetBot.Helpers
             await graphClient.Me.SendMail(email, true).Request().PostAsync();
         }
 
-        // Load user's profile.
-        // Get events in all the current user's mail folders.
-        public static async Task<List<ResultsItem>> getCalendarEvents(GraphServiceClient graphClient)
+        public static async Task<IUserEventsCollectionPage> GetCalendarEvents(GraphServiceClient graphClient)
         {
-                List<ResultsItem> items = new List<ResultsItem>();
-                // Get events.
-                IUserEventsCollectionPage events = await graphClient.Me.Events.Request().GetAsync();
-
-                if (events?.Count > 0)
-                {
-                    foreach (Event current in events)
-                    {
-                    items.Add(new ResultsItem
-                    {
-                        Id = current.Id,
-                        Subject = current.Subject,
-                        AttendeeEmailAddresses = getAttendeeEmailAddressesAsString(current.Attendees, ", "),
-                        Start = DateTime.Parse(current.Start.DateTime),
-                        End = DateTime.Parse(current.End.DateTime),
-                        Location = getAddressFromLocation(current.Location),
-                        GoogleMapsURL = getGoogleMapsURL(getAddressFromLocation(current.Location)),
-                        LinkedIdProfileURLs = getLinkedInProfileURLs(getAttendeeEmailAddressesAsString(current.Attendees, ", ")),
-                    });
-                    }
-                }
-
-            return items;
-
+            return await graphClient.Me.Events.Request().GetAsync();
         }
-
-        private static String getAddressFromLocation(Location location)
-        {
-            if (location.Address != null) {
-                String street = String.IsNullOrEmpty(location.Address.Street) ? "" : location.Address.Street;
-                String postalCode = String.IsNullOrEmpty(location.Address.PostalCode) ? "" : ", " + location.Address.PostalCode + " ";
-                String city = String.IsNullOrEmpty(location.Address.City) ? "" : location.Address.City;
-                return street + postalCode + city;
-            }
-            return "";
-        }
-
-        private static String getAttendeeEmailAddressesAsString(this IEnumerable<Attendee> collection, String seperator)
-        {
-            using (var enumerator = collection.GetEnumerator())
-            {
-                if (!enumerator.MoveNext())
-                {
-                    return String.Empty;
-                }
-
-                var builder = new StringBuilder().Append(enumerator.Current.EmailAddress.Address);
-
-                while (enumerator.MoveNext())
-                {
-                    builder.Append(seperator).Append(enumerator.Current.EmailAddress.Address);
-                }
-
-                return builder.ToString();
-            }
-        }
-
-        private static String getGoogleMapsURL(String destination)
-        {
-            String baseURL = "https://www.google.com/maps/dir/?api=1&";
-            String destinationEncoded = "destination=" + System.Uri.EscapeDataString(destination) + "&";
-            String travelmode = "travelmode=transit";
-            return baseURL + destinationEncoded + travelmode;
-        }
-
-        private static Dictionary<string,string> getLinkedInProfileURLs(String emailAddresses)
-        {
-            Dictionary<string, string> results = new Dictionary<string, string>();
-            string[] arrAddresses = emailAddresses.Split(',');
-            foreach (string address in arrAddresses)
-            {
-                if (!String.IsNullOrEmpty(address))
-                {
-                    // get first part of email address and replace . by space (split first and last name)
-                    string name = address.Split("@")[0].Replace(".", " ");
-                    // get second part of email address and get only company name
-                    string company = address.Split("@")[1].Split(".")[0];
-                    string linkedInProfileURL = BingWebSearchService.getLinkedInProfileURLFromNameAndCompany(name, company);
-                    // artificial slow down, because Bing does not allow more than 5 requests per second.
-                    Thread.Sleep(500);
-                    results.Add(name + "(" + company + ")", linkedInProfileURL);
-                }
-            }
-            return results;
-        }
-
-        private static List<string> getAttendeeEmailAddresses(String emailAddresses)
-        {
-            return new List<string>();
-        }
-
-
-
-
     }
 
     }
