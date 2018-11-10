@@ -9,38 +9,25 @@ using System.Threading.Tasks;
 
 namespace PersonalIntranetBot.Services
 {
+    class LinkedInSearchResult
+    {
+        public string Id { get; set; }
+        public string Description { get; set; }
+        public string URL { get; set; }
+    }
+
     public class LinkedInProfileFinderService
     {
-        public static Dictionary<string, string> getLinkedInProfileURLsFromEmailAddresses(String emailAddresses)
-        {
-            Dictionary<string, string> results = new Dictionary<string, string>();
-            string[] arrAddresses = emailAddresses.Split(',');
-            foreach (string address in arrAddresses)
-            {
-                if (!String.IsNullOrEmpty(address))
-                {
-                    // get first part of email address and replace . by space (split first and last name)
-                    string name = address.Split("@")[0].Replace(".", " ");
-                    // get second part of email address and get only company name
-                    string company = address.Split("@")[1].Split(".")[0];
-                    string linkedInProfileURL = GetLinkedInProfileURLFromNameAndCompany(name, company);
-                    // artificial slow down, because Bing does not allow more than 5 requests per second.
-                    Thread.Sleep(500);
-                    results.Add(name + "(" + company + ")", linkedInProfileURL);
-                }
-            }
-            return results;
-        }
+        public static string LINKEDIN_SEARCH_SUFFIX = "linkedin";
 
         public static string GetLinkedInProfileURLFromNameAndCompany(string name, string company)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             // add linked
-            string linkedInSearchString = "linkedin";
-            string searchString = String.Join(" ", new[] { name, company, linkedInSearchString });
-
-            string bingWebSearchJSON = BingWebSearch.DoBingWebSearch(searchString).JsonResult;
-            List<LinkedInProfileViewModel> linkedInSearchResults = ConvertBingSearchResultToLinkedInViewModel(bingWebSearchJSON);
+            BingWebSearchService bingService = new BingWebSearchService();
+            string searchString = String.Join(" ", new[] { name, company, LINKEDIN_SEARCH_SUFFIX });
+            string bingWebSearchJSON = bingService.DoBingWebSearch(searchString).JsonResult;
+            List<LinkedInSearchResult> linkedInSearchResults = ConvertBingSearchResultToLinkedInSearchResult(bingWebSearchJSON);
             /*
             foreach (LinkedInSearchResultItem item in linkedInSearchResults.Results)
             {
@@ -50,30 +37,36 @@ namespace PersonalIntranetBot.Services
                 Console.WriteLine("URL: " + item.URL);
             }
             */
-
-            foreach (LinkedInProfileViewModel item in linkedInSearchResults)
+            string bestMatch="";
+            string LINKEDIN_URL_SEARCH_STRING = "/in/".ToLower();
+            
+            foreach (LinkedInSearchResult item in linkedInSearchResults)
             {
-                // we assume for now that all descriptions with the string "/in/" refer to a LinkedIn profile page
-                string linkedInProfileSearchString = "/in/".ToLower();
-                string personNameSearchString = name.Trim().Replace(" ", "-").ToLower();
-                string searchResultURL = item.URL.ToLower();
-                if (searchResultURL.Contains(personNameSearchString) && searchResultURL.Contains(linkedInProfileSearchString))
+                bool isLinkedInProfilePage = item.URL.ToLower().Contains(LINKEDIN_URL_SEARCH_STRING.ToLower());
+                bool isNameInDescription = item.Description.ToLower().Contains(name.ToLower());
+                bool isCompanyInDescription = item.Description.ToLower().Contains(company.ToLower());
+                // find first match
+                if (String.IsNullOrEmpty(bestMatch) && isLinkedInProfilePage) {
+                    bestMatch = item.URL.ToLower();
+                }
+                // find best match
+                if (isNameInDescription && isCompanyInDescription && isLinkedInProfilePage)
                 {
-                    return item.URL;
+                    bestMatch = item.URL.ToLower();
                 }
             }
-            return "";
+            return bestMatch;
         }
 
-        private static List<LinkedInProfileViewModel> ConvertBingSearchResultToLinkedInViewModel(string json)
+        private static List<LinkedInSearchResult> ConvertBingSearchResultToLinkedInSearchResult(string json)
         {
-            List<LinkedInProfileViewModel> results = new List<LinkedInProfileViewModel>();
+            List<LinkedInSearchResult> results = new List<LinkedInSearchResult>();
             JObject jObject = JObject.Parse(json);
             JToken jRoot = jObject["webPages"];
             JToken[] values = jRoot["value"].ToArray();
             foreach (JToken value in values)
             {
-                results.Add(new LinkedInProfileViewModel
+                results.Add(new LinkedInSearchResult
                 {
                     Id = (string)value["id"],
                     Description = (string)value["name"],

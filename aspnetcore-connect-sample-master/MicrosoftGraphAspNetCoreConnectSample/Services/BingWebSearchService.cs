@@ -18,8 +18,14 @@ using System.Net;
 
 namespace PersonalIntranetBot.Helpers
 {
-    public static class BingWebSearch
+    public class BingWebSearchService
     {
+        public class BingSearchResult
+        {
+            public String JsonResult { get; set; }
+            public Dictionary<String, String> RelevantHeaders { get; set; }
+        }
+
         // Enter a valid subscription key.
         // const string accessKey = "826920c686cb48fb8587647960f29103";
         // Enter a valid subscription key.
@@ -32,16 +38,10 @@ namespace PersonalIntranetBot.Helpers
          */
         const string uriBase = "https://api.cognitive.microsoft.com/bing/v7.0/search";
 
-        public class BingSearchResult
-        {
-            public String JsonResult { get; set; }
-            public Dictionary<String, String> RelevantHeaders { get; set; }
-        }
-
         /// <summary>
         /// Makes a request to the Bing Web Search API and returns data as a SearchResult.
         /// </summary>
-        public static BingSearchResult DoBingWebSearch(string searchQuery)
+        public virtual BingSearchResult DoBingWebSearch(string searchQuery)
         {
             // Construct the search request URI.
             var uriQuery = uriBase + "?q=" + Uri.EscapeDataString(searchQuery);

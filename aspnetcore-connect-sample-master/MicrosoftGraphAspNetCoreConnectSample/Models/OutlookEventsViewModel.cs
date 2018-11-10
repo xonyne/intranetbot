@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace PersonalIntranetBot.Models
 {
-
     // An entity, such as a user, group, or message.
     public class OutlookEventsViewModel
     {

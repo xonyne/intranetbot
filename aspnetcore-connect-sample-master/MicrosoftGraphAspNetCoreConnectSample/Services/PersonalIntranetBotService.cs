@@ -33,11 +33,32 @@ namespace PersonalIntranetBot.Services
                         End = DateTime.Parse(current.End.DateTime),
                         Location = meetingLocationAsString,
                         GoogleMapsURL = GoogleMapsURLService.getGoogleMapsURL(meetingLocationAsString),
-                        LinkedIdProfileURLs = LinkedInProfileFinderService.getLinkedInProfileURLsFromEmailAddresses(participantEmailAddressesAsString),
+                        LinkedIdProfileURLs = GetLinkedInProfileURLsFromEmailAddresses(participantEmailAddressesAsString),
                     });
                 }
             }
             return items;
+        }
+
+        private static Dictionary<string, string> GetLinkedInProfileURLsFromEmailAddresses(String emailAddresses)
+        {
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            string[] arrAddresses = emailAddresses.Split(',');
+            foreach (string address in arrAddresses)
+            {
+                if (!String.IsNullOrEmpty(address))
+                {
+                    // get first part of email address and replace . by space (split first and last name)
+                    string name = address.Split("@")[0].Replace(".", " ").Trim();
+                    // get second part of email address and get only company name
+                    string company = address.Split("@")[1].Split(".")[0];
+                    string linkedInProfileURL = LinkedInProfileFinderService.GetLinkedInProfileURLFromNameAndCompany(name, company);
+                    // artificial slow down, because Bing does not allow more than 5 requests per second.
+                    Thread.Sleep(500);
+                    results.Add(name + "(" + company + ")", linkedInProfileURL);
+                }
+            }
+            return results;
         }
 
         private static String getAttendeeEmailAddressesAsString(this IEnumerable<Attendee> collection, String seperator)
