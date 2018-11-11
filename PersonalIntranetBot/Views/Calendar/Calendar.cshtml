@@ -20,48 +20,82 @@
             <th style="border: 1px solid green; padding: 5px;">Start</th>
             <th style="border: 1px solid green; padding: 5px;">End</th>
             <th style="border: 1px solid green; padding: 5px;">Attendees</th>
+            <th style="border: 1px solid green; padding: 5px;">Meeting information</th>
             <th style="border: 1px solid green; padding: 5px;">Travel information</th>
-            <th style="border: 1px solid green; padding: 5px;">LinkedIn profile information</th>
+            <th style="border: 1px solid green; padding: 5px;">People information</th>
         </tr>
         @foreach (var item in Model)
         {
-        <tr style="border: 1px solid green;">
-            <td style="border: 1px solid green; padding: 5px;">
-                @Html.DisplayFor(modelItem => item.Subject)<br />
-            </td>
-            <td style="border: 1px solid green;padding: 5px;">
-                @Html.DisplayFor(modelItem => item.Location)<br />
-            </td>
-            <td style="border: 1px solid green;padding: 5px;">
-                @Html.DisplayFor(modelItem => item.Start)<br />
-            </td>
-            <td style="border: 1px solid green;padding: 5px;">
-                @Html.DisplayFor(modelItem => item.End)<br />
-            </td>
-            <td style="border: 1px solid green;padding: 5px;">
-                @Html.DisplayFor(modelItem => item.AttendeeEmailAddresses)<br />
-            </td>
-            <td style="border: 1px solid green;padding: 5px;">
-                <a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" target="_blank">Show me the way!</a><br />
-            </td>
-            <td style="border: 1px solid green;padding: 5px;">
-                <ul>
-                    @foreach (var linkedInItem in item.LinkedIdProfileURLs)
-                    {
-                        @if (linkedInItem.Value == "")
+            <tr style="border: 1px solid green;">
+                <td style="border: 1px solid green; padding: 5px;">
+                    @Html.DisplayFor(modelItem => item.Subject)<br />
+                </td>
+                <td style="border: 1px solid green;padding: 5px;">
+                    @Html.DisplayFor(modelItem => item.Location)<br />
+                </td>
+                <td style="border: 1px solid green;padding: 5px;">
+                    @Html.DisplayFor(modelItem => item.Start)<br />
+                </td>
+                <td style="border: 1px solid green;padding: 5px;">
+                    @Html.DisplayFor(modelItem => item.End)<br />
+                </td>
+                <td style="border: 1px solid green;padding: 5px;">
+                    @Html.DisplayFor(modelItem => item.AttendeeEmailAddresses)<br />
+                </td>
+                <td style="border: 1px solid green;padding: 5px;">
+                    <button type="button" class="descButton btn btn-default" meeting-description="@Html.DisplayFor(modelItem => item.Description)"><span class="glyphicon glyphicon-sunglasses" style="vertical-align:middle;margin-top: -5px"></span>Show</button>
+                </td>
+                <td style="border: 1px solid green;padding: 5px;">
+                    <a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" target="_blank">Show me the way!</a><br />
+                </td>
+                <td style="border: 1px solid green;padding: 5px;">
+                    <ul>
+                        @foreach (var linkedInItem in item.LinkedIdProfileURLs)
                         {
-                            <li>No profile found for: @Html.DisplayFor(modelItem => linkedInItem.Key)</li>
+                            @if (linkedInItem.Value == "")
+                            {
+                                <li>No profile found for: @Html.DisplayFor(modelItem => linkedInItem.Key)</li>
+                            }
+                            else
+                            {
+                                <li><a href="@Html.DisplayFor(modelItem => linkedInItem.Value)" target="_blank">@Html.DisplayFor(modelItem => linkedInItem.Key)</a></li>
+                            }
                         }
-                        else
-                        {
-                            <li><a href="@Html.DisplayFor(modelItem => linkedInItem.Value)" target="_blank">@Html.DisplayFor(modelItem => linkedInItem.Key)</a></li>
-                        }
-                    }
-                </ul>
-            </td>
-        </tr>
+                    </ul>
+                </td>
+            </tr>
         }
     </table>
 
-    
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Meeting description</h4>
+                </div>
+                <div class="modal-body">
+                    <span id="content"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="hideModal" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @section Scripts
+        {
+        <script type="text/javascript">
+            $("button[type='button']").click(function () {
+                $("#myModal").find("#content").html($(this).attr("meeting-description"));
+                });
+
+                $(".descButton").click(function () {
+                    $("#myModal").modal("show");
+                });
+
+                $("#hideModal").click(function () {
+                    $("#myModal").modal("hide");
+                });
+        </script>
+    }
 }

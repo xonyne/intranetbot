@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace PersonalIntranetBot.Services
 {
@@ -28,6 +29,7 @@ namespace PersonalIntranetBot.Services
                     {
                         Id = current.Id,
                         Subject = current.Subject,
+                        Description = current.Body.Content,
                         AttendeeEmailAddresses = participantEmailAddressesAsString,
                         Start = DateTime.Parse(current.Start.DateTime),
                         End = DateTime.Parse(current.End.DateTime),
