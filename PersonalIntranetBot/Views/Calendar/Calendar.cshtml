@@ -43,25 +43,23 @@
                     @Html.DisplayFor(modelItem => item.AttendeeEmailAddresses)<br />
                 </td>
                 <td style="border: 1px solid green;padding: 5px;">
-                    <button type="button" class="descButton btn btn-default" meeting-description="@Html.DisplayFor(modelItem => item.Description)"><span class="glyphicon glyphicon-sunglasses" style="vertical-align:middle;margin-top: -5px"></span>Show</button>
+                    <button type="button" class="descButton btn btn-default" meeting-description="@Html.DisplayFor(modelItem => item.Description)"><span class="glyphicon glyphicon-sunglasses" style="vertical-align:middle;margin-top: -5px"></span> What is it about?</button>
                 </td>
                 <td style="border: 1px solid green;padding: 5px;">
-                    <a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" target="_blank">Show me the way!</a><br />
+                    <a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" class="btn btn-default" target="_blank"><span class="glyphicon glyphicon-plane" style="vertical-align:middle;margin-top: -5px"></span> Show me the way!</a>
                 </td>
                 <td style="border: 1px solid green;padding: 5px;">
-                    <ul>
                         @foreach (var linkedInItem in item.LinkedIdProfileURLs)
                         {
                             @if (linkedInItem.Value == "")
                             {
-                                <li>No profile found for: @Html.DisplayFor(modelItem => linkedInItem.Key)</li>
+                                <span class="btn btn-default disabled">No profile found for: @Html.DisplayFor(modelItem => linkedInItem.Key)</span><br/>
                             }
                             else
                             {
-                                <li><a href="@Html.DisplayFor(modelItem => linkedInItem.Value)" target="_blank">@Html.DisplayFor(modelItem => linkedInItem.Key)</a></li>
+                                <a class="btn btn-default" style="margin-bottom:20px;" href="@Html.DisplayFor(modelItem => linkedInItem.Value)" target="_blank">@Html.DisplayFor(modelItem => linkedInItem.Key)</a><br/>
                             }
                         }
-                    </ul>
                 </td>
             </tr>
         }
@@ -71,7 +69,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Meeting description</h4>
+                    <h4 class="modal-title">Meeting information</h4>
                 </div>
                 <div class="modal-body">
                     <span id="content"></span>
