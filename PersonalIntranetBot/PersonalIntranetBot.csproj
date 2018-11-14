@@ -28,6 +28,7 @@
   
   <ItemGroup>
     <Content Remove="wwwroot\images\cropped-rainbow-header.jpg" />
+    <Content Remove="Views\Components\RatingControl\default.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="Views\Calendar\Index.cshtml">
@@ -40,5 +41,8 @@
 
   <ItemGroup>
     <None Include="wwwroot\images\cropped-rainbow-header.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Calendar\Components\" />
   </ItemGroup>
 </Project>

@@ -42,6 +42,8 @@ namespace PersonalIntranetBot.Services
                     }
                 }
             }
+            // Order events by start date ascending
+            items = items.OrderBy(e => e.Start).ToList();
             return items;
         }
 
