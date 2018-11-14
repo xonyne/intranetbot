@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.Graph" Version="1.6.2" />
     <PackageReference Include="Microsoft.Identity.Client" Version="1.1.0-preview" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.8.10" />
   </ItemGroup>
   
   <ItemGroup>
@@ -25,9 +26,15 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Content Remove="wwwroot\images\cropped-rainbow-header.jpg" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Update="Views\Calendar\Calendar.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\images\cropped-rainbow-header.jpg" />
+  </ItemGroup>
 </Project>

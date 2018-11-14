@@ -1,4 +1,5 @@
-﻿using Microsoft.Graph;
+﻿using HtmlAgilityPack;
+using Microsoft.Graph;
 using PersonalIntranetBot.Helpers;
 using PersonalIntranetBot.Models;
 using System;
@@ -67,6 +68,7 @@ namespace PersonalIntranetBot.Services
                     // get second part of email address and get only company name
                     string company = address.Split("@")[1].Split(".")[0];
                     string linkedInProfileURL = LinkedInProfileFinderService.GetLinkedInProfileURLFromNameAndCompany(name, company);
+                    //string linkedInProfileImageURL = GetLinkedInProfileImageURL(linkedInProfileURL);
                     // artificial slow down, because Bing does not allow more than 5 requests per second.
                     Thread.Sleep(500);
                     results.Add(name.ToTitleCase(), linkedInProfileURL);
@@ -133,5 +135,24 @@ namespace PersonalIntranetBot.Services
         {
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title);
         }
-}
+
+        private static string GetLinkedInProfileImageURL(string linkedInProfileURL)
+        {
+            // does not work at the moment due to login
+            return "";
+
+            HtmlWeb web = new HtmlWeb();
+            HtmlDocument doc = web.Load(linkedInProfileURL);
+            HtmlNode linkedInProfileImageNode = doc.DocumentNode.SelectNodes("//*[@id=\"ember66\"]")[0];
+            string linkedInProfileImageURL = "";
+            if (linkedInProfileImageNode != null)
+            {
+                string wholeAttributeValue = linkedInProfileImageNode.Attributes["style"].Value;
+                int startIndex = wholeAttributeValue.IndexOf("url(\"", StringComparison.Ordinal);
+                int endIndex = wholeAttributeValue.IndexOf("\")", StringComparison.Ordinal);
+                linkedInProfileImageURL = wholeAttributeValue.Substring(startIndex, wholeAttributeValue.Length - endIndex);
+            }
+            return linkedInProfileImageURL;
+        }
+    }
 }

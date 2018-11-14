@@ -28,10 +28,22 @@ textarea {
     width: 100%;
 }
 
+.navbar {
+    background: url("/images/cropped-rainbow-header.jpg") scroll top !important;
+    background-size: auto;
+}
+
+    .navbar a, .navbar li {
+        color: white !important;
+    }
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
     .carousel-caption {
         display: none;
     }
+
+
+
 }

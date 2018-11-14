@@ -1,11 +1,9 @@
-﻿@model List<PersonalIntranetBot.Models.OutlookEventsViewModel>;
-
+﻿<div>
+    @model List<PersonalIntranetBot.Models.OutlookEventsViewModel>;
 @{
-    ViewData["Title"] = "My calendar events";
+    ViewData["Title"] = "My upcoming events";
 }
-
-<h2>My calendar events</h2>
-
+<h2>Upcoming events</h2>
 @if (!User.Identity.IsAuthenticated)
 {
     <br />
@@ -17,12 +15,11 @@
         <tr>
             <th style="border: 1px solid green; padding: 5px;">Subject</th>
             <th style="border: 1px solid green; padding: 5px;">Location</th>
+            <th style="border: 1px solid green; padding: 5px;">Getting there</th>
             <th style="border: 1px solid green; padding: 5px;">Start</th>
             <th style="border: 1px solid green; padding: 5px;">End</th>
             <th style="border: 1px solid green; padding: 5px;">Attendees</th>
             <th style="border: 1px solid green; padding: 5px;">Meeting information</th>
-            <th style="border: 1px solid green; padding: 5px;">Travel information</th>
-            <th style="border: 1px solid green; padding: 5px;">People information</th>
         </tr>
         @foreach (var item in Model)
         {
@@ -34,37 +31,29 @@
                     @Html.DisplayFor(modelItem => item.Location)<br />
                 </td>
                 <td style="border: 1px solid green;padding: 5px;">
+                    <a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" class="btn btn-default" target="_blank"><span class="glyphicon glyphicon-plane" style="vertical-align:middle;margin-top: -5px"></span> Show me the way!</a>
+                </td>
+                <td style="border: 1px solid green;padding: 5px;">
                     @Html.DisplayFor(modelItem => item.Start)<br />
                 </td>
                 <td style="border: 1px solid green;padding: 5px;">
                     @Html.DisplayFor(modelItem => item.End)<br />
                 </td>
                 <td style="border: 1px solid green;padding: 5px;">
-                    <ul>
-                        @foreach (var emailAddress in item.AttendeeEmailAddresses)
+                    @foreach (var linkedInItem in item.LinkedIdProfileURLs)
+                    {
+                        @if (linkedInItem.Value == "")
                         {
-                        <li>@Html.DisplayFor(modelItem => emailAddress)</li>
+                            <span class="btn btn-default disabled">No profile found for: @Html.DisplayFor(modelItem => linkedInItem.Key)</span><br />
                         }
-                    </ul>
+                        else
+                        {
+                            <a class="btn btn-default" style="margin-top:10px; margin-bottom:10px;" href="@Html.DisplayFor(modelItem => linkedInItem.Value)" target="_blank"><span class="glyphicon glyphicon-user" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(modelItem => linkedInItem.Key)</a>
+                        }
+                    }
                 </td>
                 <td style="border: 1px solid green;padding: 5px;">
                     <button type="button" class="descButton btn btn-default" meeting-description="@Html.DisplayFor(modelItem => item.Description)"><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px"></span> What is it about?</button>
-                </td>
-                <td style="border: 1px solid green;padding: 5px;">
-                    <a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" class="btn btn-default" target="_blank"><span class="glyphicon glyphicon-plane" style="vertical-align:middle;margin-top: -5px"></span> Show me the way!</a>
-                </td>
-                <td style="border: 1px solid green;padding: 5px;">
-                        @foreach (var linkedInItem in item.LinkedIdProfileURLs)
-                        {
-                            @if (linkedInItem.Value == "")
-                            {
-                                <span class="btn btn-default disabled">No profile found for: @Html.DisplayFor(modelItem => linkedInItem.Key)</span><br/>
-                            }
-                            else
-                            {
-                                <a class="btn btn-default" style="margin-bottom:20px;" href="@Html.DisplayFor(modelItem => linkedInItem.Value)" target="_blank"><span class="glyphicon glyphicon-user" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(modelItem => linkedInItem.Key)</a><br/>
-                            }
-                        }
                 </td>
             </tr>
         }
@@ -87,8 +76,7 @@
     </div>
     @section Scripts
         {
-        <script type="text/javascript">
-            $("button[type='button']").click(function () {
+        <script type="text/javascript">$("button[type='button']").click(function () {
                 $("#myModal").find("#content").html($(this).attr("meeting-description"));
                 });
 
@@ -98,7 +86,7 @@
 
                 $("#hideModal").click(function () {
                     $("#myModal").modal("hide");
-                });
-        </script>
+                });</script>
     }
 }
+</div>
