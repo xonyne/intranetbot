@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -43,6 +44,11 @@ namespace PersonalIntranetBot
             // This sample uses an in-memory cache for tokens and subscriptions. Production apps will typically use some method of persistent storage.
             services.AddMemoryCache();
             services.AddSession();
+
+            //services.Configure<ForwardedHeadersOptions>(options =>
+            //{
+             //   options.ForwardedHeaders = ForwardedHeaders.All;
+            //});
 
             // Add application services.
             //services.AddSingleton<IConfiguration>(Configuration);

@@ -40,10 +40,15 @@
                     @Html.DisplayFor(modelItem => item.End)<br />
                 </td>
                 <td style="border: 1px solid green;padding: 5px;">
-                    @Html.DisplayFor(modelItem => item.AttendeeEmailAddresses)<br />
+                    <ul>
+                        @foreach (var emailAddress in item.AttendeeEmailAddresses)
+                        {
+                        <li>@Html.DisplayFor(modelItem => emailAddress)</li>
+                        }
+                    </ul>
                 </td>
                 <td style="border: 1px solid green;padding: 5px;">
-                    <button type="button" class="descButton btn btn-default" meeting-description="@Html.DisplayFor(modelItem => item.Description)"><span class="glyphicon glyphicon-sunglasses" style="vertical-align:middle;margin-top: -5px"></span> What is it about?</button>
+                    <button type="button" class="descButton btn btn-default" meeting-description="@Html.DisplayFor(modelItem => item.Description)"><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px"></span> What is it about?</button>
                 </td>
                 <td style="border: 1px solid green;padding: 5px;">
                     <a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" class="btn btn-default" target="_blank"><span class="glyphicon glyphicon-plane" style="vertical-align:middle;margin-top: -5px"></span> Show me the way!</a>
@@ -57,7 +62,7 @@
                             }
                             else
                             {
-                                <a class="btn btn-default" style="margin-bottom:20px;" href="@Html.DisplayFor(modelItem => linkedInItem.Value)" target="_blank">@Html.DisplayFor(modelItem => linkedInItem.Key)</a><br/>
+                                <a class="btn btn-default" style="margin-bottom:20px;" href="@Html.DisplayFor(modelItem => linkedInItem.Value)" target="_blank"><span class="glyphicon glyphicon-user" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(modelItem => linkedInItem.Key)</a><br/>
                             }
                         }
                 </td>

@@ -3,6 +3,7 @@ using PersonalIntranetBot.Helpers;
 using PersonalIntranetBot.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,29 +18,40 @@ namespace PersonalIntranetBot.Services
         {
             List<OutlookEventsViewModel> items = new List<OutlookEventsViewModel>();
             Task<IUserEventsCollectionPage> graphEvents = GraphService.GetCalendarEvents(graphClient);
-            IUserEventsCollectionPage events = await graphEvents;
+            IUserEventsCollectionPage meetings = await graphEvents;
 
-            if (events?.Count > 0)
+            if (meetings?.Count > 0)
             {
-                foreach (Event current in events)
+                foreach (Event currentMeeting in meetings)
                 {
-                    string participantEmailAddressesAsString = getAttendeeEmailAddressesAsString(current.Attendees, ", ");
-                    string meetingLocationAsString = getAddressFromGraphLocation(current.Location);
-                    items.Add(new OutlookEventsViewModel
-                    {
-                        Id = current.Id,
-                        Subject = current.Subject,
-                        Description = current.Body.Content,
-                        AttendeeEmailAddresses = participantEmailAddressesAsString,
-                        Start = DateTime.Parse(current.Start.DateTime),
-                        End = DateTime.Parse(current.End.DateTime),
-                        Location = meetingLocationAsString,
-                        GoogleMapsURL = GoogleMapsURLService.getGoogleMapsURL(meetingLocationAsString),
-                        LinkedIdProfileURLs = GetLinkedInProfileURLsFromEmailAddresses(participantEmailAddressesAsString),
-                    });
+                    string meetingLocationAsString = GetAddressFromGraphLocation(currentMeeting.Location);
+                    if (MeetingIsNotRecurringAndNotAllDay(currentMeeting) && MeetingIsNotInPast(currentMeeting)) {
+                        items.Add(new OutlookEventsViewModel
+                        {
+                            Id = currentMeeting.Id,
+                            Subject = currentMeeting.Subject,
+                            Description = currentMeeting.Body.Content,
+                            AttendeeEmailAddresses = GetAttendeeEmailAddressesAsList(currentMeeting.Attendees),
+                            Start = DateTime.Parse(currentMeeting.Start.DateTime),
+                            End = DateTime.Parse(currentMeeting.End.DateTime),
+                            Location = meetingLocationAsString,
+                            GoogleMapsURL = GoogleMapsURLService.getGoogleMapsURL(meetingLocationAsString),
+                            LinkedIdProfileURLs = GetLinkedInProfileURLsFromEmailAddresses(GetAttendeeEmailAddressesAsString(currentMeeting.Attendees, ", ")),
+                        });
+                    }
                 }
             }
             return items;
+        }
+
+        private static bool MeetingIsNotRecurringAndNotAllDay(Event meeting)
+        {
+            return (!(bool)meeting.IsAllDay && meeting.Recurrence == null);
+        }
+
+        private static bool MeetingIsNotInPast(Event meeting)
+        {
+            return (DateTime.Parse(meeting.End.DateTime) > System.DateTime.Now);
         }
 
         private static Dictionary<string, string> GetLinkedInProfileURLsFromEmailAddresses(String emailAddresses)
@@ -57,13 +69,13 @@ namespace PersonalIntranetBot.Services
                     string linkedInProfileURL = LinkedInProfileFinderService.GetLinkedInProfileURLFromNameAndCompany(name, company);
                     // artificial slow down, because Bing does not allow more than 5 requests per second.
                     Thread.Sleep(500);
-                    results.Add(name + "(" + company + ")", linkedInProfileURL);
+                    results.Add(name.ToTitleCase(), linkedInProfileURL);
                 }
             }
             return results;
         }
 
-        private static String getAttendeeEmailAddressesAsString(this IEnumerable<Attendee> collection, String seperator)
+        private static String GetAttendeeEmailAddressesAsString(this IEnumerable<Attendee> collection, String separator)
         {
             using (var enumerator = collection.GetEnumerator())
             {
@@ -76,14 +88,33 @@ namespace PersonalIntranetBot.Services
 
                 while (enumerator.MoveNext())
                 {
-                    builder.Append(seperator).Append(enumerator.Current.EmailAddress.Address);
+                    builder.Append(separator).Append(enumerator.Current.EmailAddress.Address);
                 }
 
                 return builder.ToString();
             }
         }
 
-        private static String getAddressFromGraphLocation(Location location)
+        private static List<string> GetAttendeeEmailAddressesAsList(this IEnumerable<Attendee> collection)
+        {
+            List<string> result = new List<string>();
+            using (var enumerator = collection.GetEnumerator())
+            {
+                if (!enumerator.MoveNext())
+                {
+                    return result;
+                }
+
+                result.Add(enumerator.Current.EmailAddress.Address);
+                while (enumerator.MoveNext())
+                {
+                    result.Add(enumerator.Current.EmailAddress.Address);
+                }
+            }
+            return result;
+        }
+
+        private static String GetAddressFromGraphLocation(Location location)
         {
             if (location.Address != null)
             {
@@ -91,13 +122,16 @@ namespace PersonalIntranetBot.Services
                 String postalCode = String.IsNullOrEmpty(location.Address.PostalCode) ? "" : ", " + location.Address.PostalCode + " ";
                 String city = String.IsNullOrEmpty(location.Address.City) ? "" : location.Address.City;
                 return street + postalCode + city;
-            }
+            } 
+            if (location.DisplayName != null) {
+                return location.DisplayName;
+}
             return "";
         }
-
-        private static List<string> getAttendeeEmailAddresses(String emailAddresses)
+        
+        public static string ToTitleCase(this string title)
         {
-            return new List<string>();
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title);
         }
-    }
+}
 }
