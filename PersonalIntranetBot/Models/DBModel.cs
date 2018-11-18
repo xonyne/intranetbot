@@ -32,6 +32,7 @@ namespace PersonalIntranetBot.Models
         public enum LinkType { LINKEDIN, XING, FACEBOOK, INSTAGRAM, TWITTER, GENERIC };
 
         public int SocialLinkId { get; set; }
+        public int AttendeeId { get; internal set; }
         public LinkType Type  { get; set; }
         public string URL { get; set; }
     }

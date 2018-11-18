@@ -43,9 +43,17 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
         }
 
         // GET: SocialLinks/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var socialLink = new SocialLink
+            {
+                AttendeeId = (int)id
+            };
+            return View(socialLink);
         }
 
         // POST: SocialLinks/Create
@@ -53,7 +61,7 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SocialLinkId,URL")] SocialLink socialLink)
+        public async Task<IActionResult> Create([Bind("SocialLinkId,AttendeeId,URL")] SocialLink socialLink)
         {
             if (ModelState.IsValid)
             {

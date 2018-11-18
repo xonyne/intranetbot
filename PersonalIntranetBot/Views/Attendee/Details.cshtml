@@ -4,10 +4,11 @@
     ViewData["Title"] = @Html.DisplayFor(model => model.Name);
 }
 
-<h2>@Html.DisplayFor(model => Model.Name)</h2>
+<h2>@Html.DisplayFor(model => model.Name)</h2>
 
-<p><a href="mailto:@Html.DisplayFor(model => Model.EmailAddress)">@Html.DisplayFor(model => model.EmailAddress)</a></p>
-
+<p><a href="mailto:@Html.DisplayFor(model => model.EmailAddress)">@Html.DisplayFor(model => model.EmailAddress)</a></p>
+<br />
+<h4>Social Links</h4>
 
 <table class="table">
     <thead>
@@ -24,11 +25,14 @@
                     <a href="@Html.DisplayFor(modelItem => socialLink.URL)" target="_blank">@Html.DisplayFor(modelItem => socialLink.URL)</a>
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@socialLink.SocialLinkId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@socialLink.SocialLinkId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@socialLink.SocialLinkId">Delete</a>
+                    <a asp-controller="SocialLink" asp-action="Edit" asp-route-id="@socialLink.SocialLinkId">Edit</a> |
+                    <a asp-controller="SocialLink" asp-action="Details" asp-route-id="@socialLink.SocialLinkId">Details</a> |
+                    <a asp-controller="SocialLink" asp-action="Delete" asp-route-id="@socialLink.SocialLinkId">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+<p>
+    <a asp-controller="SocialLink" asp-route-id="@Model.AttendeeId" asp-action="Create">Create new link</a>
+</p>
