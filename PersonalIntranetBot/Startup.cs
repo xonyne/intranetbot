@@ -13,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PersonalIntranetBot.Extensions;
 using PersonalIntranetBot.Helpers;
+using Microsoft.EntityFrameworkCore;
+using PersonalIntranetBot.Models;
 
 namespace PersonalIntranetBot
 {
@@ -40,6 +42,10 @@ namespace PersonalIntranetBot
             .AddCookie();
 
             services.AddMvc();
+
+            var connection = @"Server=localhost\SQLEXPRESS;Database=personalintranetbot;Trusted_Connection=True;ConnectRetryCount=0";
+            services.AddDbContext<DBModelContext>
+                (options => options.UseSqlServer(connection));
 
             // This sample uses an in-memory cache for tokens and subscriptions. Production apps will typically use some method of persistent storage.
             services.AddMemoryCache();

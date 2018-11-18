@@ -33,7 +33,7 @@ namespace PersonalIntranetBot.Controllers
         [AllowAnonymous]
         // Load user's profile.
         // Get events in all the current user's mail folders.
-        public async Task<IActionResult> Calendar()
+        public async Task<IActionResult> Index()
         {
             List<OutlookEventsViewModel> items = new List<OutlookEventsViewModel>();
 

@@ -77,7 +77,7 @@ namespace PersonalIntranetBot.Services
             return results;
         }
 
-        private static String GetAttendeeEmailAddressesAsString(this IEnumerable<Attendee> collection, String separator)
+        private static String GetAttendeeEmailAddressesAsString(this IEnumerable<Microsoft.Graph.Attendee> collection, String separator)
         {
             using (var enumerator = collection.GetEnumerator())
             {
@@ -97,7 +97,7 @@ namespace PersonalIntranetBot.Services
             }
         }
 
-        private static List<string> GetAttendeeEmailAddressesAsList(this IEnumerable<Attendee> collection)
+        private static List<string> GetAttendeeEmailAddressesAsList(this IEnumerable<Microsoft.Graph.Attendee> collection)
         {
             List<string> result = new List<string>();
             using (var enumerator = collection.GetEnumerator())
