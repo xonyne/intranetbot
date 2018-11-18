@@ -23,7 +23,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.URL)
+                    <a href="@Html.DisplayFor(modelItem => item.URL)" target="_blank">@Html.DisplayFor(modelItem => item.URL)</a>
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.SocialLinkId">Edit</a> |

@@ -9,11 +9,11 @@ using PersonalIntranetBot.Models;
 
 namespace EFGetStarted.AspNetCore.NewDb.Controllers
 {
-    public class SocialLinkController : Controller
+    public class AttendeeController : Controller
     {
         private readonly DBModelContext _context;
 
-        public SocialLinkController(DBModelContext context)
+        public AttendeeController(DBModelContext context)
         {
             _context = context;
         }
@@ -21,7 +21,7 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
         // GET: SocialLinks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SocialLinks.ToListAsync());
+            return View(await _context.Attendees.ToListAsync());
         }
 
         // GET: SocialLinks/Details/5
@@ -32,14 +32,14 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
                 return NotFound();
             }
 
-            var socialLink = await _context.SocialLinks
-                .FirstOrDefaultAsync(m => m.SocialLinkId == id);
-            if (socialLink == null)
+            var attendee = await _context.Attendees.Include(s => s.SocialLinks)
+                .FirstOrDefaultAsync(m => m.AttendeeId == id);
+            if (attendee == null)
             {
                 return NotFound();
             }
 
-            return View(socialLink);
+            return View(attendee);
         }
 
         // GET: SocialLinks/Create
@@ -53,15 +53,15 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SocialLinkId,URL")] SocialLink socialLink)
+        public async Task<IActionResult> Create([Bind("AttendeeId,EmailAddress")] Attendee attendee)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(socialLink);
+                _context.Add(attendee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(socialLink);
+            return View(attendee);
         }
 
         // GET: SocialLinks/Edit/5
@@ -72,12 +72,12 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
                 return NotFound();
             }
 
-            var socialLink = await _context.SocialLinks.FindAsync(id);
-            if (socialLink == null)
+            var attendee = await _context.Attendees.FindAsync(id);
+            if (attendee == null)
             {
                 return NotFound();
             }
-            return View(socialLink);
+            return View(attendee);
         }
 
         // POST: SocialLinks/Edit/5
@@ -85,9 +85,9 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SocialLinkId,URL")] SocialLink socialLink)
+        public async Task<IActionResult> Edit(int id, [Bind("AttendeeId,EmailAddress")] Attendee attendee)
         {
-            if (socialLink == null)
+            if (attendee == null)
             {
                 return NotFound();
             }
@@ -96,12 +96,12 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
             {
                 try
                 {
-                    _context.Update(socialLink);
+                    _context.Update(attendee);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SocialLinkExists(socialLink.SocialLinkId))
+                    if (!AttendeeExists(attendee.AttendeeId))
                     {
                         return NotFound();
                     }
@@ -112,7 +112,7 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(socialLink);
+            return View(attendee);
         }
 
         // GET: SocialLinks/Delete/5
@@ -123,14 +123,14 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
                 return NotFound();
             }
 
-            var socialLink = await _context.SocialLinks
-                .FirstOrDefaultAsync(m => m.SocialLinkId == id);
-            if (socialLink == null)
+            var attendee = await _context.Attendees
+                .FirstOrDefaultAsync(m => m.AttendeeId == id);
+            if (attendee == null)
             {
                 return NotFound();
             }
 
-            return View(socialLink);
+            return View(attendee);
         }
 
         // POST: SocialLinks/Delete/5
@@ -138,15 +138,15 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var socialLink = await _context.SocialLinks.FindAsync(id);
-            _context.SocialLinks.Remove(socialLink);
+            var attendee = await _context.Attendees.FindAsync(id);
+            _context.Attendees.Remove(attendee);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SocialLinkExists(int id)
+        private bool AttendeeExists(int id)
         {
-            return _context.SocialLinks.Any(e => e.SocialLinkId == id);
+            return _context.Attendees.Any(e => e.AttendeeId == id);
         }
     }
 }

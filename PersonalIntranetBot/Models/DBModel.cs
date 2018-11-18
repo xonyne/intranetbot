@@ -20,9 +20,8 @@ namespace PersonalIntranetBot.Models
 
     public class Attendee
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public string EmailId { get; set; }
+        public int AttendeeId { get; set; }
+        public string EmailAddress { get; set; }
         public string Name { get; set; }
         public bool IsAsPerson { get; set; }
         public ICollection<SocialLink> SocialLinks { get; set; }

@@ -1,0 +1,34 @@
+﻿@model PersonalIntranetBot.Models.Attendee
+
+@{
+    ViewData["Title"] = @Html.DisplayFor(model => model.Name);
+}
+
+<h2>@Html.DisplayFor(model => Model.Name)</h2>
+
+<p><a href="mailto:@Html.DisplayFor(model => Model.EmailAddress)">@Html.DisplayFor(model => model.EmailAddress)</a></p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>URL</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var socialLink in Model.SocialLinks)
+        {
+            <tr>
+                <td>
+                    <a href="@Html.DisplayFor(modelItem => socialLink.URL)" target="_blank">@Html.DisplayFor(modelItem => socialLink.URL)</a>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@socialLink.SocialLinkId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@socialLink.SocialLinkId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@socialLink.SocialLinkId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

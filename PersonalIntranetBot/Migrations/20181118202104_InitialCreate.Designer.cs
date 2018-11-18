@@ -11,7 +11,7 @@ using System;
 namespace PersonalIntranetBot.Migrations
 {
     [DbContext(typeof(DBModelContext))]
-    [Migration("20181118171950_InitialCreate")]
+    [Migration("20181118202104_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,13 +23,16 @@ namespace PersonalIntranetBot.Migrations
 
             modelBuilder.Entity("PersonalIntranetBot.Models.Attendee", b =>
                 {
-                    b.Property<string>("EmailId");
+                    b.Property<int>("AttendeeId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("EmailAddress");
 
                     b.Property<bool>("IsAsPerson");
 
                     b.Property<string>("Name");
 
-                    b.HasKey("EmailId");
+                    b.HasKey("AttendeeId");
 
                     b.ToTable("Attendees");
                 });
@@ -39,7 +42,7 @@ namespace PersonalIntranetBot.Migrations
                     b.Property<int>("SocialLinkId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AttendeeEmailId");
+                    b.Property<int?>("AttendeeId");
 
                     b.Property<int>("Type");
 
@@ -47,7 +50,7 @@ namespace PersonalIntranetBot.Migrations
 
                     b.HasKey("SocialLinkId");
 
-                    b.HasIndex("AttendeeEmailId");
+                    b.HasIndex("AttendeeId");
 
                     b.ToTable("SocialLinks");
                 });
@@ -56,7 +59,7 @@ namespace PersonalIntranetBot.Migrations
                 {
                     b.HasOne("PersonalIntranetBot.Models.Attendee")
                         .WithMany("SocialLinks")
-                        .HasForeignKey("AttendeeEmailId");
+                        .HasForeignKey("AttendeeId");
                 });
 #pragma warning restore 612, 618
         }
