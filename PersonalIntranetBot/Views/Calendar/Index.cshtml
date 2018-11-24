@@ -16,22 +16,42 @@
         {
             eventList = Model
         })
+
+        Html.RenderPartial("MeetingDetailsModal");
+        Html.RenderPartial("PeopleDetailsModal");
+
     }
+
+
     @section Scripts
         {
+        <!-- For the meeting details modal dialog-->
         <script type="text/javascript">
+            $(".descButton").click(function () {
+                $("#meetingDetailsModal").find("#content").html($(this).attr("meeting-description"));
+            });
 
-                    $("button[type='button']").click(function () {
-                        $("#myModal").find("#content").html($(this).attr("meeting-description"));
-                    });
+            $(".descButton").click(function () {
+                $("#meetingDetailsModal").modal("show");
+            });
 
-                    $(".descButton").click(function () {
-                        $("#myModal").modal("show");
-                    });
+            $("#hideMeetingDetailsModal").click(function () {
+                $("#meetingDetailsModal").modal("hide");
+            });</script>
+        <!-- For the people details modal dialog-->
+        <script type="text/javascript">
+            $(".peopleButton").click(function () {
+                $("#peopleDetailsModal").find("#peopleDetailsModalTitle").html($(this).attr("attendee-name"));
+                $("#peopleDetailsModal").find("#peopleDetailsModalAttendeeEmail").html($(this).attr("attendee-email"));
+            });
 
-                    $("#hideModal").click(function () {
-                        $("#myModal").modal("hide");
-                    });
-        </script>
+            $(".peopleButton").click(function () {
+                $("#peopleDetailsModal").modal("show");
+            });
+
+            $("#hidePeopleDetailsModal").click(function () {
+                $("#peopleDetailsModal").modal("hide");
+            });</script>
     }
+
 </div>

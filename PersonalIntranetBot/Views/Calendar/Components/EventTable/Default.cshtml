@@ -22,49 +22,11 @@
                 </div>
             </td>
             <td style="border: 1px solid green;padding: 5px;">
-                @foreach (var linkedInItem in item.LinkedIdProfileURLs)
+                @for (int i = 0; i < item.Attendees.Count; i++)
                 {
-                    @if (linkedInItem.Value == "")
-                    {
-                        <span class="btn btn-default disabled">No profile found for: @Html.DisplayFor(modelItem => linkedInItem.Key)</span><br />
-                    }
-                    else
-                    {
-                        <a class="btn btn-default" style="margin-top:10px; margin-bottom:10px;" href="@Html.DisplayFor(modelItem => linkedInItem.Value)" target="_blank"><span class="glyphicon glyphicon-user" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(modelItem => linkedInItem.Key)</a>
-                    }
+                <button class="peopleButton btn btn-default" attendee-name="@item.Attendees[i].Name" attendee-email="@item.Attendees[i].EmailAddress" attendee-social-links="@item.Attendees[i].EmailAddress"><span class="glyphicon glyphicon-user" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(m => item.Attendees[i].Name)</button>
                 }
             </td>
         </tr>
     }
 </table>
-<div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Meeting information</h4>
-            </div>
-            <div class="modal-body">
-                <span id="content"></span>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="hideModal" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-@section Scripts
-    {
-<script type="text/javascript">
-
-            $("button[type='button']").click(function () {
-                $("#myModal").find("#content").html($(this).attr("meeting-description"));
-                });
-
-                    $(".descButton").click(function () {
-            $("#myModal").modal("show");
-        });
-
-                    $("#hideModal").click(function () {
-            $("#myModal").modal("hide");
-        });</script>
-}

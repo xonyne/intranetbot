@@ -20,6 +20,6 @@ namespace PersonalIntranetBot.Models
         public List<string> AttendeeEmailAddresses { get; set; }
         public string GoogleMapsURL { get; set; }
         // Key: Name of person, Value: URL to LinkedIn profile (empty string if not found)
-        public Dictionary<string, string> LinkedIdProfileURLs { get; set; }
+        public List<Attendee> Attendees { get; set; }
     }
 }

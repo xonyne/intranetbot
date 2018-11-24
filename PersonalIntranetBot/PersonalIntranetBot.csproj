@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Calendar\MeetingDetailsModal.cshtml" />
     <Content Remove="wwwroot\images\cropped-rainbow-header.jpg" />
     <Content Remove="Views\Components\RatingControl\default.cshtml" />
   </ItemGroup>
@@ -35,15 +36,17 @@
     <Content Update="Views\Calendar\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Attendee\Details.cshtml">
+    <Content Update="Views\Calendar\PeopleDetailsModal.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Calendar\MeetingDetailsModal.cshtml" />
     <None Include="wwwroot\images\cropped-rainbow-header.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\Attendee\" />
     <Folder Include="Views\Calendar\Components\" />
   </ItemGroup>
 </Project>

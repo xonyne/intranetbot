@@ -37,7 +37,7 @@ namespace PersonalIntranetBot.Services
                             End = DateTime.Parse(currentMeeting.End.DateTime),
                             Location = meetingLocationAsString,
                             GoogleMapsURL = GoogleMapsURLService.getGoogleMapsURL(meetingLocationAsString),
-                            LinkedIdProfileURLs = GetLinkedInProfileURLsFromEmailAddresses(GetAttendeeEmailAddressesAsString(currentMeeting.Attendees, ", ")),
+                            Attendees = getMeetingAttendees(currentMeeting.Attendees),
                         });
                     }
                 }
@@ -46,6 +46,45 @@ namespace PersonalIntranetBot.Services
             items = items.OrderBy(e => e.Start).ToList();
             return items;
         }
+
+        private static List<Models.Attendee> getMeetingAttendees(IEnumerable<Microsoft.Graph.Attendee> graphAttendees) {
+            List<Models.Attendee> results = new List<Models.Attendee>();
+
+            foreach (Microsoft.Graph.Attendee a in graphAttendees) {
+                string emailAddress = a.EmailAddress.Address.ToString();
+                if (emailAddress != null)
+                {
+                    results.Add(new Models.Attendee
+                    {
+                        EmailAddress = emailAddress,
+                        Name = GetNameFromEMailAddress(emailAddress).ToTitleCase(),
+                        IsAsPerson = true,
+                        SocialLinks = GetSocialLinksForEmailAddress(emailAddress)
+                    });
+                }
+                else {
+                    results.Add(new Models.Attendee
+                    {
+                        Name = "Unknown"
+                    });
+                }
+                        
+                       
+            }
+            return results;
+        }
+
+        private static string GetNameFromEMailAddress(string emailAddress) {
+            // get first part of email address and replace . by space (split first and last name)
+            return emailAddress.Split("@")[0].Replace(".", " ").Trim();
+        }
+
+        private static string GetCompanyFromEMailAddress(string emailAddress)
+        {
+            // get second part of email address and get only company name
+            return emailAddress.Split("@")[1].Split(".")[0];
+        }
+
 
         private static bool MeetingIsNotRecurringAndNotAllDay(Event meeting)
         {
@@ -57,26 +96,17 @@ namespace PersonalIntranetBot.Services
             return (DateTime.Parse(meeting.End.DateTime) > System.DateTime.Now);
         }
 
-        private static Dictionary<string, string> GetLinkedInProfileURLsFromEmailAddresses(String emailAddresses)
+        private static List<SocialLink> GetSocialLinksForEmailAddress(String emailAddress)
         {
-            Dictionary<string, string> results = new Dictionary<string, string>();
-            string[] arrAddresses = emailAddresses.Split(',');
-            foreach (string address in arrAddresses)
+            Thread.Sleep(500);
+            List<SocialLink> results = new List<SocialLink>();
+            results.Add(new SocialLink
             {
-                if (!String.IsNullOrEmpty(address))
-                {
-                    // get first part of email address and replace . by space (split first and last name)
-                    string name = address.Split("@")[0].Replace(".", " ").Trim();
-                    // get second part of email address and get only company name
-                    string company = address.Split("@")[1].Split(".")[0];
-                    string linkedInProfileURL = LinkedInProfileFinderService.GetLinkedInProfileURLFromNameAndCompany(name, company);
-                    //string linkedInProfileImageURL = GetLinkedInProfileImageURL(linkedInProfileURL);
-                    // artificial slow down, because Bing does not allow more than 5 requests per second.
-                    Thread.Sleep(500);
-                    results.Add(name.ToTitleCase(), linkedInProfileURL);
-                }
-            }
+                Type = SocialLink.LinkType.LINKEDIN,
+                URL = LinkedInProfileFinderService.GetLinkedInProfileURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress))
+            });
             return results;
+
         }
 
         private static String GetAttendeeEmailAddressesAsString(this IEnumerable<Microsoft.Graph.Attendee> collection, String separator)
