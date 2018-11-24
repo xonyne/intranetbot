@@ -56,6 +56,7 @@ namespace PersonalIntranetBot.Services
                 {
                     results.Add(new Models.Attendee
                     {
+                        AttendeeId = new Random().Next(1,10000),
                         EmailAddress = emailAddress,
                         Name = GetNameFromEMailAddress(emailAddress).ToTitleCase(),
                         IsAsPerson = true,
@@ -65,11 +66,10 @@ namespace PersonalIntranetBot.Services
                 else {
                     results.Add(new Models.Attendee
                     {
+                        AttendeeId = new Random().Next(1, 10000),
                         Name = "Unknown"
                     });
-                }
-                        
-                       
+                }                     
             }
             return results;
         }

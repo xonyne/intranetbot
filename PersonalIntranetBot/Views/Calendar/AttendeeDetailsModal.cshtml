@@ -1,0 +1,68 @@
+﻿@model PersonalIntranetBot.Models.Attendee
+@{
+    ViewData["Title"] = @Html.DisplayFor(model => model.Name);
+}
+<div id="attendee-@Html.DisplayFor(model => model.AttendeeId)" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="attendeeDetailsModalTitle" class="modal-title">@Html.DisplayFor(model => model.Name)</h4>
+            </div>
+            <div class="modal-body">
+                <p><a href="mailto:@Html.DisplayFor(model => model.EmailAddress)">@Html.DisplayFor(model => model.EmailAddress)</a></p>
+                <br />
+                <h4>Social Links</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>URL</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var socialLink in Model.SocialLinks)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Html.DisplayFor(modelItem => socialLink.URL)" target="_blank">@Html.DisplayFor(modelItem => socialLink.URL)</a>
+                                </td>
+                                <td>
+                                    <a asp-controller="SocialLink" asp-action="Edit" asp-route-id="@socialLink.SocialLinkId">Edit</a> |
+                                    <a asp-controller="SocialLink" asp-action="Details" asp-route-id="@socialLink.SocialLinkId">Details</a> |
+                                    <a asp-controller="SocialLink" asp-action="Delete" asp-route-id="@socialLink.SocialLinkId">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <p>
+                    <!-- TODO
+
+    <div>
+        <input type="submit" class="descButton" value="Create social link" />
+    </div>
+        -->
+                    <a asp-controller="Attendee" asp-route-id="@Model.AttendeeId" asp-action="CreateSocialLink">Create new social link</a>
+                </p>
+
+                @{ Html.RenderPartial("CreateSocialLink", new PersonalIntranetBot.Models.SocialLink
+                    { AttendeeId = Model.AttendeeId }); }
+
+                @section Scripts
+                    {
+                    <script type="text/javascript">
+                        $(".descButton").click(function () {
+                            $("#myModal").modal("show");
+                        });
+                        $("#hideModal").click(function () {
+                            $("#myModal").modal("hide");
+                        });</script>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="hideAttendeeDetailsModal" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
