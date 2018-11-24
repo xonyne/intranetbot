@@ -15,14 +15,29 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>Type</th>
                             <th>URL</th>
-                            <th></th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var socialLink in Model.SocialLinks)
                         {
                             <tr>
+                                <td>
+                                    @{
+                                        string iconUrl="";
+                                        switch (socialLink.Type)
+                                        {
+                                            case PersonalIntranetBot.Models.SocialLink.LinkType.LINKEDIN:
+                                                iconUrl = "/images/linkedin-icon.ico";
+                                                break;
+
+                                        }
+                                    }
+                                    <img class="socialLinkIcon" src="@iconUrl" height="16" width="16" />
+
+                                </td>
                                 <td>
                                     <a href="@Html.DisplayFor(modelItem => socialLink.URL)" target="_blank">@Html.DisplayFor(modelItem => socialLink.URL)</a>
                                 </td>
@@ -46,17 +61,17 @@
                 </p>
 
                 @{ Html.RenderPartial("CreateSocialLink", new PersonalIntranetBot.Models.SocialLink
-                    { AttendeeId = Model.AttendeeId }); }
+                 { AttendeeId = Model.AttendeeId }); }
 
-                @section Scripts
-                    {
+                                        @section Scripts
+                                        {
                     <script type="text/javascript">
                         $(".descButton").click(function () {
                             $("#myModal").modal("show");
-                        });
+                                            });
                         $("#hideModal").click(function () {
                             $("#myModal").modal("hide");
-                        });</script>
+                                            });</script>
                 }
             </div>
             <div class="modal-footer">
