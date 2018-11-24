@@ -61,3 +61,17 @@
         </div>
     </div>
 </div>
+@section Scripts
+    {
+    <script type="text/javascript">$("button[type='button']").click(function () {
+                        $("#myModal").find("#content").html($(this).attr("meeting-description"));
+                    });
+
+                    $(".descButton").click(function () {
+                        $("#myModal").modal("show");
+                    });
+
+                    $("#hideModal").click(function () {
+                        $("#myModal").modal("hide");
+                    });</script>
+}

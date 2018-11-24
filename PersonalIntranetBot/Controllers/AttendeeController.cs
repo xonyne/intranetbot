@@ -48,6 +48,29 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
             return View();
         }
 
+        // GET: SocialLinks/Create
+        public IActionResult CreateSocialLink(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            
+            return View(new SocialLink { AttendeeId = (int)id});
+        }
+
+        // GET: SocialLinks/Create
+        public async Task<IActionResult> OnSaveSocialLink([Bind("AttendeeId,URL")] SocialLink socialLink)
+        {
+            if (socialLink == null)
+            {
+                return NotFound();
+            }
+            _context.Add(socialLink);
+            await _context.SaveChangesAsync();
+            return View("Details");
+        }
+
         // POST: SocialLinks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.

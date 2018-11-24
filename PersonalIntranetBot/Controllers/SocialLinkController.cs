@@ -43,7 +43,8 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
         }
 
         // GET: SocialLinks/Create
-        public IActionResult Create(int? id)
+       /*
+       public IActionResult Create(int? id)
         {
             if (id == null)
             {
@@ -54,12 +55,24 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
                 AttendeeId = (int)id
             };
             return View(socialLink);
+        }*/
+
+        // GET: SocialLinks/Create
+        public async Task<IActionResult> Create([Bind("AttendeeId,URL")] SocialLink socialLink)
+        {
+            if (socialLink == null)
+            {
+                return NotFound();
+            }
+            _context.Add(socialLink);
+            await _context.SaveChangesAsync();
+            return View(socialLink);
         }
 
         // POST: SocialLinks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        /*[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SocialLinkId,AttendeeId,URL")] SocialLink socialLink)
         {
@@ -70,7 +83,7 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(socialLink);
-        }
+        }*/
 
         // GET: SocialLinks/Edit/5
         public async Task<IActionResult> Edit(int? id)

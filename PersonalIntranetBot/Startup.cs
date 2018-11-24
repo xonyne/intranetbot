@@ -18,8 +18,15 @@ using PersonalIntranetBot.Models;
 
 namespace PersonalIntranetBot
 {
+
     public class Startup
     {
+        private static string _connStr = @"
+            Server=127.0.0.1,1401;
+            Database=personalintranetbot;
+            User Id=SA;
+            Password=1StrongPassword!
+        ";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -42,8 +49,10 @@ namespace PersonalIntranetBot
             .AddCookie();
 
             services.AddMvc();
-
-            var connection = @"Server=localhost\SQLEXPRESS;Database=personalintranetbot;Trusted_Connection=True;ConnectRetryCount=0";
+            /* Mac */
+            var connection = _connStr;
+            /* Windows */
+            /*var connection = @"Server=localhost\SQLEXPRESS;Database=personalintranetbot;Trusted_Connection=True;ConnectRetryCount=0";*/
             services.AddDbContext<DBModelContext>
                 (options => options.UseSqlServer(connection));
 

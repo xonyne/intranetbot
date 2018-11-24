@@ -1,15 +1,11 @@
 ﻿@model PersonalIntranetBot.Models.Attendee
-
 @{
     ViewData["Title"] = @Html.DisplayFor(model => model.Name);
 }
-
 <h2>@Html.DisplayFor(model => model.Name)</h2>
-
 <p><a href="mailto:@Html.DisplayFor(model => model.EmailAddress)">@Html.DisplayFor(model => model.EmailAddress)</a></p>
 <br />
 <h4>Social Links</h4>
-
 <table class="table">
     <thead>
         <tr>
@@ -34,5 +30,26 @@
     </tbody>
 </table>
 <p>
-    <a asp-controller="SocialLink" asp-route-id="@Model.AttendeeId" asp-action="Create">Create new link</a>
+
+    <div>
+        <input type="submit" class="descButton" value="Create social link" />
+    </div>
+    
+    <a asp-controller="Attendee" asp-route-id="@Model.AttendeeId" asp-action="CreateSocialLink">Create new link</a>
 </p>
+
+@{ Html.RenderPartial("CreateSocialLink", new PersonalIntranetBot.Models.SocialLink
+    { AttendeeId = Model.AttendeeId }); }
+
+@section Scripts
+    {
+    <script type="text/javascript">
+
+                    $(".descButton").click(function () {
+                        $("#myModal").modal("show");
+                    });
+
+                    $("#hideModal").click(function () {
+                        $("#myModal").modal("hide");
+                    });</script>
+}
