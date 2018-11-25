@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using static PersonalIntranetBot.Models.Attendee;
+using static PersonalIntranetBot.Services.LinkedInService;
 
 namespace PersonalIntranetBot.Services
 {
@@ -36,7 +38,7 @@ namespace PersonalIntranetBot.Services
                             Start = DateTime.Parse(currentMeeting.Start.DateTime),
                             End = DateTime.Parse(currentMeeting.End.DateTime),
                             Location = meetingLocationAsString,
-                            GoogleMapsURL = GoogleMapsURLService.getGoogleMapsURL(meetingLocationAsString),
+                            GoogleMapsURL = GoogleMapsService.GetGoogleMapsURL(meetingLocationAsString),
                             Attendees = getMeetingAttendees(currentMeeting.Attendees),
                         });
                     }
@@ -60,16 +62,18 @@ namespace PersonalIntranetBot.Services
                         EmailAddress = emailAddress,
                         Name = GetNameFromEMailAddress(emailAddress).ToTitleCase(),
                         IsAsPerson = true,
-                        SocialLinks = GetSocialLinksForEmailAddress(emailAddress)
+                        SocialLinks = GetSocialLinksForEmailAddress(emailAddress),
                     });
-                }
-                else {
-                    results.Add(new Models.Attendee
+                    string linkedInProfileURL = LinkedInService.GetLinkedInProfileURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress));
+                    if (!String.IsNullOrEmpty(linkedInProfileURL))
                     {
-                        AttendeeId = new Random().Next(1, 10000),
-                        Name = "Unknown"
-                    });
-                }                     
+                        results[results.Count - 1].ImageURL = LinkedInService.GetLinkedInProfileInformationChromHeadless(linkedInProfileURL, LinkedInPublicProfileInformation.PROFILEIMAGEURL);
+                        results[results.Count - 1].CurrentJobCompany = LinkedInService.GetLinkedInProfileInformationChromHeadless(linkedInProfileURL, LinkedInPublicProfileInformation.CURRENTJOBCOMPANY);
+                        results[results.Count - 1].CurrentJobTitle = LinkedInService.GetLinkedInProfileInformationChromHeadless(linkedInProfileURL, LinkedInPublicProfileInformation.CURRENTJOBTITLE);
+                        results[results.Count - 1].EducationLocation = LinkedInService.GetLinkedInProfileInformationChromHeadless(linkedInProfileURL, LinkedInPublicProfileInformation.EDUCATIONLOCATION);
+                    }
+                }
+
             }
             return results;
         }
@@ -103,7 +107,7 @@ namespace PersonalIntranetBot.Services
             results.Add(new SocialLink
             {
                 Type = SocialLink.LinkType.LINKEDIN,
-                URL = LinkedInProfileFinderService.GetLinkedInProfileURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress))
+                URL = LinkedInService.GetLinkedInProfileURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress))
             });
             return results;
 
@@ -168,23 +172,5 @@ namespace PersonalIntranetBot.Services
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title);
         }
 
-        private static string GetLinkedInProfileImageURL(string linkedInProfileURL)
-        {
-            // does not work at the moment due to login
-            return "";
-
-            HtmlWeb web = new HtmlWeb();
-            HtmlDocument doc = web.Load(linkedInProfileURL);
-            HtmlNode linkedInProfileImageNode = doc.DocumentNode.SelectNodes("//*[@id=\"ember66\"]")[0];
-            string linkedInProfileImageURL = "";
-            if (linkedInProfileImageNode != null)
-            {
-                string wholeAttributeValue = linkedInProfileImageNode.Attributes["style"].Value;
-                int startIndex = wholeAttributeValue.IndexOf("url(\"", StringComparison.Ordinal);
-                int endIndex = wholeAttributeValue.IndexOf("\")", StringComparison.Ordinal);
-                linkedInProfileImageURL = wholeAttributeValue.Substring(startIndex, wholeAttributeValue.Length - endIndex);
-            }
-            return linkedInProfileImageURL;
-        }
     }
 }

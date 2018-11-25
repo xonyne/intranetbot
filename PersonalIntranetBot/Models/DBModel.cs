@@ -25,6 +25,10 @@ namespace PersonalIntranetBot.Models
         public string Name { get; set; }
         public bool IsAsPerson { get; set; }
         public ICollection<SocialLink> SocialLinks { get; set; }
+        public string ImageURL { get; set; }
+        public string CurrentJobTitle { get; set; }
+        public string CurrentJobCompany { get; set; }
+        public string EducationLocation { get; set; }
     }
 
     public class SocialLink
