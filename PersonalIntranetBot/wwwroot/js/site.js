@@ -4,7 +4,7 @@ $(".attendeeDetailsButton").click(function () {
 });
 
 $(".hideAttendeeeDetailsModal").click(function () {
-    $("#attendeeDetailsModal").modal("hide");
+    $("#" + $(this).attr("attendee-modal-id")).modal("hide");
 });
 
 $(".descButton").click(function () {
@@ -15,6 +15,6 @@ $(".descButton").click(function () {
     $("#meetingDetailsModal").modal("show");
 });
 
-$("#hideMeetingDetailsModal").click(function () {
+$(".hideMeetingDetailsModal").click(function () {
     $("#meetingDetailsModal").modal("hide");
 });

@@ -17,14 +17,14 @@ namespace PersonalIntranetBot.UnitTests
             string TEST_STRING = "/in/kevin-suter-191372ba";
             string NAME = "Kevin Suter";
             string COMPANY = "Zuara AG";
-            string searchString = String.Join(" ", new[] { NAME, COMPANY, LinkedInService.LINKEDIN_SEARCH_SUFFIX });
+            string searchString = String.Join(" ", new[] { NAME, COMPANY, SocialLinksService.LINKEDIN_SEARCH_STRING });
             Mock<BingWebSearchService> bingWebSearchServiceMock = new Mock<BingWebSearchService>();
             BingWebSearchServiceMockResults bingMockResults = new BingWebSearchServiceMockResults();
             BingWebSearchService.BingSearchResult result = new BingWebSearchService.BingSearchResult { JsonResult = bingMockResults.BingSearchResult_NameAndCompanyMatchingProfilesFound  };
             bingWebSearchServiceMock.Setup(x => x.DoBingWebSearch(searchString)).Returns(result);
 
             // Act
-            string resultString = LinkedInService.GetLinkedInProfileURLFromNameAndCompany(NAME, COMPANY);
+            string resultString = SocialLinksService.GetLinkedInAccountURLFromNameAndCompany(NAME, COMPANY);
 
             // Assert
             Assert.That(resultString.Contains(TEST_STRING));
@@ -38,14 +38,14 @@ namespace PersonalIntranetBot.UnitTests
             string TEST_STRING = "/in/till-jakob";
             string NAME = "Till Jakob";
             string COMPANY = "Isolutions";
-            string searchString = String.Join(" ", new[] { NAME, COMPANY, LinkedInService.LINKEDIN_SEARCH_SUFFIX });
+            string searchString = String.Join(" ", new[] { NAME, COMPANY, SocialLinksService.LINKEDIN_SEARCH_STRING });
             Mock<BingWebSearchService> bingWebSearchServiceMock = new Mock<BingWebSearchService>();
             BingWebSearchServiceMockResults bingMockResults = new BingWebSearchServiceMockResults();
             BingWebSearchService.BingSearchResult result = new BingWebSearchService.BingSearchResult { JsonResult = bingMockResults.BingSearchResult_NameMatchingProfilesFound };
             bingWebSearchServiceMock.Setup(x => x.DoBingWebSearch(searchString)).Returns(result);
 
             // Act
-            string resultString = LinkedInService.GetLinkedInProfileURLFromNameAndCompany(NAME, COMPANY);
+            string resultString = SocialLinksService.GetLinkedInAccountURLFromNameAndCompany(NAME, COMPANY);
 
             // Assert
             Assert.That(resultString.Contains(TEST_STRING));
@@ -59,14 +59,14 @@ namespace PersonalIntranetBot.UnitTests
             string TEST_STRING = "";
             string NAME = "Johnny Depp";
             string COMPANY = "SBB";
-            string searchString = String.Join(" ", new[] { NAME, COMPANY, LinkedInService.LINKEDIN_SEARCH_SUFFIX });
+            string searchString = String.Join(" ", new[] { NAME, COMPANY, SocialLinksService.LINKEDIN_SEARCH_STRING });
             Mock<BingWebSearchService> bingWebSearchServiceMock = new Mock<BingWebSearchService>();
             BingWebSearchServiceMockResults bingMockResults = new BingWebSearchServiceMockResults();
             BingWebSearchService.BingSearchResult result = new BingWebSearchService.BingSearchResult { JsonResult = bingMockResults.BingSearchResult_NameAndCompanyMatchingProfilesFound };
             bingWebSearchServiceMock.Setup(x => x.DoBingWebSearch(searchString)).Returns(result);
 
             // Act
-            string resultString = LinkedInService.GetLinkedInProfileURLFromNameAndCompany(NAME, COMPANY);
+            string resultString = SocialLinksService.GetLinkedInAccountURLFromNameAndCompany(NAME, COMPANY);
 
             // Assert
             Assert.That(resultString.Contains(TEST_STRING));

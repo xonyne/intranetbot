@@ -49,7 +49,6 @@
     <None Include="wwwroot\images\cropped-rainbow-header.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Attendee\" />
     <Folder Include="Views\Calendar\Components\" />
   </ItemGroup>
 </Project>

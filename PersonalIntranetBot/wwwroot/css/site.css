@@ -1,4 +1,8 @@
-﻿.socialLinkIcon {
+﻿.modal-title {
+display: inline !important;
+}
+
+.socialLinkIcon {
     float: right;
     margin-top: 2px;
 }

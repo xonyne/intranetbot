@@ -16,10 +16,8 @@ namespace PersonalIntranetBot.Models
         [DisplayFormat(DataFormatString = "{0:ddd, dd.MM.yy HH:mm}")]
         public DateTime End { get; set; }
         public string Location { get; set; }
-        //public string AttendeeEmailAddresses { get; set; }
         public List<string> AttendeeEmailAddresses { get; set; }
         public string GoogleMapsURL { get; set; }
-        // Key: Name of person, Value: URL to LinkedIn profile (empty string if not found)
         public List<Attendee> Attendees { get; set; }
     }
 }

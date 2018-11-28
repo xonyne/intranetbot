@@ -2,31 +2,22 @@
 @{
     ViewData["Title"] = @Html.DisplayFor(model => model.Name);
 }
-<div id="attendee-@Html.DisplayFor(model => model.AttendeeId)" class="modal fade" role="dialog">
+<div id="attendee-@Html.DisplayFor(model => model.AttendeeId)" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 id="attendeeDetailsModalTitle" class="modal-title">@Html.DisplayFor(model => model.Name)</h4>
+                <h4 class="modal-title">@Html.DisplayFor(model => model.Name)</h4>
+                <button type="button" class="close hideAttendeeDetailsModal" aria-label="Close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
+                            <!--@if (!String.IsNullOrEmpty(Model.ImageURL))
+                            {
                             <td><img src="@Html.DisplayFor(model => model.ImageURL)" width="200" height="200" /></td>
-                            <td>
-                                Current Job Title: @Html.DisplayFor(model => model.CurrentJobTitle)"<br />
-                                Current Job Company: @Html.DisplayFor(model => model.CurrentJobCompany)"<br/>
-                                Education: @Html.DisplayFor(model => model.EducationLocation)"<br />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            }-->
+                            <img src="@Html.DisplayFor(model => model.ImageURL)" width="200" height="200" />
+
                         <p><a href="mailto:@Html.DisplayFor(model => model.EmailAddress)">@Html.DisplayFor(model => model.EmailAddress)</a></p>
                         <br />
                         <h4>Social Links</h4>
@@ -50,50 +41,37 @@
                                                     case PersonalIntranetBot.Models.SocialLink.LinkType.LINKEDIN:
                                                         iconUrl = "/images/linkedin-icon.ico";
                                                         break;
+                                                    case PersonalIntranetBot.Models.SocialLink.LinkType.XING:
+                                                        iconUrl = "/images/xing-icon.png";
+                                                        break;
+                                                    case PersonalIntranetBot.Models.SocialLink.LinkType.TWITTER:
+                                                        iconUrl = "/images/twitter-icon.ico";
+                                                        break;
 
                                                 }
                                             }
                                             <img class="socialLinkIcon" src="@iconUrl" height="16" width="16" />
-
                                         </td>
                                         <td>
-                                            <a href="@Html.DisplayFor(modelItem => socialLink.URL)" target="_blank">@Html.DisplayFor(modelItem => socialLink.URL)</a>
+                                            @if (socialLink.URL.Equals("-"))
+                                            {
+                                                    <span>@Html.DisplayFor(modelItem => socialLink.URL)</span>
+                                            }
+                                            else
+                                            {
+                                                  <a href="@Html.DisplayFor(modelItem => socialLink.URL)" target="_blank">@Html.DisplayFor(modelItem => socialLink.URL)</a>
+                                            }
                                         </td>
                                         <td>
-                                            <a asp-controller="SocialLink" asp-action="Edit" asp-route-id="@socialLink.SocialLinkId">Edit</a> |
-                                            <a asp-controller="SocialLink" asp-action="Details" asp-route-id="@socialLink.SocialLinkId">Details</a> |
-                                            <a asp-controller="SocialLink" asp-action="Delete" asp-route-id="@socialLink.SocialLinkId">Delete</a>
+                                            <a asp-controller="SocialLink" asp-action="Edit" asp-route-id="@socialLink.SocialLinkId">Edit</a>
                                         </td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
-                        <p>
-                            <!-- TODO
-
-            <div>
-                <input type="submit" class="descButton" value="Create social link" />
-            </div>
-                -->
-                            <a asp-controller="Attendee" asp-route-id="@Model.AttendeeId" asp-action="CreateSocialLink">Create new social link</a>
-                        </p>
-
-                        @{ Html.RenderPartial("CreateSocialLink", new PersonalIntranetBot.Models.SocialLink
-                            { AttendeeId = Model.AttendeeId }); }
-
-                        @section Scripts
-                            {
-                            <script type="text/javascript">
-                                $(".descButton").click(function () {
-                                    $("#myModal").modal("show");
-                                });
-                                $("#hideModal").click(function () {
-                                    $("#myModal").modal("hide");
-                                });</script>
-                        }
 </div>
             <div class="modal-footer">
-                <button type="button" id="hideAttendeeDetailsModal" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default hideAttendeeDetailsModal" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using static PersonalIntranetBot.Models.Attendee;
-using static PersonalIntranetBot.Services.LinkedInService;
+using static PersonalIntranetBot.Services.SocialLinksService;
 
 namespace PersonalIntranetBot.Services
 {
@@ -39,7 +39,7 @@ namespace PersonalIntranetBot.Services
                             End = DateTime.Parse(currentMeeting.End.DateTime),
                             Location = meetingLocationAsString,
                             GoogleMapsURL = GoogleMapsService.GetGoogleMapsURL(meetingLocationAsString),
-                            Attendees = getMeetingAttendees(currentMeeting.Attendees),
+                            Attendees = GetMeetingAttendees(currentMeeting.Attendees),
                         });
                     }
                 }
@@ -49,7 +49,7 @@ namespace PersonalIntranetBot.Services
             return items;
         }
 
-        private static List<Models.Attendee> getMeetingAttendees(IEnumerable<Microsoft.Graph.Attendee> graphAttendees) {
+        private static List<Models.Attendee> GetMeetingAttendees(IEnumerable<Microsoft.Graph.Attendee> graphAttendees) {
             List<Models.Attendee> results = new List<Models.Attendee>();
 
             foreach (Microsoft.Graph.Attendee a in graphAttendees) {
@@ -58,12 +58,17 @@ namespace PersonalIntranetBot.Services
                 {
                     results.Add(new Models.Attendee
                     {
-                        AttendeeId = new Random().Next(1,10000),
+                        AttendeeId = new Random().Next(1, 10000),
                         EmailAddress = emailAddress,
                         Name = GetNameFromEMailAddress(emailAddress).ToTitleCase(),
                         IsAsPerson = true,
                         SocialLinks = GetSocialLinksForEmailAddress(emailAddress),
+                        ImageURL = "",
+                        CurrentJobTitle = "",
+                        CurrentJobCompany=GetCompanyFromEMailAddress(emailAddress).ToTitleCase(),
+                        EducationLocation="",
                     });
+                    /*
                     string linkedInProfileURL = LinkedInService.GetLinkedInProfileURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress));
                     if (!String.IsNullOrEmpty(linkedInProfileURL))
                     {
@@ -72,6 +77,7 @@ namespace PersonalIntranetBot.Services
                         results[results.Count - 1].CurrentJobTitle = LinkedInService.GetLinkedInProfileInformationChromHeadless(linkedInProfileURL, LinkedInPublicProfileInformation.CURRENTJOBTITLE);
                         results[results.Count - 1].EducationLocation = LinkedInService.GetLinkedInProfileInformationChromHeadless(linkedInProfileURL, LinkedInPublicProfileInformation.EDUCATIONLOCATION);
                     }
+                    */
                 }
 
             }
@@ -102,13 +108,24 @@ namespace PersonalIntranetBot.Services
 
         private static List<SocialLink> GetSocialLinksForEmailAddress(String emailAddress)
         {
-            Thread.Sleep(500);
-            List<SocialLink> results = new List<SocialLink>();
-            results.Add(new SocialLink
+            List<SocialLink> results = new List<SocialLink>
             {
-                Type = SocialLink.LinkType.LINKEDIN,
-                URL = LinkedInService.GetLinkedInProfileURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress))
-            });
+                new SocialLink
+                {
+                    Type = SocialLink.LinkType.LINKEDIN,
+                    URL = SocialLinksService.GetLinkedInAccountURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress))
+                },
+                new SocialLink
+                {
+                    Type = SocialLink.LinkType.XING,
+                    URL = SocialLinksService.GetXingAccountURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress))
+                },
+                new SocialLink
+                {
+                    Type = SocialLink.LinkType.TWITTER,
+                    URL = SocialLinksService.GetTwitterAccountURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress))
+                }
+            };
             return results;
 
         }
