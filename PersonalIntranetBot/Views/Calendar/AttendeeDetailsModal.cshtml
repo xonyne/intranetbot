@@ -12,11 +12,13 @@
                 </button>
             </div>
             <div class="modal-body">
-                            <!--@if (!String.IsNullOrEmpty(Model.ImageURL))
+                            @if (!String.IsNullOrEmpty(Model.ImageURL))
                             {
-                            <td><img src="@Html.DisplayFor(model => model.ImageURL)" width="200" height="200" /></td>
-                            }-->
                             <img src="@Html.DisplayFor(model => model.ImageURL)" width="200" height="200" />
+                            }
+                            else {
+                            <img src="/images/blank-profile-picture.svg" width="200" height="200" />
+                            }
 
                         <p><a href="mailto:@Html.DisplayFor(model => model.EmailAddress)">@Html.DisplayFor(model => model.EmailAddress)</a></p>
                         <br />

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Web;
 using static PersonalIntranetBot.Models.Attendee;
 using static PersonalIntranetBot.Services.SocialLinksService;
+using Location = PersonalIntranetBot.Models.Location;
 
 namespace PersonalIntranetBot.Services
 {
@@ -27,7 +28,7 @@ namespace PersonalIntranetBot.Services
             {
                 foreach (Event currentMeeting in meetings)
                 {
-                    string meetingLocationAsString = GetAddressFromGraphLocation(currentMeeting.Location);
+                    Location meetingLocation = GetAddressFromGraphLocation(currentMeeting.Location);
                     if (MeetingIsNotRecurringAndNotAllDay(currentMeeting) && MeetingIsNotInPast(currentMeeting)) {
                         items.Add(new OutlookEventsViewModel
                         {
@@ -37,8 +38,8 @@ namespace PersonalIntranetBot.Services
                             AttendeeEmailAddresses = GetAttendeeEmailAddressesAsList(currentMeeting.Attendees),
                             Start = DateTime.Parse(currentMeeting.Start.DateTime),
                             End = DateTime.Parse(currentMeeting.End.DateTime),
-                            Location = meetingLocationAsString,
-                            GoogleMapsURL = GoogleMapsService.GetGoogleMapsURL(meetingLocationAsString),
+                            Location = meetingLocation,
+                            GoogleMapsURL = GoogleMapsService.GetGoogleMapsURL(meetingLocation.LocationString),
                             Attendees = GetMeetingAttendees(currentMeeting.Attendees),
                         });
                     }
@@ -61,23 +62,13 @@ namespace PersonalIntranetBot.Services
                         AttendeeId = new Random().Next(1, 10000),
                         EmailAddress = emailAddress,
                         Name = GetNameFromEMailAddress(emailAddress).ToTitleCase(),
-                        IsAsPerson = true,
+                        IsPerson = true,
                         SocialLinks = GetSocialLinksForEmailAddress(emailAddress),
                         ImageURL = "",
                         CurrentJobTitle = "",
                         CurrentJobCompany=GetCompanyFromEMailAddress(emailAddress).ToTitleCase(),
                         EducationLocation="",
                     });
-                    /*
-                    string linkedInProfileURL = LinkedInService.GetLinkedInProfileURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress));
-                    if (!String.IsNullOrEmpty(linkedInProfileURL))
-                    {
-                        results[results.Count - 1].ImageURL = LinkedInService.GetLinkedInProfileInformationChromHeadless(linkedInProfileURL, LinkedInPublicProfileInformation.PROFILEIMAGEURL);
-                        results[results.Count - 1].CurrentJobCompany = LinkedInService.GetLinkedInProfileInformationChromHeadless(linkedInProfileURL, LinkedInPublicProfileInformation.CURRENTJOBCOMPANY);
-                        results[results.Count - 1].CurrentJobTitle = LinkedInService.GetLinkedInProfileInformationChromHeadless(linkedInProfileURL, LinkedInPublicProfileInformation.CURRENTJOBTITLE);
-                        results[results.Count - 1].EducationLocation = LinkedInService.GetLinkedInProfileInformationChromHeadless(linkedInProfileURL, LinkedInPublicProfileInformation.EDUCATIONLOCATION);
-                    }
-                    */
                 }
 
             }
@@ -169,21 +160,31 @@ namespace PersonalIntranetBot.Services
             return result;
         }
 
-        private static String GetAddressFromGraphLocation(Location location)
+        private static PersonalIntranetBot.Models.Location GetAddressFromGraphLocation(Microsoft.Graph.Location location)
         {
+            string meetingLocation="";
             if (location.Address != null)
             {
                 String street = String.IsNullOrEmpty(location.Address.Street) ? "" : location.Address.Street;
                 String postalCode = String.IsNullOrEmpty(location.Address.PostalCode) ? "" : ", " + location.Address.PostalCode + " ";
                 String city = String.IsNullOrEmpty(location.Address.City) ? "" : location.Address.City;
-                return street + postalCode + city;
+                meetingLocation= street + postalCode + city;
             } 
             if (location.DisplayName != null) {
-                return location.DisplayName;
+                meetingLocation= location.DisplayName;
 }
-            return "";
+            return new PersonalIntranetBot.Models.Location
+            {
+                LocationString = meetingLocation,
+                IsAddress = checkMeetingLocationIsAddress(meetingLocation),
+            };
         }
-        
+
+        private static bool checkMeetingLocationIsAddress(string meetingLocation)
+        {
+            return meetingLocation.Contains(",") && meetingLocation.Any(char.IsDigit);
+        }
+
         public static string ToTitleCase(this string title)
         {
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title);

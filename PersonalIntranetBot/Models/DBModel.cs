@@ -18,12 +18,18 @@ namespace PersonalIntranetBot.Models
         public DbSet<SocialLink> SocialLinks { get; set; }
     }
 
+    public class Location {
+        public int LocationId { get; set; }
+        public string LocationString { get; set; }
+        public bool IsAddress { get; set; }
+    }
+
     public class Attendee
     {
         public int AttendeeId { get; set; }
         public string EmailAddress { get; set; }
         public string Name { get; set; }
-        public bool IsAsPerson { get; set; }
+        public bool IsPerson { get; set; }
         public ICollection<SocialLink> SocialLinks { get; set; }
         public string ImageURL { get; set; }
         public string CurrentJobTitle { get; set; }

@@ -1,5 +1,11 @@
 ﻿@model List<PersonalIntranetBot.Models.OutlookEventsViewModel>;
-<table style="border: 1px solid green;">
+<table class="eventsTable" style="border: 1px solid green;">
+    <colgroup>
+        <col class="twentyfive" />
+        <col class="twentyfive" />
+        <col class="twentyfive" />
+        <col class="twentyfive" />
+    </colgroup>
     <tr>
         <th style="border: 1px solid green; padding: 5px;">Content</th>
         <th style="border: 1px solid green; padding: 5px;">Directions</th>
@@ -8,20 +14,27 @@
     </tr>
     @foreach (var item in Model)
     {
-        <tr style="border: 1px solid green;">
+        <tr style="border: 1px solid green">
             <td style="border: 1px solid green; padding: 5px;">
                 <button type="button" class="descButton btn btn-default" meeting-description="@Html.DisplayFor(modelItem => item.Description)"><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(modelItem => item.Subject)</button>
             </td>
             <td style="border: 1px solid green;padding: 5px;">
-                <div class="infoBox btn btn-default"><span class="glyphicon glyphicon-map-marker" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.Location)<br /><a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" target="_blank">Get directions...</a></div>
+                @if (item.Location.IsAddress)
+                {
+                    <div class="infoBox btn btn-default"><span class="glyphicon glyphicon-map-marker" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.Location.LocationString)<br /><a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" target="_blank">Get directions...</a></div>
+                }
+                else
+                {
+                    <div class="infoBox btn btn-default"><span class="glyphicon glyphicon-map-marker" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.Location.LocationString)</div>
+                }
             </td>
-            <td style="border: 1px solid green;padding: 5px;">
+            <td style="border: 1px solid green;padding: 5px">
                 <div class="infoBox"> 
                     <span class="glyphicon glyphicon-time" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.Start)<br />
                     <span class="glyphicon glyphicon-time" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.End)<br />
                 </div>
             </td>
-            <td style="border: 1px solid green;padding: 5px;">
+            <td style="border: 1px solid green;padding: 5px">
                 @for (int i = 0; i < item.Attendees.Count; i++)
                 {
                 <button class="attendeeDetailsButton btn btn-default" attendee-modal-id="attendee-@item.Attendees[i].AttendeeId"><span class="glyphicon glyphicon-user" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(m => item.Attendees[i].Name)</button>

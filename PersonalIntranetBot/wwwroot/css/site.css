@@ -1,11 +1,36 @@
-﻿.modal-title {
-display: inline !important;
+﻿.btn-default {
+    white-space: normal !important
+}
+
+.events-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.twenty {
+    width: 20%;
+    white-space: normal;
+    background: tomato;
+}
+
+.twentyfive {
+    width: 25%;
+}
+
+.thirty {
+    width: 30%;
+    background: yellow;
+}
+
+.modal-title {
+    display: inline !important;
 }
 
 .socialLinkIcon {
     float: right;
     margin-top: 2px;
 }
+
 .infoBox {
 text-align:left !important;
 line-height:1.5 !important;

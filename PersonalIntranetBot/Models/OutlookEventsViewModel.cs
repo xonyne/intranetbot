@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace PersonalIntranetBot.Models
 {
@@ -15,7 +14,7 @@ namespace PersonalIntranetBot.Models
         public DateTime Start { get; set; }
         [DisplayFormat(DataFormatString = "{0:ddd, dd.MM.yy HH:mm}")]
         public DateTime End { get; set; }
-        public string Location { get; set; }
+        public Location Location { get; set; }
         public List<string> AttendeeEmailAddresses { get; set; }
         public string GoogleMapsURL { get; set; }
         public List<Attendee> Attendees { get; set; }
