@@ -22,12 +22,17 @@ namespace PersonalIntranetBot.Controllers
         private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _env;
         private readonly IGraphSdkHelper _graphSdkHelper;
+        private GraphServiceClient _graphClient;
+        private readonly PersonalIntranetBotService _personalIntranetBotService;
+        private readonly DBModelContext _context;
 
-        public CalendarController(IConfiguration configuration, IHostingEnvironment hostingEnvironment, IGraphSdkHelper graphSdkHelper)
+        public CalendarController(DBModelContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment, IGraphSdkHelper graphSdkHelper)
         {
             _configuration = configuration;
             _env = hostingEnvironment;
             _graphSdkHelper = graphSdkHelper;
+            _context = context;
+            _personalIntranetBotService = new PersonalIntranetBotService(_context);
         }
 
         [AllowAnonymous]
@@ -39,16 +44,10 @@ namespace PersonalIntranetBot.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                // Get user's id for token cache.
                 var identifier = User.FindFirst(Startup.ObjectIdentifierType)?.Value;
-
-                // Initialize the GraphServiceClient.
-                var graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
-
-                // Get events.
-                IUserEventsCollectionPage events = await graphClient.Me.Events.Request().GetAsync();
-
-                items = await PersonalIntranetBotService.GetOutlookCalendarEvents(graphClient);
+                _graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
+                IUserEventsCollectionPage events = await _graphClient.Me.Events.Request().GetAsync();
+                items = await _personalIntranetBotService.GetOutlookCalendarEvents(_graphClient);
             }
             return View(items);
         }

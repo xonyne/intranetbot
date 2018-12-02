@@ -28,7 +28,7 @@ namespace PersonalIntranetBot.Models
     {
         public int AttendeeId { get; set; }
         public string EmailAddress { get; set; }
-        public string Name { get; set; }
+        public string DisplayName { get; set; }
         public bool IsPerson { get; set; }
         public ICollection<SocialLink> SocialLinks { get; set; }
         public string ImageURL { get; set; }

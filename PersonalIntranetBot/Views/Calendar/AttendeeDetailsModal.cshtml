@@ -1,12 +1,12 @@
 ﻿@model PersonalIntranetBot.Models.Attendee
 @{
-    ViewData["Title"] = @Html.DisplayFor(model => model.Name);
+    ViewData["Title"] = @Html.DisplayFor(model => model.DisplayName);
 }
 <div id="attendee-@Html.DisplayFor(model => model.AttendeeId)" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">@Html.DisplayFor(model => model.Name)</h4>
+                <h4 class="modal-title">@Html.DisplayFor(model => model.DisplayName)</h4>
                 <button type="button" class="close hideAttendeeDetailsModal" aria-label="Close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span>
                 </button>

@@ -37,7 +37,7 @@
             <td style="border: 1px solid green;padding: 5px">
                 @for (int i = 0; i < item.Attendees.Count; i++)
                 {
-                <button class="attendeeDetailsButton btn btn-default" attendee-modal-id="attendee-@item.Attendees[i].AttendeeId"><span class="glyphicon glyphicon-user" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(m => item.Attendees[i].Name)</button>
+                <button class="attendeeDetailsButton btn btn-default" attendee-modal-id="attendee-@item.Attendees[i].AttendeeId"><span class="glyphicon glyphicon-user" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(m => item.Attendees[i].DisplayName)</button>
                 Html.RenderPartial("AttendeeDetailsModal", item.Attendees[i]);
                 }
             </td>

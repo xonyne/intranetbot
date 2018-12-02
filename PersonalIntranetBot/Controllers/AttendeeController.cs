@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PersonalIntranetBot.Models;
 
-namespace EFGetStarted.AspNetCore.NewDb.Controllers
+namespace PersonalIntranetBot.Controllers
 {
     public class AttendeeController : Controller
     {
@@ -18,10 +18,16 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
             _context = context;
         }
 
-        // GET: SocialLinks
+        // GET: Attendees
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Attendees.ToListAsync());
+            return View(await _context.Attendees.Include(s => s.SocialLinks).ToListAsync());
+        }
+
+        // GET: Attendees
+        public async Task<List<Attendee>> GetAttendees()
+        {
+            return await  _context.Attendees.Include(s => s.SocialLinks).ToListAsync();
         }
 
         // GET: SocialLinks/Details/5

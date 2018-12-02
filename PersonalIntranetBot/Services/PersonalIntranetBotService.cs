@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph;
 using PersonalIntranetBot.Helpers;
 using PersonalIntranetBot.Models;
@@ -10,15 +11,19 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using static PersonalIntranetBot.Models.Attendee;
-using static PersonalIntranetBot.Services.SocialLinksService;
 using Location = PersonalIntranetBot.Models.Location;
 
 namespace PersonalIntranetBot.Services
 {
-    public static class PersonalIntranetBotService
+    public class PersonalIntranetBotService
     {
-        public static async Task<List<OutlookEventsViewModel>> GetOutlookCalendarEvents(GraphServiceClient graphClient)
+        private readonly DBModelContext _dbContext;
+
+        public PersonalIntranetBotService(DBModelContext dbContext) {
+            _dbContext = dbContext;
+        }
+
+        public async Task<List<OutlookEventsViewModel>> GetOutlookCalendarEvents(GraphServiceClient graphClient)
         {
             List<OutlookEventsViewModel> items = new List<OutlookEventsViewModel>();
             Task<IUserEventsCollectionPage> graphEvents = GraphService.GetCalendarEvents(graphClient);
@@ -40,64 +45,78 @@ namespace PersonalIntranetBot.Services
                             End = DateTime.Parse(currentMeeting.End.DateTime),
                             Location = meetingLocation,
                             GoogleMapsURL = GoogleMapsService.GetGoogleMapsURL(meetingLocation.LocationString),
-                            Attendees = GetMeetingAttendees(currentMeeting.Attendees),
+                            Attendees = GetAndUpdateMeetingAttendees(currentMeeting.Attendees),
                         });
                     }
                 }
             }
             // Order events by start date ascending
             items = items.OrderBy(e => e.Start).ToList();
+
+            //Save attendees to database
+
             return items;
         }
 
-        private static List<Models.Attendee> GetMeetingAttendees(IEnumerable<Microsoft.Graph.Attendee> graphAttendees) {
-            List<Models.Attendee> results = new List<Models.Attendee>();
+        private List<Models.Attendee> GetAndUpdateMeetingAttendees(IEnumerable<Microsoft.Graph.Attendee> meetingAttendees) {
+            List<Models.Attendee> dbAttendees = _dbContext.Attendees.Include(s => s.SocialLinks).ToList();
 
-            foreach (Microsoft.Graph.Attendee a in graphAttendees) {
-                string emailAddress = a.EmailAddress.Address.ToString();
-                if (emailAddress != null)
+            List<Models.Attendee> results = new List<Models.Attendee>();
+            foreach (Microsoft.Graph.Attendee graphAttendee in meetingAttendees) {
+                string meetingAttendeeEmailAddress = graphAttendee.EmailAddress.Address.ToString();
+                if (meetingAttendeeEmailAddress != null)
                 {
-                    results.Add(new Models.Attendee
+                    if (!dbAttendees.Any(dbAttendee => dbAttendee.EmailAddress.ToLower() == meetingAttendeeEmailAddress.ToLower()))
                     {
-                        AttendeeId = new Random().Next(1, 10000),
-                        EmailAddress = emailAddress,
-                        Name = GetNameFromEMailAddress(emailAddress).ToTitleCase(),
-                        IsPerson = true,
-                        SocialLinks = GetSocialLinksForEmailAddress(emailAddress),
-                        ImageURL = "",
-                        CurrentJobTitle = "",
-                        CurrentJobCompany=GetCompanyFromEMailAddress(emailAddress).ToTitleCase(),
-                        EducationLocation="",
-                    });
+                        var attendee = new Models.Attendee
+                        {
+                            EmailAddress = meetingAttendeeEmailAddress,
+                            DisplayName = ToTitleCase(GetNameFromEMailAddress(meetingAttendeeEmailAddress)),
+                            IsPerson = true,
+                            SocialLinks = GetSocialLinksForEmailAddress(meetingAttendeeEmailAddress),
+                            ImageURL = "",
+                            CurrentJobTitle = "",
+                            CurrentJobCompany = ToTitleCase(GetCompanyFromEMailAddress(meetingAttendeeEmailAddress)),
+                            EducationLocation = "",
+                        };
+                        results.Add(attendee);
+                        _dbContext.Add(attendee);
+                    }
+                    else {
+                        results.Add(dbAttendees.First(item => item.EmailAddress.ToLower() == meetingAttendeeEmailAddress.ToLower()));
+                    }
+                    
                 }
 
             }
+            _dbContext.SaveChanges();
+
             return results;
         }
 
-        private static string GetNameFromEMailAddress(string emailAddress) {
+        private string GetNameFromEMailAddress(string emailAddress) {
             // get first part of email address and replace . by space (split first and last name)
             return emailAddress.Split("@")[0].Replace(".", " ").Trim();
         }
 
-        private static string GetCompanyFromEMailAddress(string emailAddress)
+        private string GetCompanyFromEMailAddress(string emailAddress)
         {
             // get second part of email address and get only company name
             return emailAddress.Split("@")[1].Split(".")[0];
         }
 
 
-        private static bool MeetingIsNotRecurringAndNotAllDay(Event meeting)
+        private bool MeetingIsNotRecurringAndNotAllDay(Event meeting)
         {
             return (!(bool)meeting.IsAllDay && meeting.Recurrence == null);
         }
 
-        private static bool MeetingIsNotInPast(Event meeting)
+        private bool MeetingIsNotInPast(Event meeting)
         {
-            return (DateTime.Parse(meeting.End.DateTime) > System.DateTime.Now);
+            return (DateTime.Parse(meeting.End.DateTime) >= System.DateTime.Now);
         }
 
-        private static List<SocialLink> GetSocialLinksForEmailAddress(String emailAddress)
+        private List<SocialLink> GetSocialLinksForEmailAddress(String emailAddress)
         {
             List<SocialLink> results = new List<SocialLink>
             {
@@ -121,7 +140,7 @@ namespace PersonalIntranetBot.Services
 
         }
 
-        private static String GetAttendeeEmailAddressesAsString(this IEnumerable<Microsoft.Graph.Attendee> collection, String separator)
+        private String GetAttendeeEmailAddressesAsString(IEnumerable<Microsoft.Graph.Attendee> collection, String separator)
         {
             using (var enumerator = collection.GetEnumerator())
             {
@@ -141,7 +160,7 @@ namespace PersonalIntranetBot.Services
             }
         }
 
-        private static List<string> GetAttendeeEmailAddressesAsList(this IEnumerable<Microsoft.Graph.Attendee> collection)
+        private List<string> GetAttendeeEmailAddressesAsList(IEnumerable<Microsoft.Graph.Attendee> collection)
         {
             List<string> result = new List<string>();
             using (var enumerator = collection.GetEnumerator())
@@ -160,7 +179,7 @@ namespace PersonalIntranetBot.Services
             return result;
         }
 
-        private static PersonalIntranetBot.Models.Location GetAddressFromGraphLocation(Microsoft.Graph.Location location)
+        private PersonalIntranetBot.Models.Location GetAddressFromGraphLocation(Microsoft.Graph.Location location)
         {
             string meetingLocation="";
             if (location.Address != null)
@@ -176,16 +195,16 @@ namespace PersonalIntranetBot.Services
             return new PersonalIntranetBot.Models.Location
             {
                 LocationString = meetingLocation,
-                IsAddress = checkMeetingLocationIsAddress(meetingLocation),
+                IsAddress = CheckMeetingLocationIsAddress(meetingLocation),
             };
         }
 
-        private static bool checkMeetingLocationIsAddress(string meetingLocation)
+        private bool CheckMeetingLocationIsAddress(string meetingLocation)
         {
             return meetingLocation.Contains(",") && meetingLocation.Any(char.IsDigit);
         }
 
-        public static string ToTitleCase(this string title)
+        public string ToTitleCase(string title)
         {
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title);
         }
