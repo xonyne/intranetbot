@@ -12,70 +12,75 @@
                 </button>
             </div>
             <div class="modal-body">
-                            @if (!String.IsNullOrEmpty(Model.ImageURL))
-                            {
-                            <img src="@Html.DisplayFor(model => model.ImageURL)" width="200" height="200" />
-                            }
-                            else {
-                            <img src="/images/blank-profile-picture.svg" width="200" height="200" />
-                            }
+                @if (!String.IsNullOrEmpty(Model.ImageURL))
+                {
+                    <img src="@Html.DisplayFor(model => model.ImageURL)" width="200" height="200" />
+                }
+                else
+                {
+                    <img src="/images/blank-profile-picture.svg" width="200" height="200" />
+                }
 
-                        <p><a href="mailto:@Html.DisplayFor(model => model.EmailAddress)">@Html.DisplayFor(model => model.EmailAddress)</a></p>
-                        <br />
-                        <h4>Social Links</h4>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>URL</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var socialLink in Model.SocialLinks)
-                                {
-                                    <tr>
-                                        <td>
-                                            @{
-                                                string iconUrl = "";
-                                                switch (socialLink.Type)
-                                                {
-                                                    case PersonalIntranetBot.Models.SocialLink.LinkType.LINKEDIN:
-                                                        iconUrl = "/images/linkedin-icon.ico";
-                                                        break;
-                                                    case PersonalIntranetBot.Models.SocialLink.LinkType.XING:
-                                                        iconUrl = "/images/xing-icon.png";
-                                                        break;
-                                                    case PersonalIntranetBot.Models.SocialLink.LinkType.TWITTER:
-                                                        iconUrl = "/images/twitter-icon.ico";
-                                                        break;
+                <p><a href="mailto:@Html.DisplayFor(model => model.EmailAddress)">@Html.DisplayFor(model => model.EmailAddress)</a></p>
+                <br />
+                <h4>Social Links</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>URL</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var socialLink in Model.SocialLinks)
+                        {
+                            <tr>
+                                <td>
+                                    @{
+                                        string iconUrl = "";
+                                        switch (socialLink.Type)
+                                        {
+                                            case PersonalIntranetBot.Models.SocialLink.LinkType.LINKEDIN:
+                                                iconUrl = "/images/linkedin-icon.ico";
+                                                break;
+                                            case PersonalIntranetBot.Models.SocialLink.LinkType.XING:
+                                                iconUrl = "/images/xing-icon.png";
+                                                break;
+                                            case PersonalIntranetBot.Models.SocialLink.LinkType.TWITTER:
+                                                iconUrl = "/images/twitter-icon.ico";
+                                                break;
 
-                                                }
-                                            }
-                                            <img class="socialLinkIcon" src="@iconUrl" height="16" width="16" />
-                                        </td>
-                                        <td>
-                                            @if (socialLink.URL.Equals("-"))
-                                            {
-                                                    <span>@Html.DisplayFor(modelItem => socialLink.URL)</span>
-                                            }
-                                            else
-                                            {
-                                                  <a href="@Html.DisplayFor(modelItem => socialLink.URL)" target="_blank">@Html.DisplayFor(modelItem => socialLink.URL)</a>
-                                            }
-                                        </td>
-                                        <td>
-                                            <a asp-controller="SocialLink" asp-action="Edit" asp-route-id="@socialLink.SocialLinkId">Edit</a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-</div>
+                                        }
+                                    }
+                                    <img class="socialLinkIcon" src="@iconUrl" height="16" width="16" />
+                                </td>
+                                <td>
+                                    @if (socialLink.URL.Equals("-"))
+                                    {
+                                        <span>@Html.DisplayFor(modelItem => socialLink.URL)</span>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Html.DisplayFor(modelItem => socialLink.URL)" target="_blank">@Html.DisplayFor(modelItem => socialLink.URL)</a>
+                                    }
+                                </td>
+                                <td>
+                                    <button type="button" class="editSocialLinkButton btn btn-sm" social-link-url="@Html.DisplayFor(modelItem => socialLink.URL)">Edit</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default hideAttendeeDetailsModal" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
+
+
+
 

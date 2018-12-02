@@ -55,6 +55,11 @@ textarea {
     max-width: 280px;
 }
 
+#inputSocialLinkURL {
+    max-width: none !important;
+}
+
+
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;

@@ -16,7 +16,7 @@
     {
         <tr style="border: 1px solid green">
             <td style="border: 1px solid green; padding: 5px;">
-                <button type="button" class="descButton btn btn-default" meeting-description="@Html.DisplayFor(modelItem => item.Description)"><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(modelItem => item.Subject)</button>
+                <button type="button" class="meetingDescriptionButton btn btn-default" meeting-description="@Html.DisplayFor(modelItem => item.Description)"><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(modelItem => item.Subject)</button>
             </td>
             <td style="border: 1px solid green;padding: 5px;">
                 @if (item.Location.IsAddress)
