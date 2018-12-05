@@ -15,40 +15,42 @@ using System.Collections.Generic;
 using PersonalIntranetBot.Models;
 using System.Text;
 using System.Net;
+using static PersonalIntranetBot.Helpers.BingWebSearchService;
+using PersonalIntranetBot.Extensions;
+using Microsoft.Extensions.Configuration;
 
 namespace PersonalIntranetBot.Helpers
 {
-    public class BingWebSearchService
+    public class BingWebSearchService : IBingWebSearchService
     {
+        private readonly string _accessKey;
+        private readonly string _uriBase;
+
         public class BingSearchResult
         {
             public String JsonResult { get; set; }
             public Dictionary<String, String> RelevantHeaders { get; set; }
         }
 
-        // Enter a valid subscription key.
-        // const string accessKey = "826920c686cb48fb8587647960f29103";
-        // Enter a valid subscription key.
-        const string accessKey = "aebed497b60d47d380526f1bb1f66d25";
-
-        /*
-         * If you encounter unexpected authorization errors, double-check this value
-         * against the endpoint for your Bing Web search instance in your Azure
-         * dashboard.
-         */
-        const string uriBase = "https://api.cognitive.microsoft.com/bing/v7.0/search";
+        public BingWebSearchService(IConfiguration configuration)
+        {
+            var bingOptions = new BingOptions();
+            configuration.Bind("BingWebSearchConfig", bingOptions);
+            _accessKey = bingOptions.AccessKey;
+            _uriBase = bingOptions.UriBase;
+        }
 
         /// <summary>
         /// Makes a request to the Bing Web Search API and returns data as a SearchResult.
         /// </summary>
-        public virtual BingSearchResult DoBingWebSearch(string searchQuery)
+        public BingSearchResult DoBingWebSearch(string searchQuery)
         {
             // Construct the search request URI.
-            var uriQuery = uriBase + "?q=" + Uri.EscapeDataString(searchQuery);
+            var uriQuery = _uriBase + "?q=" + Uri.EscapeDataString(searchQuery);
 
             // Perform request and get a response.
-            WebRequest request = HttpWebRequest.Create(uriQuery);
-            request.Headers["Ocp-Apim-Subscription-Key"] = accessKey;
+            WebRequest request = WebRequest.Create(uriQuery);
+            request.Headers["Ocp-Apim-Subscription-Key"] = _accessKey;
             HttpWebResponse response = (HttpWebResponse)request.GetResponseAsync().Result;
             string json = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
@@ -62,11 +64,16 @@ namespace PersonalIntranetBot.Helpers
             // Extract Bing HTTP headers.
             foreach (String header in response.Headers)
             {
-                if (header.StartsWith("BingAPIs-") || header.StartsWith("X-MSEdge-"))
+                if (header.StartsWith("BingAPIs-", StringComparison.Ordinal) || header.StartsWith("X-MSEdge-", StringComparison.Ordinal))
                     searchResult.RelevantHeaders[header] = response.Headers[header];
             }
             return searchResult;
         }
+    }
+
+    public interface IBingWebSearchService
+    {
+        BingSearchResult DoBingWebSearch(string searchQuery);
     }
 }
 

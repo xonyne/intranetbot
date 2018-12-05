@@ -15,12 +15,16 @@ using Location = PersonalIntranetBot.Models.Location;
 
 namespace PersonalIntranetBot.Services
 {
-    public class PersonalIntranetBotService
+    public class PersonalIntranetBotService : IPersonalIntranetBotService
     {
         private readonly DBModelContext _dbContext;
+        private readonly IGoogleMapsService _googleMapsService;
+        private readonly ISocialLinkService _socialLinksService;
 
-        public PersonalIntranetBotService(DBModelContext dbContext) {
+        public PersonalIntranetBotService(DBModelContext dbContext, IGoogleMapsService googleMapsService, ISocialLinkService socialLinksService) {
             _dbContext = dbContext;
+            _googleMapsService = googleMapsService;
+            _socialLinksService = socialLinksService;
         }
 
         public async Task<List<OutlookEventsViewModel>> GetOutlookCalendarEvents(GraphServiceClient graphClient)
@@ -44,7 +48,7 @@ namespace PersonalIntranetBot.Services
                             Start = DateTime.Parse(currentMeeting.Start.DateTime),
                             End = DateTime.Parse(currentMeeting.End.DateTime),
                             Location = meetingLocation,
-                            GoogleMapsURL = GoogleMapsService.GetGoogleMapsURL(meetingLocation.LocationString),
+                            GoogleMapsURL = _googleMapsService.GetGoogleMapsURL(meetingLocation.LocationString),
                             Attendees = GetAndUpdateMeetingAttendees(currentMeeting.Attendees),
                         });
                     }
@@ -59,7 +63,9 @@ namespace PersonalIntranetBot.Services
         }
 
         private List<Models.Attendee> GetAndUpdateMeetingAttendees(IEnumerable<Microsoft.Graph.Attendee> meetingAttendees) {
-            List<Models.Attendee> dbAttendees = _dbContext.Attendees.Include(s => s.SocialLinks).ToList();
+           Task<List<Models.Attendee>> dbAttendeesTask = _dbContext.Attendees.Include(s => s.SocialLinks).ToListAsync();
+           dbAttendeesTask.Wait();
+           List<Models.Attendee> dbAttendees = dbAttendeesTask.Result;
 
             List<Models.Attendee> results = new List<Models.Attendee>();
             foreach (Microsoft.Graph.Attendee graphAttendee in meetingAttendees) {
@@ -123,17 +129,17 @@ namespace PersonalIntranetBot.Services
                 new SocialLink
                 {
                     Type = SocialLink.LinkType.LINKEDIN,
-                    URL = SocialLinksService.GetLinkedInAccountURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress))
+                    URL = _socialLinksService.GetLinkedInAccountURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress))
                 },
                 new SocialLink
                 {
                     Type = SocialLink.LinkType.XING,
-                    URL = SocialLinksService.GetXingAccountURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress))
+                    URL = _socialLinksService.GetXingAccountURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress))
                 },
                 new SocialLink
                 {
                     Type = SocialLink.LinkType.TWITTER,
-                    URL = SocialLinksService.GetTwitterAccountURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress))
+                    URL = _socialLinksService.GetTwitterAccountURLFromNameAndCompany(GetNameFromEMailAddress(emailAddress), GetCompanyFromEMailAddress(emailAddress))
                 }
             };
             return results;
@@ -209,5 +215,10 @@ namespace PersonalIntranetBot.Services
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title);
         }
 
+    }
+
+    public interface IPersonalIntranetBotService
+    {
+        Task<List<OutlookEventsViewModel>> GetOutlookCalendarEvents(GraphServiceClient graphClient);
     }
 }

@@ -14,18 +14,19 @@ using PersonalIntranetBot.Extensions;
 using PersonalIntranetBot.Helpers;
 using Microsoft.EntityFrameworkCore;
 using PersonalIntranetBot.Models;
+using PersonalIntranetBot.Services;
 
 namespace PersonalIntranetBot
 {
 
     public class Startup
     {
-        /*private static string _connStr = @"
+        private static string _connStr = @"
             Server=127.0.0.1,1401;
             Database=personalintranetbot;
             User Id=SA;
             Password=1StrongPassword!
-        ";*/
+        ";
 
         public Startup(IConfiguration configuration)
         {
@@ -50,9 +51,9 @@ namespace PersonalIntranetBot
 
             services.AddMvc();
             /* Mac */
-            /*var connection = _connStr;*/
+            var connection = _connStr;
             /* Windows */
-            var connection = @"Server=localhost\SQLEXPRESS;Database=personalintranetbot;Trusted_Connection=True;ConnectRetryCount=0";
+            /*var connection = @"Server=localhost\SQLEXPRESS;Database=personalintranetbot;Trusted_Connection=True;ConnectRetryCount=0";*/
             services.AddDbContext<DBModelContext>
                 (options => options.UseSqlServer(connection));
 
@@ -60,15 +61,15 @@ namespace PersonalIntranetBot
             services.AddMemoryCache();
             services.AddSession();
 
-            //services.Configure<ForwardedHeadersOptions>(options =>
-            //{
-             //   options.ForwardedHeaders = ForwardedHeaders.All;
-            //});
-
             // Add application services.
             //services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<IGraphAuthProvider, GraphAuthProvider>();
             services.AddTransient<IGraphSdkHelper, GraphSdkHelper>();
+            services.AddTransient<IBingWebSearchService, BingWebSearchService>();
+            services.AddTransient<IGoogleMapsService, GoogleMapsService>();
+            services.AddTransient<IPersonalIntranetBotService, PersonalIntranetBotService>();
+            services.AddTransient<ISocialLinkService, SocialLinksService    >();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

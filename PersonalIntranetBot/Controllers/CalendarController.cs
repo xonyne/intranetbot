@@ -23,16 +23,17 @@ namespace PersonalIntranetBot.Controllers
         private readonly IHostingEnvironment _env;
         private readonly IGraphSdkHelper _graphSdkHelper;
         private GraphServiceClient _graphClient;
-        private readonly PersonalIntranetBotService _personalIntranetBotService;
+        private readonly IPersonalIntranetBotService _personalIntranetBotService;
         private readonly DBModelContext _context;
 
-        public CalendarController(DBModelContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment, IGraphSdkHelper graphSdkHelper)
+
+        public CalendarController(DBModelContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment, IGraphSdkHelper graphSdkHelper, IPersonalIntranetBotService personalIntranetBotService)
         {
             _configuration = configuration;
             _env = hostingEnvironment;
             _graphSdkHelper = graphSdkHelper;
             _context = context;
-            _personalIntranetBotService = new PersonalIntranetBotService(_context);
+            _personalIntranetBotService = personalIntranetBotService;
         }
 
         [AllowAnonymous]

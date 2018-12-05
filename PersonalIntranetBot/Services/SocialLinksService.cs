@@ -23,77 +23,63 @@ namespace PersonalIntranetBot.Services
         public string URL { get; set; }
     }
 
-    public static class SocialLinksService
+    public class SocialLinksService : ISocialLinkService
     {
+        private readonly IBingWebSearchService _bingWebSearchService;
+
         public enum LinkedInPublicProfileInformation { PROFILEIMAGEURL, CURRENTJOBTITLE, CURRENTJOBCOMPANY, EDUCATIONLOCATION };
-        public static string PROFILEIMAGEURL_XPATH = "//div[@class='profile-picture']";
-        /*public static string PROFILEIMAGEURL_XPATH = "//*[@id=\"topcard\"]/div[1]/div[1]/a/img";*/
-        public static string CURRENTJOBTITLE_XPATH = "//*[@id=\"topcard\"]/div[1]/div[2]/div/p";
-        public static string CURRENTJOBCOMPANY_XPATH = "//*[@id=\"topcard\"]/div[1]/div[2]/div/table/tbody/tr[1]/td/ol/li/span/a";
-        public static string EDUCATIONLOCATION_XPATH = "//*[@id=\"topcard\"]/div[1]/div[2]/div/table/tbody/tr[3]/td/ol/li/a";
 
-        public static string LINKEDIN_URL_STRING = "/in/".ToLower();
-        public static string LINKEDIN_SEARCH_STRING = "linkedin";
+        private static readonly string LINKEDIN_URL_STRING = "/in/".ToLower();
+        private static readonly string LINKEDIN_SEARCH_STRING = "linkedin";
 
-        public static string XING_URL_STRING = "/profile/".ToLower();
-        public static string XING_SEARCH_STRING = "xing";
+        private static readonly string XING_URL_STRING = "/profile/".ToLower();
+        private static readonly string XING_SEARCH_STRING = "xing";
 
-        public static string TWITTER_URL_STRING = "twitter.com".ToLower();
-        public static string TWITTER_SEARCH_STRING = "twitter";
+        private static readonly string TWITTER_URL_STRING = "twitter.com".ToLower();
+        private static readonly string TWITTER_SEARCH_STRING = "twitter";
 
-        private static List<BingSearchResult> PerformBingWebSearch(string searchString) {
-            Thread.Sleep(1000);
-            BingWebSearchService bingService = new BingWebSearchService();
-            string bingWebSearchJSON = bingService.DoBingWebSearch(searchString).JsonResult;
+        public SocialLinksService (IBingWebSearchService bingWebSearchService) {
+            _bingWebSearchService = bingWebSearchService;
+        }
+
+        private List<BingSearchResult> PerformBingWebSearch(string searchString) {
+            Thread.Sleep(1000);         
+            string bingWebSearchJSON = _bingWebSearchService.DoBingWebSearch(searchString).JsonResult;
             return ConvertBingWebSearchJSONResultToBingSearchResultObjects(bingWebSearchJSON);
         }
 
-        public static string GetLinkedInAccountURLFromNameAndCompany(string name, string company)
+        public string GetLinkedInAccountURLFromNameAndCompany(string name, string company)
         {
-            string searchString = String.Join(" ", new[] { name, company, LINKEDIN_SEARCH_STRING });
-            List<BingSearchResult> linkedInSearchResults = PerformBingWebSearch(searchString);
-
-            string bestMatch="-";              
-            foreach (BingSearchResult item in linkedInSearchResults)
-            {
-                bool isLinkedInProfileURL = item.URL.ToLower().Contains(LINKEDIN_URL_STRING.ToLower());
-                bool isNameInDescription = item.Description.ToLower().Contains(name.ToLower());
-                bool isCompanyInDescription = item.Description.ToLower().Contains(company.ToLower());
-
-                // find best match
-                if (isNameInDescription && isCompanyInDescription && isLinkedInProfileURL)
-                {
-                    bestMatch = item.URL.ToLower();
-                    break;
-                }
-                else if (isNameInDescription && isLinkedInProfileURL)
-                {
-                    bestMatch = item.URL.ToLower();
-                    break;
-                }
-            }
-            return bestMatch;
+            return GetSocialLinkURL(name, company, LINKEDIN_SEARCH_STRING, LINKEDIN_URL_STRING);
         }
 
-        public static string GetTwitterAccountURLFromNameAndCompany(string name, string company)
+        public string GetTwitterAccountURLFromNameAndCompany(string name, string company)
         {
-            string searchString = String.Join(" ", new[] { name, company, TWITTER_SEARCH_STRING });
-            List<BingSearchResult> twitterSearchResults = PerformBingWebSearch(searchString);
+            return GetSocialLinkURL(name, company, TWITTER_SEARCH_STRING, TWITTER_URL_STRING);
+        }
+
+        public string GetXingAccountURLFromNameAndCompany(string name, string company)
+        {
+            return GetSocialLinkURL(name, company, XING_SEARCH_STRING, XING_URL_STRING);
+        }
+
+        private string GetSocialLinkURL(string name, string company, string searchSuffix, string urlMatchingString) {
+            string searchString = String.Join(" ", new[] { name, company, searchSuffix });
+            List<BingSearchResult> bingSearchResults = PerformBingWebSearch(searchString);
 
             string bestMatch = "-";
-            foreach (BingSearchResult item in twitterSearchResults)
+            foreach (BingSearchResult item in bingSearchResults)
             {
-                bool isTwitterProfileURL = item.URL.ToLower().Contains(TWITTER_URL_STRING.ToLower());
+                bool isSocialProfileURL = item.URL.ToLower().Contains(urlMatchingString.ToLower());
                 bool isNameInDescription = item.Description.ToLower().Contains(name.ToLower());
                 bool isCompanyInDescription = item.Description.ToLower().Contains(company.ToLower());
-
-                // find best match
-                if (isNameInDescription && isCompanyInDescription && isTwitterProfileURL)
+               
+                if (isNameInDescription && isCompanyInDescription && isSocialProfileURL)
                 {
-                    bestMatch = item.URL.ToLower();
-                    break;
+                    return item.URL.ToLower();
                 }
-                else if (isNameInDescription && isTwitterProfileURL)
+
+                if (isNameInDescription && isSocialProfileURL)
                 {
                     bestMatch = item.URL.ToLower();
                 }
@@ -101,103 +87,7 @@ namespace PersonalIntranetBot.Services
             return bestMatch;
         }
 
-        public static string GetXingAccountURLFromNameAndCompany(string name, string company)
-        {
-            string searchString = String.Join(" ", new[] { name, company, XING_SEARCH_STRING });
-            List<BingSearchResult> xingSearchResults = PerformBingWebSearch(searchString);
-
-            string bestMatch = "-";
-            foreach (BingSearchResult item in xingSearchResults)
-            {
-                bool isXingProfileURL = item.URL.ToLower().Contains(XING_URL_STRING.ToLower());
-                bool isNameInDescription = item.Description.ToLower().Contains(name.ToLower());
-                bool isCompanyInDescription = item.Description.ToLower().Contains(company.ToLower());
-              
-                // find best match
-                if (isNameInDescription && isCompanyInDescription && isXingProfileURL)
-                {
-                    bestMatch = item.URL.ToLower();
-                    break;
-                }
-                else if (isNameInDescription && isXingProfileURL)
-                {
-                    bestMatch = item.URL.ToLower();
-                }
-            }
-            return bestMatch;
-        }
-
-        /* Does not work like expected --> can't fetch LinkedIn public profile information */
-        public static string GetLinkedInProfileInformation(string linkedInPublicProfileURL, LinkedInPublicProfileInformation requiredInformationType)
-        {
-
-            HtmlWeb web = new HtmlWeb();
-            HtmlDocument doc = web.Load(linkedInPublicProfileURL);
-            HtmlNodeCollection htmlNodes;
-
-            string linkedInRequiredInformation = "";
-            switch (requiredInformationType)
-            {
-                case LinkedInPublicProfileInformation.PROFILEIMAGEURL:
-                    htmlNodes = doc.DocumentNode.SelectNodes(SocialLinksService.PROFILEIMAGEURL_XPATH);
-                    if (htmlNodes != null)
-                    {
-                        linkedInRequiredInformation = htmlNodes[0].Attributes["src"].Value;
-                    }
-                    break;
-                case LinkedInPublicProfileInformation.CURRENTJOBCOMPANY:
-                    htmlNodes = doc.DocumentNode.SelectNodes(SocialLinksService.CURRENTJOBCOMPANY_XPATH);
-                    if (htmlNodes != null)
-                    {
-                        linkedInRequiredInformation = htmlNodes[0].InnerHtml;
-                    }
-                    break;
-                case LinkedInPublicProfileInformation.CURRENTJOBTITLE:
-                    htmlNodes = doc.DocumentNode.SelectNodes(SocialLinksService.CURRENTJOBTITLE_XPATH);
-                    if (htmlNodes != null)
-                    {
-                        linkedInRequiredInformation = htmlNodes[0].InnerHtml;
-                    }
-                    break;
-                case LinkedInPublicProfileInformation.EDUCATIONLOCATION:
-                    htmlNodes = doc.DocumentNode.SelectNodes(SocialLinksService.EDUCATIONLOCATION_XPATH);
-                    if (htmlNodes != null)
-                    {
-                        linkedInRequiredInformation = htmlNodes[0].InnerHtml;
-                    }
-                    break;
-            }
-
-
-            return linkedInRequiredInformation;
-        }
-
-        /* Work in progress --> trying to fetch LinkedIn public profile information */
-        public static string GetLinkedInProfileInformationChromHeadless(string linkedInPublicProfileURL, LinkedInPublicProfileInformation requiredInformationType)
-        {
-            /*string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            UriBuilder uri = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
-            return Path.GetDirectoryName(path);*/
-
-            var chromeOptions = new ChromeOptions();
-            chromeOptions.AddArguments("headless");
-
-            string linkedInRequiredInformation = "";
-            var browser = new ChromeDriver(@"C:\Users\gast.xonyne-PC\Source\Repos\intranetbot\PersonalIntranetBot\wwwroot\lib", chromeOptions);
-            //Navigate to google page
-            browser.Navigate().GoToUrl(linkedInPublicProfileURL);
-
-            WebDriverWait waitForUsername = new WebDriverWait(browser, new System.TimeSpan(50000));
-            waitForUsername.Until(b => browser.FindElement(By.XPath(SocialLinksService.PROFILEIMAGEURL_XPATH)));
-
-            //Find the Search text box UI Element
-            IWebElement element = browser.FindElement(By.XPath(SocialLinksService.PROFILEIMAGEURL_XPATH));
-
-            return linkedInRequiredInformation;
-        }
-
-        private static List<BingSearchResult> ConvertBingWebSearchJSONResultToBingSearchResultObjects(string json)
+        private List<BingSearchResult> ConvertBingWebSearchJSONResultToBingSearchResultObjects(string json)
         {
             List<BingSearchResult> results = new List<BingSearchResult>();
             JObject jObject = JObject.Parse(json);
@@ -215,5 +105,12 @@ namespace PersonalIntranetBot.Services
             return results;
         }
 
+    }
+
+    public interface ISocialLinkService
+    {
+       string GetLinkedInAccountURLFromNameAndCompany(string name, string company);
+       string GetTwitterAccountURLFromNameAndCompany(string name, string company);
+       string GetXingAccountURLFromNameAndCompany(string name, string company);
     }
 }
