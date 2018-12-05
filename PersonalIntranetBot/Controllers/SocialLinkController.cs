@@ -106,34 +106,30 @@ namespace EFGetStarted.AspNetCore.NewDb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         /*[ValidateAntiForgeryToken]*/
-        public async Task<IActionResult> Edit(int id, [Bind("SocialLinkId,InputSocialLinkURL")] SocialLink socialLink)
-        {
-            if (socialLink == null)
-            {
-                return NotFound();
-            }
-
+        public JsonResult SaveSocialLink(SocialLink link)
+        {   
+            //SocialLink socialLink = _context.SocialLinks.Single(x => x.SocialLinkId == socialLink.SocialLinkId);
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(socialLink);
-                    await _context.SaveChangesAsync();
+                    _context.Update(link);
+                   //await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SocialLinkExists(socialLink.SocialLinkId))
+                    if (!SocialLinkExists(link.SocialLinkId))
                     {
-                        return NotFound();
+                        //return NotFound();
                     }
                     else
                     {
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
             }
-            return View(socialLink);
+            return Json(link.SocialLinkId);
         }
 
         // GET: SocialLinks/Delete/5

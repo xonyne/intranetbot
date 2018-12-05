@@ -30,21 +30,20 @@ $(".hideEditSocialLinkModal").click(function () {
 });
 
 $("#saveSocialLinkButton").click(function () {
+    var socialLink = { SocialLinkId: "1", AttendeeId: "0", Type:"0", URL: "http"  }
     $.ajax({
         type: "POST",
-        url: "SocialLink/Edit/" + $("#InputSocialLinkID").val(),
-        data: { socialLinkId: $("#InputSocialLinkURL").val(), url: $("#InputSocialLinkID").val() },
+        url: "/SocialLink/SaveSocialLink",
+        data: "{link:" + JSON.stringify(socialLink) + "}",
         contentType: "application/json; charset=utf-8",
-        dataType: "json",
         success: function (msg) {
-            alert("Social Link " + $("#InputSocialLinkURL").val() + " successfully saved!");
+            alert("Social Link " + msg + " successfully saved!");
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.status);
             alert(thrownError);
         }
     });
-
 });
 
 
