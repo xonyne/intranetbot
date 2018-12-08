@@ -11,9 +11,10 @@ using System;
 namespace PersonalIntranetBot.Migrations
 {
     [DbContext(typeof(DBModelContext))]
-    partial class DBModelContextModelSnapshot : ModelSnapshot
+    [Migration("20181207161153_LastUpdatedAndUpdatedByColumnsAdded")]
+    partial class LastUpdatedAndUpdatedByColumnsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +42,7 @@ namespace PersonalIntranetBot.Migrations
 
                     b.Property<DateTime>("LastUpdated");
 
-                    b.Property<string>("LastUpdatedBy");
+                    b.Property<string>("UpdatedBy");
 
                     b.HasKey("AttendeeId");
 

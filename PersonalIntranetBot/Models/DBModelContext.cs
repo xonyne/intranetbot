@@ -35,6 +35,8 @@ namespace PersonalIntranetBot.Models
         public string CurrentJobTitle { get; set; }
         public string CurrentJobCompany { get; set; }
         public string EducationLocation { get; set; }
+        public DateTime LastUpdated { get; set; }
+        public string LastUpdatedBy { get; set; }
     }
 
     public class SocialLink

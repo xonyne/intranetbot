@@ -10,13 +10,14 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="inputSocialLinkURL">Social Link URL</label>
-                        <input id="InputSocialLinkID" />
-                        <input class="form-control" id="InputSocialLinkURL" size="1024">
-                        <small class="form-text text-muted">Last edited: 20.12.2018 14:56 by Kevin Suter</small>
+                        <label for="InputSocialLinkURL">Social Link URL</label>
+                        <input class="form-control" id="InputSocialLinkURL" size="1024" onClick="this.setSelectionRange(0, this.value.length)">
+
+                        <input id="InputSocialLinkID" hidden />
+                        <input id="InputSocialLinkAttendeeID" hidden />
                     </div>
                 </form>
-                <button id="saveSocialLinkButton" class="btn btn-primary">Save</button>
+                <button id="saveSocialLinkButton" class="btn btn-primary hideEditSocialLinkModal">Save</button>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default hideEditSocialLinkModal" data-dismiss="modal">Cancel</button>

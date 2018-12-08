@@ -1,0 +1,25 @@
+﻿<div id="editImageURLModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Image URL</h4>
+                <button type="button" class="close hideEditImageURLModal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="InputImageURL">Image URL</label>
+                        <input class="form-control" id="InputImageURL" size="1024" onClick="this.setSelectionRange(0, this.value.length)">
+                        <input id="InputImageUrlAttendeeID" hidden />
+                    </div>
+                </form>
+                <button id="saveImageURLButton" class="btn btn-primary hideEditImageURLModal">Save</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default hideEditImageURLModal" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

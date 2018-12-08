@@ -51,9 +51,9 @@ namespace PersonalIntranetBot
 
             services.AddMvc();
             /* Mac */
-            var connection = _connStr;
+            /*var connection = _connStr;*/
             /* Windows */
-            /*var connection = @"Server=localhost\SQLEXPRESS;Database=personalintranetbot;Trusted_Connection=True;ConnectRetryCount=0";*/
+            var connection = @"Server=localhost\SQLEXPRESS;Database=personalintranetbot;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddDbContext<DBModelContext>
                 (options => options.UseSqlServer(connection));
 

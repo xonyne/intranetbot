@@ -18,159 +18,91 @@ namespace PersonalIntranetBot.Controllers
             _context = context;
         }
 
-        // GET: Attendees
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Attendees.Include(s => s.SocialLinks).ToListAsync());
-        }
-
-        // GET: Attendees
-        public async Task<List<Attendee>> GetAttendees()
-        {
-            return await  _context.Attendees.Include(s => s.SocialLinks).ToListAsync();
-        }
-
-        // GET: SocialLinks/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var attendee = await _context.Attendees.Include(s => s.SocialLinks)
-                .FirstOrDefaultAsync(m => m.AttendeeId == id);
-            if (attendee == null)
-            {
-                return NotFound();
-            }
-
-            return View(attendee);
-        }
-
-        // GET: SocialLinks/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // GET: SocialLinks/Create
-        public IActionResult CreateSocialLink(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            
-            return View(new SocialLink { AttendeeId = (int)id});
-        }
-
-        // GET: SocialLinks/Create
-        public async Task<IActionResult> OnSaveSocialLink([Bind("AttendeeId,URL")] SocialLink socialLink)
-        {
-            if (socialLink == null)
-            {
-                return NotFound();
-            }
-            _context.Add(socialLink);
-            await _context.SaveChangesAsync();
-            return View("Details");
-        }
-
-        // POST: SocialLinks/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AttendeeId,EmailAddress")] Attendee attendee)
+        public async Task<IActionResult> SaveSocialLink(SocialLink incomingSocialLink)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(attendee);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(attendee);
-        }
-
-        // GET: SocialLinks/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var attendee = await _context.Attendees.FindAsync(id);
-            if (attendee == null)
-            {
-                return NotFound();
-            }
-            return View(attendee);
-        }
-
-        // POST: SocialLinks/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AttendeeId,EmailAddress")] Attendee attendee)
-        {
-            if (attendee == null)
-            {
-                return NotFound();
-            }
-
+            SocialLink socialLink = new SocialLink();
+            Attendee affectedAttendee = new Attendee();
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(attendee);
+                    affectedAttendee = _context.Attendees.Single(x => x.AttendeeId == incomingSocialLink.AttendeeId);
+                    affectedAttendee.LastUpdated = DateTime.Now;
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        affectedAttendee.LastUpdatedBy = User.Identity.Name;
+                    }
+                    else {
+                        affectedAttendee.LastUpdatedBy = "anonymous";
+
+                    }
+
+                    socialLink = _context.SocialLinks.Single(x => x.SocialLinkId == incomingSocialLink.SocialLinkId);
+                    socialLink.URL = incomingSocialLink.URL;
+                    _context.Update(socialLink);
+                    _context.Update(affectedAttendee);
                     await _context.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AttendeeExists(attendee.AttendeeId))
+                    if (!SocialLinkExists(incomingSocialLink.SocialLinkId))
                     {
-                        return NotFound();
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.BadGateway;
+                        return Content("Error: Could not find social link in database");
                     }
                     else
                     {
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(attendee);
+            return Content("Last updated: " + affectedAttendee.LastUpdated + " by " + affectedAttendee.LastUpdatedBy);
         }
 
-        // GET: SocialLinks/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> SaveImageURL(Attendee incomingAttendee)
         {
-            if (id == null)
+            Attendee affectedAttendee = new Attendee();
+            if (ModelState.IsValid)
             {
-                return NotFound();
-            }
+                try
+                {
+                    affectedAttendee = _context.Attendees.Single(x => x.AttendeeId == incomingAttendee.AttendeeId);
+                    affectedAttendee.LastUpdated = DateTime.Now;
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        affectedAttendee.LastUpdatedBy = User.Identity.Name;
+                    }
+                    else
+                    {
+                        affectedAttendee.LastUpdatedBy = "anonymous";
 
-            var attendee = await _context.Attendees
-                .FirstOrDefaultAsync(m => m.AttendeeId == id);
-            if (attendee == null)
-            {
-                return NotFound();
-            }
+                    }
+                    affectedAttendee.ImageURL = incomingAttendee.ImageURL;
+                    _context.Update(affectedAttendee);
+                    await _context.SaveChangesAsync();
 
-            return View(attendee);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!AttendeeExists(affectedAttendee.AttendeeId))
+                    {
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.BadGateway;
+                        return Content("Error: Could not find attendee in database");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+            return Content("Last updated: " + affectedAttendee.LastUpdated + " by " + affectedAttendee.LastUpdatedBy);
         }
 
-        // POST: SocialLinks/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        private bool SocialLinkExists(int id)
         {
-            var attendee = await _context.Attendees.FindAsync(id);
-            _context.Attendees.Remove(attendee);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return _context.SocialLinks.Any(e => e.SocialLinkId == id);
         }
 
         private bool AttendeeExists(int id)

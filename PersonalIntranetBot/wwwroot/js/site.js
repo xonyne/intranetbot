@@ -22,6 +22,7 @@ $(".hideAttendeeeDetailsModal").click(function () {
 $(".editSocialLinkButton").click(function () {
     $("#editSocialLinkModal").find("#InputSocialLinkURL").val($(this).attr("social-link-url"));
     $("#editSocialLinkModal").find("#InputSocialLinkID").val($(this).attr("social-link-id"));
+    $("#editSocialLinkModal").find("#InputSocialLinkAttendeeID").val($(this).attr("social-link-attendee-id"));
     $("#editSocialLinkModal").modal("show");
 });
 
@@ -30,14 +31,17 @@ $(".hideEditSocialLinkModal").click(function () {
 });
 
 $("#saveSocialLinkButton").click(function () {
-    var socialLink = { SocialLinkId: "1", AttendeeId: "0", Type:"0", URL: "http"  }
     $.ajax({
         type: "POST",
-        url: "/SocialLink/SaveSocialLink",
-        data: "{link:" + JSON.stringify(socialLink) + "}",
-        contentType: "application/json; charset=utf-8",
+        url: "/Attendee/SaveSocialLink",
+        data: "AttendeeId=" + $("#InputSocialLinkAttendeeID").val() + "&SocialLinkId=" + $("#InputSocialLinkID").val() + "&URL=" + $("#InputSocialLinkURL").val(),
         success: function (msg) {
-            alert("Social Link " + msg + " successfully saved!");
+            // update information in attendee details dialog
+            $("#socialLink-" + $("#InputSocialLinkID").val()).attr("href", $("#InputSocialLinkURL").val());
+            $("#socialLinkEditButton-" + $("#InputSocialLinkID").val()).attr("social-link-url", $("#InputSocialLinkURL").val());
+            $("#socialLink-" + $("#InputSocialLinkID").val()).text($("#InputSocialLinkURL").val());
+            // update last updated hint
+            $("#lastupdated-" + $("#InputSocialLinkAttendeeID").val()).text(msg);
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.status);
@@ -46,5 +50,32 @@ $("#saveSocialLinkButton").click(function () {
     });
 });
 
+// Image URL
+$(".editImageUrl").click(function () {
+    $("#editImageURLModal").find("#InputImageURL").val($(this).attr("src"));
+    $("#editImageURLModal").find("#InputImageUrlAttendeeID").val($(this).attr("image-url-attendee-id"));
+    $("#editImageURLModal").modal("show");
+    $("#editImageURLModal").find("#InputImageURL").focus();
+});
 
+$(".hideEditImageURLModal").click(function () {
+    $("#editImageURLModal").modal("hide");
+});
 
+$("#saveImageURLButton").click(function () {
+    $.ajax({
+        type: "POST",
+        url: "/Attendee/SaveImageURL",
+        data: "AttendeeId=" + $("#InputImageUrlAttendeeID").val() + "&ImageURL=" + $("#InputImageURL").val(),
+        success: function (msg) {
+            // update information in attendee details dialog
+            $("#attendee-img-" + $("#InputImageUrlAttendeeID").val()).attr("src", $("#InputImageURL").val());
+            // update last updated hint
+            $("#lastupdated-" + $("#InputImageUrlAttendeeID").val()).text(msg);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status);
+            alert(thrownError);
+        }
+    });
+});

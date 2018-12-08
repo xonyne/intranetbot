@@ -20,6 +20,7 @@ namespace PersonalIntranetBot.Services
         private readonly DBModelContext _dbContext;
         private readonly IGoogleMapsService _googleMapsService;
         private readonly ISocialLinkService _socialLinksService;
+        private static string _personalIntranetBotName = "Personal Intranet Bot";
 
         public PersonalIntranetBotService(DBModelContext dbContext, IGoogleMapsService googleMapsService, ISocialLinkService socialLinksService) {
             _dbContext = dbContext;
@@ -84,6 +85,8 @@ namespace PersonalIntranetBot.Services
                             CurrentJobTitle = "",
                             CurrentJobCompany = ToTitleCase(GetCompanyFromEMailAddress(meetingAttendeeEmailAddress)),
                             EducationLocation = "",
+                            LastUpdated = DateTime.Now,
+                            LastUpdatedBy = _personalIntranetBotName
                         };
                         results.Add(attendee);
                         _dbContext.Add(attendee);
