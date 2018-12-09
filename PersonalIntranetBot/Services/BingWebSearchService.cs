@@ -70,10 +70,11 @@ namespace PersonalIntranetBot.Helpers
             return searchResult;
         }
     }
+}
 
-    public interface IBingWebSearchService
+public interface IBingWebSearchService
     {
         BingSearchResult DoBingWebSearch(string searchQuery);
-    }
 }
+
 

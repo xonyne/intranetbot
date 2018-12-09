@@ -61,6 +61,7 @@ namespace PersonalIntranetBot.Controllers
             return Content("Last updated: " + affectedAttendee.LastUpdated + " by " + affectedAttendee.LastUpdatedBy);
         }
 
+        [HttpPost]
         public async Task<IActionResult> SaveImageURL(Attendee incomingAttendee)
         {
             Attendee affectedAttendee = new Attendee();

@@ -16,7 +16,7 @@
     {
         <tr style="border: 1px solid black">
             <td style="border: 1px solid black; padding: 5px;">
-                <button type="button" class="eventsTableElement nmeetingDescriptionButton btn btn-default" meeting-description="@Html.DisplayFor(modelItem => item.Description)"><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(modelItem => item.Subject)</button>
+                <button type="button" class="eventsTableElement meetingDescriptionButton btn btn-default" meeting-description="@Html.DisplayFor(modelItem => item.Description)"><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(modelItem => item.Subject)</button>
             </td>
             <td style="border: 1px solid black;padding: 5px;">
                 @if (item.Location.IsAddress)
@@ -37,7 +37,8 @@
             <td style="border: 1px solid black;padding: 5px">
                 @for (int i = 0; i < item.Attendees.Count; i++)
                 {
-                <button class="eventsTableElement attendeeDetailsButton btn btn-default" attendee-modal-id="attendee-@item.Attendees[i].AttendeeId"><span class="glyphicon glyphicon-user" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(m => item.Attendees[i].DisplayName)</button>
+                <p><button class="eventsTableElement attendeeDetailsButton btn btn-default" attendee-modal-id="attendee-@item.Attendees[i].AttendeeId"><span class="glyphicon glyphicon-user" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(m => item.Attendees[i].DisplayName)</button></p>
+                
                 Html.RenderPartial("AttendeeDetailsModal", item.Attendees[i]);
                 }
             </td>

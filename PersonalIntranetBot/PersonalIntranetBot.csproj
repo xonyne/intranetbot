@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Apis.Customsearch.v1" Version="1.36.1.1369" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.Graph" Version="1.6.2" />
     <PackageReference Include="Microsoft.Identity.Client" Version="1.1.0-preview" />
@@ -38,6 +39,9 @@
     <Content Remove="Views\Components\RatingControl\default.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Update="Views\Settings\Index.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Calendar\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

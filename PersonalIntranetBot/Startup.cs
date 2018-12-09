@@ -68,7 +68,8 @@ namespace PersonalIntranetBot
             services.AddTransient<IBingWebSearchService, BingWebSearchService>();
             services.AddTransient<IGoogleMapsService, GoogleMapsService>();
             services.AddTransient<IPersonalIntranetBotService, PersonalIntranetBotService>();
-            services.AddTransient<ISocialLinkService, SocialLinksService    >();
+            services.AddTransient<ISocialLinkService, SocialLinksService>();
+            services.AddTransient<IGoogleCustomSearchService, GoogleCustomSearchService>();
 
         }
 

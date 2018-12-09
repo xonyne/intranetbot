@@ -8,7 +8,6 @@ $(".hideMeetingDetailsModal").click(function () {
     $("#meetingDetailsModal").modal("hide");
 });
 
-
 // Attendee details
 $(".attendeeDetailsButton").click(function () {
     $("#" + $(this).attr("attendee-modal-id")).modal("show");
@@ -78,4 +77,22 @@ $("#saveImageURLButton").click(function () {
             alert(thrownError);
         }
     });
+});
+
+$("#deleteAllDatabaseContentButton").click(function () {
+    var answer = confirm("Are you sure you want to delete ALL data in the database?");
+    if (answer == true) {
+        $.ajax({
+            type: "GET",
+            url: "/Settings/DeleteAllDatabaseContent",
+            success: function (msg) {
+                alert(msg);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status);
+                alert(thrownError);
+            }
+        });
+    }
+
 });

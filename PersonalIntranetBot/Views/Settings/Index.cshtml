@@ -1,0 +1,21 @@
+﻿<div>
+    @model List<PersonalIntranetBot.Models.OutlookEventsViewModel>;
+    @{
+        ViewData["Title"] = "My Calendar";
+    }
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <br />
+        <p>Choose <b>Sign in</b> at the top of the page and sign in with your work or school account.</p>
+    }
+    @if (User.Identity.IsAuthenticated)
+    {
+        <h2>Settings</h2>
+        <button id="deleteAllDatabaseContentButton" class="btn btn-primary">Delete all database content</button>
+
+        <form id="__AjaxAntiForgeryForm" action="#" method="post">
+            @Html.AntiForgeryToken()
+        </form>
+    }
+</div>

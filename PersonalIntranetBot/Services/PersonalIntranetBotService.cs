@@ -19,13 +19,15 @@ namespace PersonalIntranetBot.Services
     {
         private readonly DBModelContext _dbContext;
         private readonly IGoogleMapsService _googleMapsService;
+        private readonly IGoogleCustomSearchService _googleCustomSearchService;
         private readonly ISocialLinkService _socialLinksService;
         private static string _personalIntranetBotName = "Personal Intranet Bot";
 
-        public PersonalIntranetBotService(DBModelContext dbContext, IGoogleMapsService googleMapsService, ISocialLinkService socialLinksService) {
+        public PersonalIntranetBotService(DBModelContext dbContext, IGoogleMapsService googleMapsService, ISocialLinkService socialLinksService, IGoogleCustomSearchService googleCustomSearchService) {
             _dbContext = dbContext;
             _googleMapsService = googleMapsService;
             _socialLinksService = socialLinksService;
+            _googleCustomSearchService = googleCustomSearchService;
         }
 
         public async Task<List<OutlookEventsViewModel>> GetOutlookCalendarEvents(GraphServiceClient graphClient)
@@ -81,7 +83,7 @@ namespace PersonalIntranetBot.Services
                             DisplayName = ToTitleCase(GetNameFromEMailAddress(meetingAttendeeEmailAddress)),
                             IsPerson = true,
                             SocialLinks = GetSocialLinksForEmailAddress(meetingAttendeeEmailAddress),
-                            ImageURL = "",
+                            ImageURL = _googleCustomSearchService.DoGoogleImageSearch (GetNameFromEMailAddress(meetingAttendeeEmailAddress) + " " + GetCompanyFromEMailAddress(meetingAttendeeEmailAddress)),
                             CurrentJobTitle = "",
                             CurrentJobCompany = ToTitleCase(GetCompanyFromEMailAddress(meetingAttendeeEmailAddress)),
                             EducationLocation = "",
