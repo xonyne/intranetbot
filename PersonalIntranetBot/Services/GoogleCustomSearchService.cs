@@ -46,19 +46,25 @@ namespace PersonalIntranetBot.Helpers
         /// <summary>
         /// Makes a request to the Bing Web Search API and returns data as a SearchResult.
         /// </summary>
-        public string DoGoogleImageSearch(string searchQuery)
+        public string DoGoogleImageSearch(string name, string company)
         {
             var customSearchService = new CustomsearchService(new BaseClientService.Initializer { ApiKey = _apiKey });
-            var listRequest = customSearchService.Cse.List(searchQuery);
+            var listRequest = customSearchService.Cse.List(name + " " + company);
             listRequest.Cx = _searchEngineId;
-            listRequest.ImgType = CseResource.ListRequest.ImgTypeEnum.Face;
-            listRequest.SearchType= CseResource.ListRequest.SearchTypeEnum.Image;
+            listRequest.SearchType = CseResource.ListRequest.SearchTypeEnum.Image;
 
             Console.WriteLine("Start...");
             IList<Result> paging = new List<Result>();
-            var count = 0;
+
             string bestImageURL = "";
-            while (paging != null)
+            bool twitterImageFound = false;
+            bool linkedInImageFound = false;
+            bool companyImageFound = false;
+            bool rectangularImageFound = false;
+            var count = 0;
+            Console.WriteLine("---- New Google image search ----");
+            // max. 100 results are return for JSON API requests (see https://developers.google.com/custom-search/v1/cse/list, start parameter)
+            while (count < 10)
             {
                 Console.WriteLine($"Page {count}");
                 listRequest.Start = count * 10 + 1;
@@ -66,28 +72,73 @@ namespace PersonalIntranetBot.Helpers
                 paging = listRequest.Execute().Items;
                 if (paging != null)
                     foreach (var item in paging)
-                        //most likely a Twitter image
-                        if (item.Image.ContextLink.Contains("pbs.twimg.com")){
-                            bestImageURL = item.Image.ContextLink;
-                            break;
-                        //most likely a LinkedIn image
-                        } else if (item.Image.Height == 200 && item.Image.Width == 200 && item.Image.ContextLink.Contains("base64")) {
-                            bestImageURL = item.Image.ContextLink;
-                            break;
+                    {
+                        // it's an image of the company!
+                        if (!companyImageFound && IsCompanyImage(item, company))
+                        {
+                            Console.WriteLine("Company image found: " + item.Link + "  (" + name + ") ");
+                            companyImageFound = true;
+                            bestImageURL = item.Link;
                         }
-
+                        //most likely a LinkedIn image
+                        else if (!linkedInImageFound && !twitterImageFound && !companyImageFound && IsLinkedInImage(item))
+                        {
+                            Console.WriteLine("LinkedIn image found: " + item.Link + "  (" + name + ") ");
+                            linkedInImageFound = true;
+                            bestImageURL = item.Link;
+                        }
+                        //most likely a Twitter image
+                        else if (!twitterImageFound && !linkedInImageFound && !companyImageFound && IsTwitterImage(item))
+                        {
+                            Console.WriteLine("Twitter image found: " + item.Link + "  (" + name + ") ");
+                            twitterImageFound = true;
+                            bestImageURL = item.Link;
+                        }
+                        // height to width ratio are equal
+                        else if (!linkedInImageFound && !twitterImageFound && !companyImageFound && !rectangularImageFound && IsRectangularImage(item))
+                        {
+                            Console.WriteLine("Rectangular image found: " + item.Link + "  (" + name + ") ");
+                            rectangularImageFound = true;
+                            bestImageURL = item.Link;
+                        }
+                        Console.WriteLine(name + ": " + item.Image.ContextLink + " (Context Link) | " + item.Link + " (Image Link)");
+                    }
                 count++;
             }
-            Console.WriteLine("Done.");
-            Console.ReadLine();
+            Console.WriteLine("---- Google image search ends ----");
             return bestImageURL;
         }
+
+        private bool IsCompanyImage(Result item, string company)
+        {
+            return (item.Link.Contains(company) || item.Image.ContextLink.Contains(company)) && item.Image.Height == item.Image.Width;
+        }
+
+        private bool IsLinkedInImage(Result item)
+        {
+            return item.Link.Contains("linkedin") && item.Image.Height == item.Image.Width;
+        }
+
+
+        private bool IsTwitterImage(Result item)
+        {
+            return item.Link.Contains("pbs.twimg.com") && item.Image.Height == item.Image.Width;
+        }
+
+        private bool IsRectangularImage(Result item)
+        {
+            return item.Image.Height == item.Image.Width;
+        }
+
     }
+
 }
+
+
 
 public interface IGoogleCustomSearchService
 {
-        string DoGoogleImageSearch(string searchQuery);
+    string DoGoogleImageSearch(string name, string company);
 }
 
 

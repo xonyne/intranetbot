@@ -83,7 +83,7 @@ namespace PersonalIntranetBot.Services
                             DisplayName = ToTitleCase(GetNameFromEMailAddress(meetingAttendeeEmailAddress)),
                             IsPerson = true,
                             SocialLinks = GetSocialLinksForEmailAddress(meetingAttendeeEmailAddress),
-                            ImageURL = _googleCustomSearchService.DoGoogleImageSearch (GetNameFromEMailAddress(meetingAttendeeEmailAddress) + " " + GetCompanyFromEMailAddress(meetingAttendeeEmailAddress)),
+                            ImageURL = _googleCustomSearchService.DoGoogleImageSearch(GetNameFromEMailAddress(meetingAttendeeEmailAddress), GetCompanyFromEMailAddress(meetingAttendeeEmailAddress)),
                             CurrentJobTitle = "",
                             CurrentJobCompany = ToTitleCase(GetCompanyFromEMailAddress(meetingAttendeeEmailAddress)),
                             EducationLocation = "",
@@ -106,8 +106,16 @@ namespace PersonalIntranetBot.Services
         }
 
         private string GetNameFromEMailAddress(string emailAddress) {
+            
             // get first part of email address and replace . by space (split first and last name)
-            return emailAddress.Split("@")[0].Replace(".", " ").Trim();
+            string name = emailAddress.Split("@")[0].Replace(".", " ").Trim();
+            
+            // set umlauts
+            name = name.Replace("ue", "ü");
+            name = name.Replace("ae", "ä");
+            name = name.Replace("oe", "ö");
+
+            return name;
         }
 
         private string GetCompanyFromEMailAddress(string emailAddress)
