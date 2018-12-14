@@ -11,9 +11,10 @@ using System;
 namespace PersonalIntranetBot.Migrations
 {
     [DbContext(typeof(DBModelContext))]
-    partial class DBModelContextModelSnapshot : ModelSnapshot
+    [Migration("20181212123522_MeetingCommentsTableRenamedAgain")]
+    partial class MeetingCommentsTableRenamedAgain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,7 +60,7 @@ namespace PersonalIntranetBot.Migrations
 
                     b.Property<string>("LastUpdatedBy");
 
-                    b.Property<string>("MeetingId");
+                    b.Property<int>("MeetingId");
 
                     b.HasKey("MeetingCommentId");
 

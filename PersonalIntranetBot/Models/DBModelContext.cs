@@ -16,6 +16,7 @@ namespace PersonalIntranetBot.Models
 
         public DbSet<Attendee> Attendees { get; set; }
         public DbSet<SocialLink> SocialLinks { get; set; }
+        public DbSet<MeetingComment> MeetingComments { get; set; }
     }
 
     public class Location {
@@ -35,6 +36,15 @@ namespace PersonalIntranetBot.Models
         public string CurrentJobTitle { get; set; }
         public string CurrentJobCompany { get; set; }
         public string EducationLocation { get; set; }
+        public DateTime LastUpdated { get; set; }
+        public string LastUpdatedBy { get; set; }
+    }
+
+    public class MeetingComment
+    {
+        public int MeetingCommentId { get; set; }
+        public string MeetingId { get; set; }
+        public string Comment { get; set; }
         public DateTime LastUpdated { get; set; }
         public string LastUpdatedBy { get; set; }
     }

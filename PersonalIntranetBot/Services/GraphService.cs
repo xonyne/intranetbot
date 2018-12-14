@@ -256,7 +256,7 @@ namespace PersonalIntranetBot.Helpers
 
     public interface IGraphService
     {
-        Task<List<OutlookEventsViewModel>> GetOutlookCalendarEvents(GraphServiceClient graphClient);
+        Task<List<PersonalIntranetBotMeetingViewModel>> GetOutlookCalendarEvents(GraphServiceClient graphClient);
     }
 
 }

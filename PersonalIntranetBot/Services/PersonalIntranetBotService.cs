@@ -30,39 +30,54 @@ namespace PersonalIntranetBot.Services
             _googleCustomSearchService = googleCustomSearchService;
         }
 
-        public async Task<List<OutlookEventsViewModel>> GetOutlookCalendarEvents(GraphServiceClient graphClient)
+        public async Task<List<PersonalIntranetBotMeetingViewModel>> GetOutlookCalendarEvents(GraphServiceClient graphClient)
         {
-            List<OutlookEventsViewModel> items = new List<OutlookEventsViewModel>();
-            Task<IUserEventsCollectionPage> graphEvents = GraphService.GetCalendarEvents(graphClient);
-            IUserEventsCollectionPage meetings = await graphEvents;
+            List<PersonalIntranetBotMeetingViewModel> meetingViewItems = new List<PersonalIntranetBotMeetingViewModel>();
+            IUserEventsCollectionPage meetingGraphItems = await GraphService.GetCalendarEvents(graphClient); ;
 
-            if (meetings?.Count > 0)
+            if (meetingGraphItems?.Count > 0)
             {
-                foreach (Event currentMeeting in meetings)
+                foreach (Event graphMeeting in meetingGraphItems)
                 {
-                    Location meetingLocation = GetAddressFromGraphLocation(currentMeeting.Location);
-                    if (MeetingIsNotRecurringAndNotAllDay(currentMeeting) && MeetingIsNotInPast(currentMeeting)) {
-                        items.Add(new OutlookEventsViewModel
+                    Location meetingLocation = GetAddressFromGraphLocation(graphMeeting.Location);
+                    if (MeetingIsNotRecurringAndNotAllDay(graphMeeting) && MeetingIsNotInPast(graphMeeting)) {
+                        string meetingIdWithNoSpecialChars = RemoveMeetingIdSpecialChars(graphMeeting.Id);
+                        meetingViewItems.Add(new PersonalIntranetBotMeetingViewModel
                         {
-                            Id = currentMeeting.Id,
-                            Subject = currentMeeting.Subject,
-                            Description = currentMeeting.Body.Content,
-                            AttendeeEmailAddresses = GetAttendeeEmailAddressesAsList(currentMeeting.Attendees),
-                            Start = DateTime.Parse(currentMeeting.Start.DateTime),
-                            End = DateTime.Parse(currentMeeting.End.DateTime),
+                            MeetingId = meetingIdWithNoSpecialChars,
+                            Subject = graphMeeting.Subject,
+                            Start = DateTime.Parse(graphMeeting.Start.DateTime),
+                            End = DateTime.Parse(graphMeeting.End.DateTime),
                             Location = meetingLocation,
                             GoogleMapsURL = _googleMapsService.GetGoogleMapsURL(meetingLocation.LocationString),
-                            Attendees = GetAndUpdateMeetingAttendees(currentMeeting.Attendees),
+                            Attendees = GetAndUpdateMeetingAttendees(graphMeeting.Attendees),
+                            MeetingContent = new PersonalIntranetBotMeetingContentViewModel {
+                                MeetingId = meetingIdWithNoSpecialChars,
+                                Subject = graphMeeting.Subject,
+                                Description = graphMeeting.Body.Content,
+                                Comments = LoadMeetingComments(graphMeeting.Id)
+                            }
                         });
                     }
                 }
             }
             // Order events by start date ascending
-            items = items.OrderBy(e => e.Start).ToList();
+            meetingViewItems = meetingViewItems.OrderBy(e => e.Start).ToList();
 
             //Save attendees to database
 
-            return items;
+            return meetingViewItems;
+        }
+
+        private string RemoveMeetingIdSpecialChars(string id) {
+            return id.Replace("=", "").Replace("_", "");
+        }
+
+        private List<MeetingComment> LoadMeetingComments(string id)
+        {
+            Task<List<Models.MeetingComment>> meetingCommentsTask = _dbContext.MeetingComments.Where(s => s.MeetingId.Equals(id)).ToListAsync();
+            meetingCommentsTask.Wait();
+            return meetingCommentsTask.Result;
         }
 
         private List<Models.Attendee> GetAndUpdateMeetingAttendees(IEnumerable<Microsoft.Graph.Attendee> meetingAttendees) {
@@ -110,7 +125,7 @@ namespace PersonalIntranetBot.Services
             // get first part of email address and replace . by space (split first and last name)
             string name = emailAddress.Split("@")[0].Replace(".", " ").Trim();
             
-            // set umlauts
+            // set Umlauts
             name = name.Replace("ue", "ü");
             name = name.Replace("ae", "ä");
             name = name.Replace("oe", "ö");
@@ -232,6 +247,6 @@ namespace PersonalIntranetBot.Services
 
     public interface IPersonalIntranetBotService
     {
-        Task<List<OutlookEventsViewModel>> GetOutlookCalendarEvents(GraphServiceClient graphClient);
+        Task<List<PersonalIntranetBotMeetingViewModel>> GetOutlookCalendarEvents(GraphServiceClient graphClient);
     }
 }

@@ -1,5 +1,5 @@
 ﻿<div>
-    @model List<PersonalIntranetBot.Models.OutlookEventsViewModel>;
+    @model List<PersonalIntranetBot.Models.PersonalIntranetBotMeetingViewModel>;
     @{
         ViewData["Title"] = "My Calendar";
     }
@@ -16,10 +16,7 @@
         {
             eventList = Model
         })
-
-        Html.RenderPartial("MeetingDetailsModal");
         Html.RenderPartial("EditSocialLinkModal");
         Html.RenderPartial("EditImageURLModal");
-
     }
 </div>

@@ -1,7 +1,6 @@
 ﻿<div>
-    @model List<PersonalIntranetBot.Models.OutlookEventsViewModel>;
     @{
-        ViewData["Title"] = "My Calendar";
+        ViewData["Title"] = "Settings";
     }
 
     @if (!User.Identity.IsAuthenticated)
@@ -12,7 +11,7 @@
     @if (User.Identity.IsAuthenticated)
     {
         <h2>Settings</h2>
-        <button id="deleteAllDatabaseContentButton" class="btn btn-primary">Delete all database content</button>
+        <button id="deleteAllDatabaseContentButton" class="btn btn-danger">Delete all database content</button>
 
         <form id="__AjaxAntiForgeryForm" action="#" method="post">
             @Html.AntiForgeryToken()

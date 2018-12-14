@@ -7,7 +7,7 @@ namespace WebApp.Pages.Components.RatingControl
     {
         public EventTableViewComponent() { }
 
-        public IViewComponentResult Invoke(List<PersonalIntranetBot.Models.OutlookEventsViewModel> eventList)
+        public IViewComponentResult Invoke(List<PersonalIntranetBot.Models.PersonalIntranetBotMeetingViewModel> eventList)
         {
             return View("Default", eventList);
         }

@@ -1,15 +1,47 @@
 ﻿// Meeting description
-$(".meetingDescriptionButton").click(function () {
-    $("#meetingDetailsModal").find("#contentMeetingDetailsModal").html($(this).attr("meeting-description"));
-    $("#meetingDetailsModal").modal("show");
+$(".showMeetingContentButton").click(function () {
+    $("#" + $(this).attr("meetingContent-modal-id")).modal("show");
 });
 
-$(".hideMeetingDetailsModal").click(function () {
-    $("#meetingDetailsModal").modal("hide");
+$(".hideMeetingContentModal").click(function () {
+    $("#" + $(this).attr("meetingContent-modal-id")).modal("hide");
 });
+
+// Meeting comments
+
+$(".addMeetingCommentButton").click(function () {
+    $("#addMeetingCommentModal").find("#InputMeetingCommentMeetingId").val($(this).attr("meeting-id"));
+    $("#addMeetingCommentModal").modal("show");
+});
+
+$(".hideAddMeetingCommentModal").click(function () {
+    $("#addMeetingCommentModal").modal("hide");
+});
+
+$("#saveMeetingCommentButton").click(function () {
+    $.ajax({
+        type: "POST",
+        url: "/MeetingContent/SaveMeetingComment",
+        // Wird nicht funktionieren, da es mehrere Modals gibt! --> Mehrere Input-Felder mit gleicher ID funktioniert nicht!
+        data: "MeetingId=" + $("#InputMeetingCommentMeetingId").val() + "&Comment=" + $("#InputMeetingComment").val(),
+        success: function (msg) {
+            //Kommentar per JQUERY hinzufügen
+            $("#" + $(this).attr("meetingContent-modal-id")).append;
+            <div class="panel panel-default">
+                <div class="panel-body">@Html.DisplayFor(model => model.Comments[i].Comment)</div>
+                <small class="form-text text-muted">@Html.DisplayFor(model => model.Comments[i].LastUpdated) by  @Html.DisplayFor(model => model.Comments[i].LastUpdatedBy)</small>
+            </div>
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status);
+            alert(thrownError);
+        }
+    });
+});
+
 
 // Attendee details
-$(".attendeeDetailsButton").click(function () {
+$(".showAttendeeDetailsButton").click(function () {
     $("#" + $(this).attr("attendee-modal-id")).modal("show");
 });
 

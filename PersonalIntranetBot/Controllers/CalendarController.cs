@@ -41,7 +41,7 @@ namespace PersonalIntranetBot.Controllers
         // Get events in all the current user's mail folders.
         public async Task<IActionResult> Index()
         {
-            List<OutlookEventsViewModel> items = new List<OutlookEventsViewModel>();
+            List<PersonalIntranetBotMeetingViewModel> items = new List<PersonalIntranetBotMeetingViewModel>();
 
             if (User.Identity.IsAuthenticated)
             {

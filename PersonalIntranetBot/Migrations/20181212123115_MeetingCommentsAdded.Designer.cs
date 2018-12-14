@@ -11,9 +11,10 @@ using System;
 namespace PersonalIntranetBot.Migrations
 {
     [DbContext(typeof(DBModelContext))]
-    partial class DBModelContextModelSnapshot : ModelSnapshot
+    [Migration("20181212123115_MeetingCommentsAdded")]
+    partial class MeetingCommentsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,24 +47,6 @@ namespace PersonalIntranetBot.Migrations
                     b.HasKey("AttendeeId");
 
                     b.ToTable("Attendees");
-                });
-
-            modelBuilder.Entity("PersonalIntranetBot.Models.MeetingComment", b =>
-                {
-                    b.Property<int>("MeetingCommentId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Comment");
-
-                    b.Property<DateTime>("LastUpdated");
-
-                    b.Property<string>("LastUpdatedBy");
-
-                    b.Property<string>("MeetingId");
-
-                    b.HasKey("MeetingCommentId");
-
-                    b.ToTable("MeetingComments");
                 });
 
             modelBuilder.Entity("PersonalIntranetBot.Models.SocialLink", b =>

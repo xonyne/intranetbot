@@ -62,7 +62,7 @@ namespace PersonalIntranetBot.Helpers
             bool companyImageFound = false;
             bool rectangularImageFound = false;
             var count = 0;
-            Console.WriteLine("---- New Google image search ----");
+            Console.WriteLine("---- Google image search starts ----");
             // max. 100 results are return for JSON API requests (see https://developers.google.com/custom-search/v1/cse/list, start parameter)
             while (count < 10)
             {

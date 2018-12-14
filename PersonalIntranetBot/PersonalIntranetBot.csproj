@@ -32,9 +32,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Calendar\AddMeetingCommentModal.cshtml" />
     <Content Remove="Views\Calendar\EditImageUrlModal.cshtml" />
     <Content Remove="Views\Calendar\EditSocialLinkModal.cshtml" />
-    <Content Remove="Views\Calendar\MeetingDetailsModal.cshtml" />
+    <Content Remove="Views\Calendar\MeetingContentModal.cshtml" />
     <Content Remove="wwwroot\images\cropped-rainbow-header.jpg" />
     <Content Remove="Views\Components\RatingControl\default.cshtml" />
   </ItemGroup>
@@ -51,9 +52,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Calendar\AddMeetingCommentModal.cshtml" />
     <None Include="Views\Calendar\EditImageURLModal.cshtml" />
     <None Include="Views\Calendar\EditSocialLinkModal.cshtml" />
-    <None Include="Views\Calendar\MeetingDetailsModal.cshtml" />
+    <None Include="Views\Calendar\MeetingContentModal.cshtml" />
     <None Include="wwwroot\images\cropped-rainbow-header.jpg" />
   </ItemGroup>
   <ItemGroup>
