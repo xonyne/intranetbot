@@ -21,7 +21,6 @@ namespace PersonalIntranetBot.Controllers
         [HttpPost]
         public async Task<JsonResult> SaveMeetingComment(MeetingComment incomingMeetingComment)
         {
-            //MeetingComment meetingComment = _context.MeetingComments.Single(x => x.MeetingCommentId == incomingMeetingComment.MeetingCommentId);
             MeetingComment meetingComment = new MeetingComment();
             if (ModelState.IsValid)
             {

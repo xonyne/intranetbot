@@ -22,11 +22,11 @@
             <td style="border: 1px solid black;padding: 5px;">
                 @if (item.Location.IsAddress)
                 {
-                    <div class="eventsTableElement infoBox btn btn-default"><span class="glyphicon glyphicon-map-marker" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.Location.LocationString)<br /><a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" target="_blank">Get directions...</a></div>
+                <a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" target="_blank" class="eventsTableElement infoBox btn btn-default"><span class="glyphicon glyphicon-map-marker" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.Location.LocationString) ...</a>
                 }
                 else
                 {
-                    <div class="eventsTableElement infoBox btn btn-default"><span class="glyphicon glyphicon-map-marker" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.Location.LocationString)</div>
+                    <div class=""><span class="glyphicon glyphicon-map-marker" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.Location.LocationString)</div>
                 }
             </td>
             <td style="border: 1px solid black;padding: 5px">

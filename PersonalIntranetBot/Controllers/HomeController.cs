@@ -10,6 +10,7 @@ using PersonalIntranetBot.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
 using Microsoft.AspNetCore.Hosting;
+using PersonalIntranetBot.Services;
 
 namespace PersonalIntranetBot.Controllers
 {
@@ -18,12 +19,14 @@ namespace PersonalIntranetBot.Controllers
         private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _env;
         private readonly IGraphSdkHelper _graphSdkHelper;
+        private readonly IGraphService _graphService;
 
-        public HomeController(IConfiguration configuration, IHostingEnvironment hostingEnvironment, IGraphSdkHelper graphSdkHelper)
+        public HomeController(IConfiguration configuration, IHostingEnvironment hostingEnvironment, IGraphSdkHelper graphSdkHelper, IGraphService graphService)
         {
             _configuration = configuration;
             _env = hostingEnvironment;
             _graphSdkHelper = graphSdkHelper;
+            _graphService = graphService;
         }
 
         [AllowAnonymous]
@@ -42,9 +45,9 @@ namespace PersonalIntranetBot.Controllers
                 // Initialize the GraphServiceClient.
                 var graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
 
-                ViewData["Response"] = await GraphService.GetUserJson(graphClient, email, HttpContext);
+                ViewData["Response"] = await _graphService.GetUserJson(graphClient, email, HttpContext);
 
-                ViewData["Picture"] = await GraphService.GetPictureBase64(graphClient, email, HttpContext);
+                ViewData["Picture"] = await _graphService.GetPictureBase64(graphClient, email, HttpContext);
             }
 
             return View();
@@ -70,7 +73,7 @@ namespace PersonalIntranetBot.Controllers
                 var graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
 
                 // Send the email.
-                await GraphService.SendEmail(graphClient, _env, recipients, HttpContext);
+                await _graphService.SendEmail(graphClient, _env, recipients, HttpContext);
                 
                 // Reset the current user's email address and the status to display when the page reloads.
                 TempData["Message"] = "Success! Your mail was sent.";

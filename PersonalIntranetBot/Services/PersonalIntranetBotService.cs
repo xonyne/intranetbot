@@ -21,10 +21,12 @@ namespace PersonalIntranetBot.Services
         private readonly IGoogleMapsService _googleMapsService;
         private readonly IGoogleCustomSearchService _googleCustomSearchService;
         private readonly ISocialLinkService _socialLinksService;
+        private readonly IGraphService _graphService;
         private static string _personalIntranetBotName = "Personal Intranet Bot";
 
-        public PersonalIntranetBotService(DBModelContext dbContext, IGoogleMapsService googleMapsService, ISocialLinkService socialLinksService, IGoogleCustomSearchService googleCustomSearchService) {
+        public PersonalIntranetBotService(DBModelContext dbContext, IGoogleMapsService googleMapsService, ISocialLinkService socialLinksService, IGoogleCustomSearchService googleCustomSearchService, IGraphService graphService) {
             _dbContext = dbContext;
+            _graphService = graphService;
             _googleMapsService = googleMapsService;
             _socialLinksService = socialLinksService;
             _googleCustomSearchService = googleCustomSearchService;
@@ -33,8 +35,7 @@ namespace PersonalIntranetBot.Services
         public async Task<List<PersonalIntranetBotMeetingViewModel>> GetOutlookCalendarEvents(GraphServiceClient graphClient)
         {
             List<PersonalIntranetBotMeetingViewModel> meetingViewItems = new List<PersonalIntranetBotMeetingViewModel>();
-            IUserEventsCollectionPage meetingGraphItems = await GraphService.GetCalendarEvents(graphClient); ;
-
+            IUserEventsCollectionPage meetingGraphItems = await _graphService.GetCalendarEvents(graphClient);
             if (meetingGraphItems?.Count > 0)
             {
                 foreach (Event graphMeeting in meetingGraphItems)

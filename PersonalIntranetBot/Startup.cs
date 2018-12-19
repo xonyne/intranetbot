@@ -70,6 +70,7 @@ namespace PersonalIntranetBot
             services.AddTransient<IPersonalIntranetBotService, PersonalIntranetBotService>();
             services.AddTransient<ISocialLinkService, SocialLinksService>();
             services.AddTransient<IGoogleCustomSearchService, GoogleCustomSearchService>();
+            services.AddTransient<IGraphService, GraphDemoService>();
 
         }
 

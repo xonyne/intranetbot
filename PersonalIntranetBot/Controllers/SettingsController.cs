@@ -39,6 +39,9 @@ namespace PersonalIntranetBot.Controllers
             var socialLinks = _context.Set<SocialLink>();
             _context.SocialLinks.RemoveRange(socialLinks);
 
+            var comments = _context.Set<MeetingComment>();
+            _context.MeetingComments.RemoveRange(comments);
+
             _context.SaveChanges();
 
             return Content("All database content successfully deleted!");

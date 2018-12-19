@@ -19,7 +19,7 @@ using System.Threading;
 
 namespace PersonalIntranetBot.Services
 {
-    public class GraphService : IGraphService
+    public class GraphDemoService : IGraphService
     {
         // Load user's profile in formatted JSON.
         public async Task<string> GetUserJson(GraphServiceClient graphClient, string email, HttpContext httpContext)
@@ -251,16 +251,18 @@ namespace PersonalIntranetBot.Services
 
         public async Task<IUserEventsCollectionPage> GetCalendarEvents(GraphServiceClient graphClient)
         {
+            /*List<Event> graphDemoEvents = new List<Event>();
+
+            graphDemoEvents.Add(new Event
+            {
+                Subject = "Test",
+                Body=new ItemBody {
+                    Content = "Test"
+                }
+
+            });*/
             return await graphClient.Me.Events.Request().GetAsync();
         }
-    }
-
-    public interface IGraphService
-    {
-        Task<IUserEventsCollectionPage> GetCalendarEvents(GraphServiceClient graphClient);
-        Task<string> GetUserJson(GraphServiceClient graphClient, string email, HttpContext httpContext);
-        Task<string> GetPictureBase64(GraphServiceClient graphClient, string email, HttpContext httpContext);
-        Task SendEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext);
     }
 }
 

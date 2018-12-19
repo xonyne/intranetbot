@@ -12,8 +12,7 @@
                     <div class="form-group">
                         <label for="InputMeetingComment">Comment</label>
                         <input class="form-control" id="InputMeetingComment" size="1024" onClick="this.setSelectionRange(0, this.value.length)" onkeypress="return checkEnterAndClickSave(event, 'saveMeetingCommentButton')">
-                        <input id="InputMeetingCommentId" />
-                        <input id="InputMeetingCommentMeetingId" />
+                        <input id="InputMeetingCommentMeetingId" hidden />
                     </div>
                 </form>
                 <button id="saveMeetingCommentButton" class="btn btn-primary hideAddMeetingCommentModal">Save</button>

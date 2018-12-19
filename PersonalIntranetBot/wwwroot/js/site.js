@@ -7,7 +7,6 @@ $(".showMeetingContentButton").click(function () {
 
 $(".addMeetingCommentButton").click(function () {
     $("#addMeetingCommentModal").find("#InputMeetingCommentMeetingId").val($(this).attr("meeting-id"));
-    $("#addMeetingCommentModal").find("#InputMeetingCommentId").val("");
     $("#addMeetingCommentModal").find("#InputMeetingComment").val("");
     $("#addMeetingCommentModal").modal("show");
 });
