@@ -12,15 +12,29 @@ $(".addMeetingCommentButton").click(function () {
     $("#addMeetingCommentModal").modal("show");
 });
 
-$(".editCommentButton").click(function () {
-    $("#addMeetingCommentModal").find("#InputMeetingCommentMeetingId").val($(this).attr("meeting-id"));
-    $("#addMeetingCommentModal").find("#InputMeetingCommentId").val($(this).attr("comment-id")).val();
-    $("#addMeetingCommentModal").find("#InputMeetingComment").val($("#comment-" + $(this).attr("comment-id")).val());
-    $("#addMeetingCommentModal").modal("show");
+$(".hideAddMeetingCommentModal").click(function () {
+    $("#addMeetingCommentModal").modal("hide");
 });
 
 $(".hideAddMeetingCommentModal").click(function () {
     $("#addMeetingCommentModal").modal("hide");
+});
+
+$("body").on("click", ".deleteMeetingCommentIcon", function () {
+    if (window.confirm("Are you sure?")) {
+        $.ajax({
+            type: "POST",
+            url: "/MeetingContent/DeleteMeetingComment",
+            data: "MeetingCommentId=" + $(this).attr("meeting-comment-id"),
+            success: function (result) {
+                $("#comment-" + result.meetingCommentId).remove();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status);
+                alert(thrownError);
+            }
+        });
+    }
 });
 
 $("#saveMeetingCommentButton").click(function () {
@@ -31,7 +45,7 @@ $("#saveMeetingCommentButton").click(function () {
         success: function (result) {
             $("#meetingComments-" + $("#InputMeetingCommentMeetingId").val()).append(
                 '<div id=\"comment-' + result.meetingCommentId + '\" class=\"panel panel-default\"><div class=\"panel-body\">' + result.comment +
-                '<button class=\"editCommentButton\" comment-id=\"' + result.meetingCommentId + '" meeting-id=\"' + result.meetingId + '\"><i class=\"glyphicon glyphicon-pencil\" style=\"vertical-align:middle;margin-top: -5px\" /></button>' +
+                '<br /><span><i class=\"glyphicon glyphicon-remove deleteMeetingCommentIcon\" style=\"vertical-align:middle;margin-top: -5px\" meeting-comment-id=\"' + result.meetingCommentId + '\"></span></i>' +
                 '</div><small class=\"form-text text-muted\">' + getFullDateStringFromDate(new Date(result.lastUpdated)) + ' by ' + result.lastUpdatedBy + '</small></div>' 
             );
         },

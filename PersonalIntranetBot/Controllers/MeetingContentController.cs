@@ -50,7 +50,29 @@ namespace PersonalIntranetBot.Controllers
             }
 
             return Json(meetingComment);
-            //return Content("Last updated: " + meetingComment.LastUpdated + " by " + meetingComment.LastUpdatedBy);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DeleteMeetingComment(MeetingComment incomingMeetingComment)
+        {
+            MeetingComment meetingComment = new MeetingComment();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    meetingComment = _context.MeetingComments.Single(x => x.MeetingCommentId == incomingMeetingComment.MeetingCommentId);
+                    _context.Remove(meetingComment);
+                    await _context.SaveChangesAsync();
+
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.BadGateway;
+                    return Json("Error: Could not delete meeting comment in database");
+                }
+            }
+
+            return Json(meetingComment);
         }
     }
 }
