@@ -1,16 +1,21 @@
-﻿// Meeting description
+﻿// Meeting content
 $(".showMeetingContentButton").click(function () {
     $("#" + $(this).attr("meetingContent-modal-id")).modal("show");
-});
-
-$(".hideMeetingContentModal").click(function () {
-    $("#" + $(this).attr("meetingContent-modal-id")).modal("hide");
 });
 
 // Meeting comments
 
 $(".addMeetingCommentButton").click(function () {
     $("#addMeetingCommentModal").find("#InputMeetingCommentMeetingId").val($(this).attr("meeting-id"));
+    $("#addMeetingCommentModal").find("#InputMeetingCommentId").val("");
+    $("#addMeetingCommentModal").find("#InputMeetingComment").val("");
+    $("#addMeetingCommentModal").modal("show");
+});
+
+$(".editCommentButton").click(function () {
+    $("#addMeetingCommentModal").find("#InputMeetingCommentMeetingId").val($(this).attr("meeting-id"));
+    $("#addMeetingCommentModal").find("#InputMeetingCommentId").val($(this).attr("comment-id")).val();
+    $("#addMeetingCommentModal").find("#InputMeetingComment").val($("#comment-" + $(this).attr("comment-id")).val());
     $("#addMeetingCommentModal").modal("show");
 });
 
@@ -22,15 +27,13 @@ $("#saveMeetingCommentButton").click(function () {
     $.ajax({
         type: "POST",
         url: "/MeetingContent/SaveMeetingComment",
-        // Wird nicht funktionieren, da es mehrere Modals gibt! --> Mehrere Input-Felder mit gleicher ID funktioniert nicht!
         data: "MeetingId=" + $("#InputMeetingCommentMeetingId").val() + "&Comment=" + $("#InputMeetingComment").val(),
-        success: function (msg) {
-            //Kommentar per JQUERY hinzufügen
-            $("#" + $(this).attr("meetingContent-modal-id")).append;
-            <div class="panel panel-default">
-                <div class="panel-body">@Html.DisplayFor(model => model.Comments[i].Comment)</div>
-                <small class="form-text text-muted">@Html.DisplayFor(model => model.Comments[i].LastUpdated) by  @Html.DisplayFor(model => model.Comments[i].LastUpdatedBy)</small>
-            </div>
+        success: function (result) {
+            $("#meetingComments-" + $("#InputMeetingCommentMeetingId").val()).append(
+                '<div id=\"comment-' + result.meetingCommentId + '\" class=\"panel panel-default\"><div class=\"panel-body\">' + result.comment +
+                '<button class=\"editCommentButton\" comment-id=\"' + result.meetingCommentId + '" meeting-id=\"' + result.meetingId + '\"><i class=\"glyphicon glyphicon-pencil\" style=\"vertical-align:middle;margin-top: -5px\" /></button>' +
+                '</div><small class=\"form-text text-muted\">' + getFullDateStringFromDate(new Date(result.lastUpdated)) + ' by ' + result.lastUpdatedBy + '</small></div>' 
+            );
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.status);
@@ -38,6 +41,18 @@ $("#saveMeetingCommentButton").click(function () {
         }
     });
 });
+
+function getFullDateStringFromDate(d) {
+    return ("0" + d.getDate()).slice(-2) + "." + ("0" + (d.getMonth() + 1)).slice(-2) + "." +
+        d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2);
+}
+
+function checkEnterAndClickSave(e, buttonId) {
+    if (e.keyCode == 13) {
+        $("#" + buttonId).click();
+        return false;
+    }
+}
 
 
 // Attendee details

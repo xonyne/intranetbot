@@ -55,7 +55,7 @@ namespace PersonalIntranetBot.Services
                                 MeetingId = meetingIdWithNoSpecialChars,
                                 Subject = graphMeeting.Subject,
                                 Description = graphMeeting.Body.Content,
-                                Comments = LoadMeetingComments(graphMeeting.Id)
+                                Comments = LoadMeetingComments(meetingIdWithNoSpecialChars)
                             }
                         });
                     }
@@ -70,7 +70,7 @@ namespace PersonalIntranetBot.Services
         }
 
         private string RemoveMeetingIdSpecialChars(string id) {
-            return id.Replace("=", "").Replace("_", "");
+            return id.Replace("=", "").Replace("_", "").Trim();
         }
 
         private List<MeetingComment> LoadMeetingComments(string id)

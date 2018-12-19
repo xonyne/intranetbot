@@ -14,11 +14,11 @@
             <div class="modal-body">
                 @if (!String.IsNullOrEmpty(Model.ImageURL))
                 {
-                    <img id="attendee-img-@Html.DisplayFor(model => model.AttendeeId)" class="editImageUrl" src="@Html.DisplayFor(model => model.ImageURL)" width="200" height="200" image-url-attendee-id="@Html.DisplayFor(model => model.AttendeeId)" />
+                    <img id="attendee-img-@Html.DisplayFor(model => model.AttendeeId)" class="attendeeImage editImageUrl" src="@Html.DisplayFor(model => model.ImageURL)" width="200" height="200" image-url-attendee-id="@Html.DisplayFor(model => model.AttendeeId)" />
                 }
                 else
                 {
-                    <img id="attendee-img-@Html.DisplayFor(model => model.AttendeeId)" class="editImageUrl" src="/images/blank-profile-picture.svg" width="200" height="200" image-url-attendee-id="@Html.DisplayFor(model => model.AttendeeId)" />
+                    <img id="attendee-img-@Html.DisplayFor(model => model.AttendeeId)" class="attendeeImage editImageUrl" src="/images/blank-profile-picture.svg" width="200" height="200" image-url-attendee-id="@Html.DisplayFor(model => model.AttendeeId)" />
                 }
 
                 <p><a href="mailto:@Html.DisplayFor(model => model.EmailAddress)">@Html.DisplayFor(model => model.EmailAddress)</a></p>
@@ -65,9 +65,9 @@
                         }
                     </tbody>
                 </table>
+                <small id="lastupdated-@Html.DisplayFor(model => model.AttendeeId)" class="form-text text-muted">Last updated: @Html.DisplayFor(model => model.LastUpdated) by  @Html.DisplayFor(model => model.LastUpdatedBy)</small>
             </div>
             <div class="modal-footer">
-                <small id="lastupdated-@Html.DisplayFor(model => model.AttendeeId)" class="form-text text-muted">Last updated: @Html.DisplayFor(model => model.LastUpdated) by  @Html.DisplayFor(model => model.LastUpdatedBy)</small>
                 <button type="button" class="btn btn-default hideAttendeeDetailsModal" data-dismiss="modal">Close</button>
             </div>
         </div>
