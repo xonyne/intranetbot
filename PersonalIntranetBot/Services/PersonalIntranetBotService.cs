@@ -22,7 +22,7 @@ namespace PersonalIntranetBot.Services
         private readonly IGoogleCustomSearchService _googleCustomSearchService;
         private readonly ISocialLinkService _socialLinksService;
         private readonly IGraphService _graphService;
-        private static string _personalIntranetBotName = "Personal Intranet Bot";
+        private static string _personalIntranetBotName = "Personal Calendar Bot";
 
         public PersonalIntranetBotService(DBModelContext dbContext, IGoogleMapsService googleMapsService, ISocialLinkService socialLinksService, IGoogleCustomSearchService googleCustomSearchService, IGraphService graphService) {
             _dbContext = dbContext;
