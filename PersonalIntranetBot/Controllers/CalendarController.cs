@@ -48,7 +48,7 @@ namespace PersonalIntranetBot.Controllers
                 var identifier = User.FindFirst(Startup.ObjectIdentifierType)?.Value;
                 _graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
                 IUserEventsCollectionPage events = await _graphClient.Me.Events.Request().GetAsync();
-                items = await _personalIntranetBotService.GetOutlookCalendarEvents(_graphClient);
+                items = _personalIntranetBotService.GetOutlookCalendarEvents(_graphClient);
             }
             return View(items);
         }

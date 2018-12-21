@@ -249,15 +249,17 @@ namespace PersonalIntranetBot.Services
             return pictureStream;
         }
 
-        public async Task<IUserEventsCollectionPage> GetCalendarEvents(GraphServiceClient graphClient)
+        public List<Event> GetCalendarEvents(GraphServiceClient graphClient)
         {
-            return await graphClient.Me.Events.Request().GetAsync();
+            Task<IUserEventsCollectionPage> eventTask = graphClient.Me.Events.Request().GetAsync();
+            eventTask.Wait();
+            return eventTask.Result.ToList();
         }
     }
 
     public interface IGraphService
     {
-        Task<IUserEventsCollectionPage> GetCalendarEvents(GraphServiceClient graphClient);
+        List<Event> GetCalendarEvents(GraphServiceClient graphClient);
         Task<string> GetUserJson(GraphServiceClient graphClient, string email, HttpContext httpContext);
         Task<string> GetPictureBase64(GraphServiceClient graphClient, string email, HttpContext httpContext);
         Task SendEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext);
