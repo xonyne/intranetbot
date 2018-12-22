@@ -90,40 +90,9 @@ namespace PersonalIntranetBot.Services
         }
 
         // Send an email message from the current user.
-        public async Task SendEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext)
+        public async Task SendEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext, string comment, string meetingTitle, string name)
         {
             if (recipients == null) return;
-
-            var attachments = new MessageAttachmentsCollectionPage();
-
-            try
-            {
-                // Load user's profile picture.
-                var pictureStream = await GetMyPictureStream(graphClient, httpContext);
-
-                // Copy stream to MemoryStream object so that it can be converted to byte array.
-                var pictureMemoryStream = new MemoryStream();
-                await pictureStream.CopyToAsync(pictureMemoryStream);
-
-                // Convert stream to byte array and add as attachment.
-                attachments.Add(new FileAttachment
-                {
-                    ODataType = "#microsoft.graph.fileAttachment",
-                    ContentBytes = pictureMemoryStream.ToArray(),
-                    ContentType = "image/png",
-                    Name = "me.png"
-                });
-            }
-            catch (Exception e)
-            {
-                switch (e.Message)
-                {
-                    case "ResourceNotFound":
-                        break;
-                    default:
-                        throw;
-                }
-            }
 
             // Prepare the recipient list.
             var splitRecipientsString = recipients.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
@@ -140,12 +109,11 @@ namespace PersonalIntranetBot.Services
             {
                 Body = new ItemBody
                 {
-                    Content = System.IO.File.ReadAllText(hostingEnvironment.WebRootPath + "/email_template.html"),
+                    Content = System.IO.File.ReadAllText(hostingEnvironment.WebRootPath + "/email_template.html").Replace("@comment", comment).Replace("@name", name).Replace("@url",hostingEnvironment.ContentRootPath),
                     ContentType = BodyType.Html,
                 },
-                Subject = "Sent from the Microsoft Graph Connect sample",
+                Subject = "New comment added for " + meetingTitle,
                 ToRecipients = recipientList,
-                Attachments = attachments
             };
 
             await graphClient.Me.SendMail(email, true).Request().PostAsync();
@@ -262,7 +230,7 @@ namespace PersonalIntranetBot.Services
         List<Event> GetCalendarEvents(GraphServiceClient graphClient);
         Task<string> GetUserJson(GraphServiceClient graphClient, string email, HttpContext httpContext);
         Task<string> GetPictureBase64(GraphServiceClient graphClient, string email, HttpContext httpContext);
-        Task SendEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext);
+        Task SendEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext, string comment, string meetingTitle, string name);
     }
 }
 

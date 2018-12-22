@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
 using Microsoft.AspNetCore.Hosting;
 using PersonalIntranetBot.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace PersonalIntranetBot.Controllers
 {
@@ -73,7 +74,7 @@ namespace PersonalIntranetBot.Controllers
                 var graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
 
                 // Send the email.
-                await _graphService.SendEmail(graphClient, _env, recipients, HttpContext);
+                await _graphService.SendEmail(graphClient, _env, recipients, HttpContext, "Mein Kommentar", "Neues Meeting", Request.Path);
                 
                 // Reset the current user's email address and the status to display when the page reloads.
                 TempData["Message"] = "Success! Your mail was sent.";
