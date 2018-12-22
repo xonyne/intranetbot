@@ -23,10 +23,13 @@ namespace PersonalIntranetBot.Services
         public string URL { get; set; }
     }
 
+   
+
     public class SocialLinksService : ISocialLinkService
     {
         private readonly IBingWebSearchService _bingWebSearchService;
 
+        public static readonly string NO_SOCIAL_LINK ="-";
         public enum LinkedInPublicProfileInformation { PROFILEIMAGEURL, CURRENTJOBTITLE, CURRENTJOBCOMPANY, EDUCATIONLOCATION };
 
         private static readonly string LINKEDIN_URL_STRING = "/in/".ToLower();
@@ -67,7 +70,7 @@ namespace PersonalIntranetBot.Services
             string searchString = String.Join(" ", new[] { name, company, searchSuffix });
             List<BingSearchResult> bingSearchResults = PerformBingWebSearch(searchString);
 
-            string bestMatch = "-";
+            string bestMatch = NO_SOCIAL_LINK;
             foreach (BingSearchResult item in bingSearchResults)
             {
                 bool isSocialProfileURL = item.URL.ToLower().Contains(urlMatchingString.ToLower());

@@ -34,7 +34,16 @@ $("body").on("click", ".deleteMeetingCommentIcon", function () {
             }
         });
     }
-});
+})
+
+/* c shortcut um Kommentar zur erfassen
+$(document).keypress(function (e) {
+    if ($('.modal').is(':visible') && $('.modal').is(':visible')) {
+        $(".addMeetingCommentButton").click();
+    }
+});*/
+
+
 
 $("#saveMeetingCommentButton").click(function () {
     $.ajax({

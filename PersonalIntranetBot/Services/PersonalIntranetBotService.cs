@@ -35,7 +35,7 @@ namespace PersonalIntranetBot.Services
         public List<PersonalIntranetBotMeetingViewModel> GetOutlookCalendarEvents(GraphServiceClient graphClient)
         {
             List<PersonalIntranetBotMeetingViewModel> meetingViewItems = new List<PersonalIntranetBotMeetingViewModel>();
-            List<Event> meetingGraphItems =  _graphService.GetCalendarEvents(graphClient);
+            List<Event> meetingGraphItems = _graphService.GetCalendarEvents(graphClient);
             if (meetingGraphItems?.Count > 0)
             {
                 foreach (Event graphMeeting in meetingGraphItems)
@@ -82,13 +82,15 @@ namespace PersonalIntranetBot.Services
         }
 
         private List<Models.Attendee> GetAndUpdateMeetingAttendees(IEnumerable<Microsoft.Graph.Attendee> meetingAttendees) {
-           Task<List<Models.Attendee>> dbAttendeesTask = _dbContext.Attendees.Include(s => s.SocialLinks).ToListAsync();
-           dbAttendeesTask.Wait();
-           List<Models.Attendee> dbAttendees = dbAttendeesTask.Result;
+            Task<List<Models.Attendee>> dbAttendeesTask = _dbContext.Attendees.Include(s => s.SocialLinks).ToListAsync();
+            dbAttendeesTask.Wait();
+            List<Models.Attendee> dbAttendees = dbAttendeesTask.Result;
 
             List<Models.Attendee> results = new List<Models.Attendee>();
             foreach (Microsoft.Graph.Attendee graphAttendee in meetingAttendees) {
                 string meetingAttendeeEmailAddress = graphAttendee.EmailAddress.Address.ToString();
+                List<SocialLink> socialLinks = GetSocialLinksForEmailAddress(meetingAttendeeEmailAddress);
+                string imageURL = GetImageURL(meetingAttendeeEmailAddress, socialLinks);
                 if (meetingAttendeeEmailAddress != null)
                 {
                     if (!dbAttendees.Any(dbAttendee => dbAttendee.EmailAddress.ToLower() == meetingAttendeeEmailAddress.ToLower()))
@@ -98,8 +100,8 @@ namespace PersonalIntranetBot.Services
                             EmailAddress = meetingAttendeeEmailAddress,
                             DisplayName = ToTitleCase(GetNameFromEMailAddress(meetingAttendeeEmailAddress)),
                             IsPerson = true,
-                            SocialLinks = GetSocialLinksForEmailAddress(meetingAttendeeEmailAddress),
-                            ImageURL = _googleCustomSearchService.DoGoogleImageSearch(GetNameFromEMailAddress(meetingAttendeeEmailAddress), GetCompanyFromEMailAddress(meetingAttendeeEmailAddress)),
+                            SocialLinks = socialLinks,
+                            ImageURL =imageURL,
                             CurrentJobTitle = "",
                             CurrentJobCompany = ToTitleCase(GetCompanyFromEMailAddress(meetingAttendeeEmailAddress)),
                             EducationLocation = "",
@@ -112,13 +114,56 @@ namespace PersonalIntranetBot.Services
                     else {
                         results.Add(dbAttendees.First(item => item.EmailAddress.ToLower() == meetingAttendeeEmailAddress.ToLower()));
                     }
-                    
+
                 }
 
             }
             _dbContext.SaveChanges();
 
             return results;
+        }
+
+        private string GetImageURL(string meetingAttendee, List<SocialLink> socialLinks)
+        {
+            //LinkedIn exluded, as it won't return good results
+            bool hasTwitter = !socialLinks.Single(l =>  l.Type == SocialLink.LinkType.TWITTER).URL.Equals(SocialLinksService.NO_SOCIAL_LINK);
+            bool hasXing = !socialLinks.Single(l => l.Type == SocialLink.LinkType.XING).URL.Equals(SocialLinksService.NO_SOCIAL_LINK);
+
+            string name = GetNameFromEMailAddress(meetingAttendee);
+            string company = GetCompanyFromEMailAddress(meetingAttendee);
+
+            string imgURL = "";
+
+            //search for company image first, then xing, then twitter, then for just some rectangular image
+            imgURL = _googleCustomSearchService.DoGoogleImageSearch(name, company, ImageType.COMPANY);
+            if (!String.IsNullOrEmpty(imgURL)) {
+                Console.WriteLine("Company (1) image found for: " + name);
+                return imgURL;
+            }
+
+            if (hasXing) imgURL = _googleCustomSearchService.DoGoogleImageSearch(name, company, ImageType.XING);
+            if (!String.IsNullOrEmpty(imgURL)) {
+                Console.WriteLine("Xing (2) image found for: " + name);
+                return imgURL;
+            }
+
+
+            if (hasTwitter) imgURL = _googleCustomSearchService.DoGoogleImageSearch(name, company, ImageType.TWITTER);
+            if (!String.IsNullOrEmpty(imgURL))
+            {
+                Console.WriteLine("Twitter (3) image found for: " + name);
+                return imgURL;
+            }
+
+            imgURL = _googleCustomSearchService.DoGoogleImageSearch(name, company, ImageType.RECTANGULAR);
+            if (!String.IsNullOrEmpty(imgURL))
+            {
+                Console.WriteLine("Rectangular (4) image found for: " + name);
+                return imgURL;
+            }
+
+            return imgURL;
+        
         }
 
         private string GetNameFromEMailAddress(string emailAddress) {

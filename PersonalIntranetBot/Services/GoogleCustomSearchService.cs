@@ -21,9 +21,18 @@ using Microsoft.Extensions.Configuration;
 using Google.Apis.Customsearch.v1;
 using Google.Apis.Services;
 using Google.Apis.Customsearch.v1.Data;
+using PersonalIntranetBot.Services;
 
-namespace PersonalIntranetBot.Helpers
+namespace PersonalIntranetBot.Services
 {
+    public enum ImageType
+    {
+        COMPANY,
+        XING,
+        TWITTER,
+        RECTANGULAR
+    }
+
     public class GoogleCustomSearchService : IGoogleCustomSearchService
     {
         private readonly string _apiKey;
@@ -34,6 +43,9 @@ namespace PersonalIntranetBot.Helpers
             public String JsonResult { get; set; }
             public Dictionary<String, String> RelevantHeaders { get; set; }
         }
+
+
+
 
         public GoogleCustomSearchService(IConfiguration configuration)
         {
@@ -46,99 +58,108 @@ namespace PersonalIntranetBot.Helpers
         /// <summary>
         /// Makes a request to the Bing Web Search API and returns data as a SearchResult.
         /// </summary>
-        public string DoGoogleImageSearch(string name, string company)
+        public string DoGoogleImageSearch(string name, string company, ImageType imageType)
         {
             var customSearchService = new CustomsearchService(new BaseClientService.Initializer { ApiKey = _apiKey });
-            var listRequest = customSearchService.Cse.List(name + " " + company);
+            string searchString = name;
+            switch (imageType)
+            {
+                case ImageType.COMPANY: searchString += " " + company; break;
+                case ImageType.XING: searchString += " xing"; break;
+                case ImageType.TWITTER: searchString += " twitter"; break;
+                case ImageType.RECTANGULAR: break;
+            }
+
+            var listRequest = customSearchService.Cse.List(searchString);
             listRequest.Cx = _searchEngineId;
             listRequest.SearchType = CseResource.ListRequest.SearchTypeEnum.Image;
 
             Console.WriteLine("Start...");
             IList<Result> paging = new List<Result>();
 
-            string bestImageURL = "";
-            bool twitterImageFound = false;
-            bool linkedInImageFound = false;
-            bool companyImageFound = false;
-            bool rectangularImageFound = false;
+            string emptyImageUrl = "";
             var count = 0;
             Console.WriteLine("---- Google image search starts ----");
-            // max. 100 results are return for JSON API requests (see https://developers.google.com/custom-search/v1/cse/list, start parameter)
-            while (count < 10)
+            // max. 100 results are returned for JSON API requests (see https://developers.google.com/custom-search/v1/cse/list, start parameter)
+            Console.WriteLine("Searching for '" + searchString + "' (" + name + ", " + company + ")");
+            while (count < 1)
             {
-                Console.WriteLine($"Page {count}");
                 listRequest.Start = count * 10 + 1;
                 listRequest.Num = 10;
                 paging = listRequest.Execute().Items;
                 if (paging != null)
                     foreach (var item in paging)
                     {
-                        // it's an image of the company!
-                        if (!companyImageFound && IsCompanyImage(item, company))
+                        Console.WriteLine(item.Link);
+                        switch (imageType)
                         {
-                            Console.WriteLine("Company image found: " + item.Link + "  (" + name + ") ");
-                            companyImageFound = true;
-                            bestImageURL = item.Link;
+                            case ImageType.COMPANY:
+                                if (IsCompanyImage(item, name, company))
+                                    return item.Link;
+                                break;
+                            case ImageType.XING:
+                                if (IsXingImage(item))
+                                    return item.Link;
+                                break;
+                            case ImageType.TWITTER:
+                                if (IsTwitterImage(item))
+                                    return item.Link;
+                                break;
+                            case ImageType.RECTANGULAR:
+                                if (IsRectangularImage(item))
+                                    return item.Link;
+                                break;
                         }
-                        //most likely a LinkedIn image
-                        else if (!linkedInImageFound && !twitterImageFound && !companyImageFound && IsLinkedInImage(item))
-                        {
-                            Console.WriteLine("LinkedIn image found: " + item.Link + "  (" + name + ") ");
-                            linkedInImageFound = true;
-                            bestImageURL = item.Link;
-                        }
-                        //most likely a Twitter image
-                        else if (!twitterImageFound && !linkedInImageFound && !companyImageFound && IsTwitterImage(item))
-                        {
-                            Console.WriteLine("Twitter image found: " + item.Link + "  (" + name + ") ");
-                            twitterImageFound = true;
-                            bestImageURL = item.Link;
-                        }
-                        // height to width ratio are equal
-                        else if (!linkedInImageFound && !twitterImageFound && !companyImageFound && !rectangularImageFound && IsRectangularImage(item))
-                        {
-                            Console.WriteLine("Rectangular image found: " + item.Link + "  (" + name + ") ");
-                            rectangularImageFound = true;
-                            bestImageURL = item.Link;
-                        }
-                        Console.WriteLine(name + ": " + item.Image.ContextLink + " (Context Link) | " + item.Link + " (Image Link)");
                     }
                 count++;
             }
             Console.WriteLine("---- Google image search ends ----");
-            return bestImageURL;
+            return emptyImageUrl;
         }
 
-        private bool IsCompanyImage(Result item, string company)
+        private bool IsCompanyImage(Result item, string name, string company)
         {
-            return (item.Link.Contains(company) || item.Image.ContextLink.Contains(company)) && item.Image.Height == item.Image.Width;
+            bool someLinkContainsCompany = (item.Link.Contains(company) || item.Image.ContextLink.Contains(company));
+            bool imageURLContainsNamepart = false;
+            string[] nameparts = name.Split(" ");
+            foreach (string namepart in nameparts) {
+                imageURLContainsNamepart = item.Link.Contains(namepart);
+            }
+            bool imageRectangular = item.Image.Height == item.Image.Width;
+
+            return (someLinkContainsCompany && imageURLContainsNamepart && imageRectangular);
         }
 
-        private bool IsLinkedInImage(Result item)
+        private bool IsXingImage(Result item)
         {
-            return item.Link.Contains("linkedin") && item.Image.Height == item.Image.Width;
+            bool imageURLContainsXing = item.Link.Contains("xing");
+            bool imageRectangular = item.Image.Height == item.Image.Width;
+
+            return imageURLContainsXing && imageRectangular;
         }
 
 
         private bool IsTwitterImage(Result item)
         {
-            return item.Link.Contains("pbs.twimg.com") && item.Image.Height == item.Image.Width;
+            bool imageURLContainsTwitter = item.Link.Contains("pbs.twimg.com");
+            bool imageRectangular = item.Image.Height == item.Image.Width;
+           
+            return imageURLContainsTwitter && imageRectangular;
         }
 
         private bool IsRectangularImage(Result item)
         {
-            return item.Image.Height == item.Image.Width;
+            bool imageRectangular = item.Image.Height == item.Image.Width;
+            return imageRectangular;
         }
 
     }
 
 }
 
-
-
 public interface IGoogleCustomSearchService
 {
-    string DoGoogleImageSearch(string name, string company);
+    string DoGoogleImageSearch(string name, string company, ImageType imageType);
 }
 
 
