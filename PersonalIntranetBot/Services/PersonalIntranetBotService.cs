@@ -172,9 +172,11 @@ namespace PersonalIntranetBot.Services
             string name = emailAddress.Split("@")[0].Replace(".", " ").Trim();
             
             // set Umlauts
+            /*
             name = name.Replace("ue", "ü");
             name = name.Replace("ae", "ä");
             name = name.Replace("oe", "ö");
+            */
 
             return name;
         }

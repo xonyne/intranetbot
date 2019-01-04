@@ -219,9 +219,9 @@ namespace PersonalIntranetBot.Services
             List<Event> graphDemoEvents = new List<Event> {
           new Event {
            Id = "4d4gDDerwesf",
-            Subject = "Certified Scrum Master (CSM)®",
+            Subject = "Training - Certified Scrum Master (CSM)®",
             Body = new ItemBody {
-             Content = "<div>\n<h4>Inhalt</h4>\nDieser Kurs wird in Englisch durchgeführt werden. The course will be held in English.<br /><br />Scrum is a popular Agile software development method. In this two-day certification course, prepared in accordance with the <a href=\"https://www.scrumalliance.org/\" target=\"_blank\">Scrum Alliances</a> requirements, you will learn the Scrum basics through practical exercises. This course is organized by bbv in cooperation with Crisp AB from Stockholm, Sweden. Crisp AB employs experienced and committed Scrum trainers, among them Henrik Kniberg, author of the standard reference Scrum and XP from the Trenches. The course fee covers the certification fee as well as a two-year membership in the Scrum Alliance. <br /><br />Contents:<br /><ul><li>What are the foundations and principles of Scrum?</li><li>Scrum Framework and meetings: what is time-boxing? What are the roles, rules and artefacts?</li><li>What's the impact of Scrum on my project and organisation? How can I best introduce Scrum considering the required change?</li><li>How can the total cost of ownership (TCO) be measured and optimised?</li><li>What's the best Scrum team composition? What effects of team dynamics need to be considered? What is the influence on team productivity?</li><li>Scrum project planning, predictability, risk management and reporting.</li><li>How can Scrum be applied to large or distributed teams? How can Scrum best be scaled?</li></ul><br /><h4>Ziel</h4>\nAfter attending this course, participants are enabled to apply Scrum in their own projects and are familiar with ideas of how to continuously improve their development processes.<br /><br /><h4>Zielgruppe</h4>\n<ul><li>Test engineers</li><li>Test managers</li><li>Software architects</li><li>Software engineers</li><li>IT project leaders and managers</li><li>QA engineers</li></ul><br /><h4>Voraussetzungen</h4>\nWe recommend that you tackle Scrum prior to the course. The Scrum Alliance has compiled a helpful reading list.</div>"
+Content="<div>Scrum is a popular Agile software development method. In this two-day certification course, prepared in accordance with the <a href=\"\\&quot;https://www.scrumalliance.org/\\&quot;\" target=\"\\&quot;_blank\\&quot;\">Scrum Alliances</a> requirements, you will learn the Scrum basics through practical exercises. <br /><br />Contents:<br />\n<ul>\n<li>What are the foundations and principles of Scrum?</li>\n<li>Scrum Framework and meetings: what is time-boxing? What are the roles, rules and artefacts?</li>\n<li>What's the impact of Scrum on my project and organisation? How can I best introduce Scrum considering the required change?</li>\n<li>How can the total cost of ownership (TCO) be measured and optimised?</li>\n<li>What's the best Scrum team composition? What effects of team dynamics need to be considered? What is the influence on team productivity?</li>\n<li>Scrum project planning, predictability, risk management and reporting.</li>\n<li>How can Scrum be applied to large or distributed teams? How can Scrum best be scaled?</li>\n</ul>\n</div>"
             },
             Location = new Microsoft.Graph.Location {
              Address = new PhysicalAddress() {
@@ -251,7 +251,7 @@ namespace PersonalIntranetBot.Services
            Id = "df4FF344g34345ggggder",
             Subject = "Personal Intranet Bot // Verteidigung Bachelor Thesis Kevin Suter",
             Body = new ItemBody {
-             Content = "<h4>Ablauf</h4>\n<p>Die Verteidigung der Bachelor-Arbeit wird vom Betreuer/von der Betreuerin in Absprache mit dem Experten/der Expertin und den Studierenden organisiert. Der empfohlene Umfang der Verteidigung ist wie folgt:</p>\n<ol>\n<li>\n<p>Vortrag inkl. Demonstration der Ergebnisse <strong>20-40 Minuten&nbsp;<img src=\"https://html-online.com/editor/tinymce4_6_5/plugins/emoticons/img/smiley-innocent.gif\" alt=\"innocent\" /></strong></p>\n</li>\n<li>\n<p>Umfang der Befragung der Studierenden: Anzahl Studierende in der Projektgruppe mal <strong>15 Minuten <img src=\"https://html-online.com/editor/tinymce4_6_5/plugins/emoticons/img/smiley-tongue-out.gif\" alt=\"tongue-out\" /></strong>. ...</p>\n</li>\n</ol>",
+             Content = "<h4>Ablauf</h4>\n<p>Die Verteidigung der Bachelor-Arbeit wird vom Betreuer/von der Betreuerin in Absprache mit dem Experten/der Expertin und den Studierenden organisiert. Der empfohlene Umfang der Verteidigung ist wie folgt:</p>\n<ol>\n<li>\n<p>Vortrag inkl. Demonstration der Ergebnisse <strong>20-40 Minuten&nbsp;</strong></p>\n</li>\n<li>\n<p>Umfang der Befragung der Studierenden: Anzahl Studierende in der Projektgruppe mal <strong>15 Minuten</strong>. ...</p>\n</li>\n</ol>",
             },
             Location = new Microsoft.Graph.Location {
              Address = new PhysicalAddress() {
@@ -324,12 +324,118 @@ namespace PersonalIntranetBot.Services
               EmailAddress = new EmailAddress() {
                Address = "kevin.suter@zuara.ch"
               }
+             },
+             new Attendee() {
+              EmailAddress = new EmailAddress() {
+               Address = "alexander.nussbaum@mimacom.com"
+              }
              }
             },
             IsAllDay = false,
             Recurrence = null
-          }
-         };
+          },
+         new Event
+         {
+             Id = "345DSDFSDddsSERSAEa43D",
+             Subject = "ahead Usability Testing",
+             Body = new ItemBody
+             {
+                 Content = "<article class=\"amp-wp-article\">\n<div class=\"amp-wp-article-content\">\n<div class=\"amp-wp-content the_content\">\n<h2>Collaboration Workshops for Leaders and Teams</h2>\n<p>For innovation to flourish, organizations must create an environment that fosters creativity; bringing together multi-talented groups of people who work in close collaboration together&mdash; exchanging knowledge, ideas and shaping the direction of the future. Easier said than done in siloed environments.</p>\n<p>The ability to collaborate across disciplines, business units&nbsp;and customers is crucial to your innovation success &mdash;especially when you are engaged in lean, agile, and/or design thinking processes.&nbsp;Good collaboration fosters original thinking, creativity, and innovation.</p>\n<p><strong>&ldquo;Bad collaboration is worse than no collaboration.&rdquo;</strong> &mdash;Morten T Hansen</p>\n<h3>Explore the principles and practices of effective collaboration in this experiential workshop.</h3>\n<p>Workshops are customized for your organization to help leaders and teams in marketing, sales, HR, engineering, IT, finance, R&amp;D and related functions.</p>\n<h4>Topics include:</h4>\n<ul>\n<li>Assess your collaboration IQ: A self-evaluation tool.</li>\n<li>Collaboration principles and practices</li>\n<li>Establishing rules of engagement for collaboration</li>\n<li>Distinctions between collaboration, cooperation, and consensus</li>\n<li>Identify and overcome the four barriers to collaboration</li>\n<li>Build cross-functional cohesion without losing individualism</li>\n<li>Collaborative leadership practices</li>\n<li>Foster a collaborative culture that values talent, diversity, relationships and connections.</li>\n<li>T shape thinking: Drawing upon the depth of your expertise as well as having the breadth of knowledge to contribute to others</li>\n<li>How to critique an idea and give constructive feedback</li>\n<li>Decision-making</li>\n</ul>\n<p>Workshops are based in part on the research of Morten T Hansen, Warren Bennis, and Google re:Work, as well as <em><a href=\"https://www.creativityatwork.com/orchestrating-collaboration-at-work-toc/\">Orchestrating Collaboration at Work: Using music, improv, storytelling and other arts to improve teamwork</a> </em>(a book on collaboration that was conceived and written collaboratively).</p>\n<h3>Action-based Learning Activities</h3>\n<p>Hands-on activities involve arts-based approaches to create safety, build trust, find shared values, shift perceptions, and uncover the &lsquo;group gold&rsquo; that leads to breakthroughs in problem-solving.&nbsp;The arts are especially useful in helping people from different cultures find common ground and build cohesion.</p>\n<ul>\n<li>Theatre Improv games, such as Yes And vs Yes But to build on ideas rather than tear them apart</li>\n<li>Collaborative poetry writing to solve problems</li>\n<li>Visual -dialogues to communicate through imagery</li>\n<li>Painting a shared vision</li>\n<li>Question-storming and other&nbsp;idea generation&nbsp;techniques</li>\n</ul>\n<p><em>Bonus: No fake team-building exercises.</em></p>\n<p><strong>Learning Outcomes:</strong></p>\n<ul>\n<li>Develop the collaborative leadership and management skills required to create trusting, collaborative environments that inspire and engage diverse groups of people to co-create.</li>\n<li>Build relationships to form networks and self-organizing collegial communities of practice to enhance serendipity and innovation.</li>\n<li>Know when not to collaborate, and avoid wasting time and energy when collaboration is unnecessary.</li>\n<li>Leave the workshop with proven methods for cultivating collaboration in groups and teams.</li>\n</ul>\n<p><strong>Time frame: half-day to two days</strong></p>\n<p>See also <a href=\"https://www.creativityatwork.com/2011/06/03/adventures-in-learning-creativity/\">Adventures in Learning about Creativity</a></p>\n<p class=\"amp-wp-inline-0786f4623984c46e15421e6979be740d\"><strong>How can we help your organization collaborate and innovate?</strong></p>\n<p class=\"amp-wp-inline-0786f4623984c46e15421e6979be740d\">&nbsp;</p>\n<div class=\"fusion-fullwidth fullwidth-box hundred-percent-fullwidth non-hundred-percent-height-scrolling\">\n<div class=\"fusion-builder-row fusion-row \">\n<div class=\"fusion-layout-column fusion_builder_column fusion_builder_column_1_1 fusion-one-full fusion-column-first fusion-column-last fusion-column-no-min-height 1_1 amp-wp-inline-53a0243f03979e11ce67197f1514e600\">\n<div class=\"fusion-column-wrapper\" data-bg-url=\"\">\n<div class=\"fusion-button-wrapper fusion-alignleft\"><a class=\"fusion-button button-flat fusion-button-square button-large button-default button-1\" title=\"H4\" href=\"https://www.creativityatwork.com/contact-us-2/\" target=\"_blank\" rel=\"noopener\"><span class=\"fusion-button-text\">Contact us today </span></a></div>\n<div class=\"fusion-clearfix\">&nbsp;</div>\n</div>\n</div>\n</div>\n</div>\n<div class=\"grammarly-disable-indicator\">&nbsp;</div>\n</div>\n</div>\n</article>\n<div class=\"amp-wp-content widget-wrapper\">\n<div class=\"amp_widget_above_the_footer\">\n<div class=\"textwidget custom-html-widget\">\n<div class=\"orchestrating\"><a href=\"https://www.creativityatwork.com/orchestrating-collaboration-at-work-toc/\"><img class=\"i-amphtml-fill-content i-amphtml-replaced-content\" src=\"https://i2.wp.com/cdn.creativityatwork.com/wp-content/uploads/OCAW-book-cover-270w.jpg?resize=270%2C352&amp;ssl=1\" sizes=\"(min-width: 270px) 270px, 100vw\" alt=\"OCAW-book-cover\" /></a></div>\n<div class=\"orchestrating\"><strong><a href=\"https://www.creativityatwork.com/orchestrating-collaboration-at-work-toc/\">An arts-based recipe book of activities for trainers:</a><a href=\"https://www.creativityatwork.com/orchestrating-collaboration-at-work-toc/\"> Orchestrating Collaboration at Work</a>:</strong><a href=\"https://www.creativityatwork.com/orchestrating-collaboration-at-work-toc/\"> Using music, improv, storytelling and other arts to improve teamwork</a> <a href=\"https://www.creativityatwork.com/orchestrating-collaboration-at-work-toc/\">By Arthur B VanGundy and Linda Naiman</a></div>\n</div>\n</div>\n</div>"
+             },
+             Location = new Microsoft.Graph.Location {
+             Address = new PhysicalAddress() {
+              Street = "Schanzenstrasse 4c",
+              PostalCode = "3008",
+              City = "Bern"
+             },
+            },
+             Start = new DateTimeTimeZone()
+             {
+                 DateTime = new DateTime(2019, 4, 2, 14, 00, 00).ToString()
+             },
+             End = new DateTimeTimeZone()
+             {
+                 DateTime = new DateTime(2019, 4, 2, 18, 00, 00).ToString()
+             },
+             Attendees = new List<Attendee> {
+             new Attendee() {
+              EmailAddress = new EmailAddress() {
+               Address = "ferdinand.vogler@isolutions.ch"
+              }
+             },
+             new Attendee() {
+              EmailAddress = new EmailAddress() {
+               Address = "frank.quednau@isolutions.ch"
+              }
+             },
+             new Attendee() {
+              EmailAddress = new EmailAddress() {
+               Address = "pascal.grossniklaus@isolutions.ch"
+              }
+             },
+             new Attendee() {
+              EmailAddress = new EmailAddress() {
+               Address = "girolamo.marroccoli@isolutions.ch"
+              }
+             },
+             new Attendee() {
+              EmailAddress = new EmailAddress() {
+               Address = "till.jakob@isolutions.ch"
+              }
+             },
+             new Attendee() {
+              EmailAddress = new EmailAddress() {
+               Address = "peer.juettner@isolutions.ch"
+              }
+             }
+            },
+             IsAllDay = false,
+             Recurrence = null
+         },
+         new Event
+         {
+             Id = "345DSDFSDddsSERSAEa43D43d",
+             Subject = "Strategiemeeting 2019",
+             Body = new ItemBody
+             {
+                 Content="<p><strong>Ziele</strong></p>\n<p>Strategische Ausrichtung des Unternehmens f&uuml;r 2019 gemeinsam entwickeln.</p>\n<p><strong>Vorbereitung</strong></p>\n<ol>\n<li>Zahlen 2018 fertigstellen.</li>\n<li>Resum&eacute;e 2018 nach Bereich vorbereiten.</li>\n<li>Pers&ouml;nliche Ziele und W&uuml;nsche f&uuml;r 2019.</li>\n</ol>\n<p><strong>Traktanden</strong></p>\n<ul>\n<li>R&uuml;ckblick 2018\n<ul>\n<li>Welche Ziele wurden erreicht?</li>\n<li>R&uuml;ckblick der einzelnen Bereiche.</li>\n<li>Zahlen 2018 - finanzielle Situation des Unternehmens.</li>\n</ul>\n</li>\n<li>Ausblick 2019\n<ul>\n<li>Wo wollen wir hin im 2019?\n<ul>\n<li>Interne Zusammenarbeit?</li>\n<li>Externe Zusammenarbeit mit Kunden?</li>\n<li>Produkte?</li>\n<li>Weiterbildung?</li>\n<li>Finanzielle Ziele?</li>\n</ul>\n</li>\n<li>Milestones und Planung f&uuml;r 2019 zusammen erarbeiten.</li>\n</ul>\n</li>\n</ul>"
+             },
+             Location = new Microsoft.Graph.Location
+             {
+                 Address = new PhysicalAddress()
+                 {
+                     Street = "Kramgasse 82, 3011 Bern",
+                 },
+             },
+             Start = new DateTimeTimeZone()
+             {
+                 DateTime = new DateTime(2019, 1, 7, 08, 00, 00).ToString()
+             },
+             End = new DateTimeTimeZone()
+             {
+                 DateTime = new DateTime(2019, 1, 7, 20, 00, 00).ToString()
+             },
+             Attendees = new List<Attendee> {
+             new Attendee() {
+              EmailAddress = new EmailAddress() {
+               Address = "roman.maire@zuara.ch"
+              }
+             },
+             new Attendee() {
+              EmailAddress = new EmailAddress() {
+               Address = "sebastian.fiechter@zuara.ch"
+              }
+             },
+             new Attendee() {
+              EmailAddress = new EmailAddress() {
+               Address = "kevin.suter@zuara.ch"
+              }
+             }
+            },
+             IsAllDay = false,
+             Recurrence = null
+         },
+            };
          return graphDemoEvents;
         }
     }
