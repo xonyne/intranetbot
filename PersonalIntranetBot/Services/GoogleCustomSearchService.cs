@@ -132,7 +132,7 @@ namespace PersonalIntranetBot.Services
 
         private bool IsXingImage(Result item)
         {
-            bool imageURLContainsXing = item.Link.Contains("xing");
+            bool imageURLContainsXing = item.Link.Contains("image");
             bool imageRectangular = item.Image.Height == item.Image.Width;
 
             return imageURLContainsXing && imageRectangular;

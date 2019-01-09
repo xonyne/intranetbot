@@ -46,7 +46,7 @@ namespace PersonalIntranetBot.Services
         }
 
         private List<BingSearchResult> PerformBingWebSearch(string searchString) {
-            Thread.Sleep(1000);         
+            Thread.Sleep(500);         
             string bingWebSearchJSON = _bingWebSearchService.DoBingWebSearch(searchString).JsonResult;
             return ConvertBingWebSearchJSONResultToBingSearchResultObjects(bingWebSearchJSON);
         }
