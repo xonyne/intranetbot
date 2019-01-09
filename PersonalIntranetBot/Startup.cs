@@ -21,12 +21,14 @@ namespace PersonalIntranetBot
 
     public class Startup
     {
+        /* Mac */
+        /*
         private static string _connStr = @"
             Server=127.0.0.1,1401;
             Database=personalintranetbot;
             User Id=SA;
             Password=1StrongPassword!
-        ";
+        ";*/
 
         public Startup(IConfiguration configuration)
         {
