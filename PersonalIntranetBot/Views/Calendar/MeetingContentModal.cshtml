@@ -21,32 +21,6 @@
             </div>
             <hr />
             <div id="meetingComments-@Html.DisplayFor(model => model.MeetingId)" class="meetingComments">
-                <!-- Document links and tasks not implemented yet. Might be considered for future versions.
-                    <table>
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="padding-right:10px;">
-                                    <h4>Content Links</h4>
-                                    <span style="line-height:1.7em"><a href=""><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px" /> external_training_application_form.pdf</a></span><br />
-                                    <span style="line-height:1.7em"><a href=""><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px" /> company_scrum_masters.xlsx</a></span><br />
-                                    <span style="line-height:1.7em"><a href=""><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px" /> external_training_regulations.pdf</a></span><br />
-                                </td>
-                                <td>
-                                    <h4>Tasks</h4>
-                                    <span style="line-height:1.7em"><span class="glyphicon glyphicon-unchecked" style="vertical-align:middle;margin-top: -5px" /> Sign in application form</span><br />
-                                    <span style="line-height:1.7em"><span class="glyphicon glyphicon-unchecked" style="vertical-align:middle;margin-top: -5px" /> Check your training budget</span><br />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    -->
-
                     <h4>Comments</h4>
                     @for (int i = 0; i < Model.Comments.Count; i++)
                     {
