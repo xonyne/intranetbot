@@ -1,4 +1,9 @@
-﻿using System;
+﻿/* 
+*  Author: Microsoft
+*  Description: This class is used to handle the authentication to the Azure Active Directory.
+*  
+*/
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;

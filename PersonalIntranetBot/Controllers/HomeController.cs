@@ -1,17 +1,16 @@
 ﻿/* 
-*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
-*  See LICENSE in the source repository root for complete license information. 
+*  Author: Kevin Suter
+*  Description: This class is used to render the home page and to handle user input on this page.
+*  
 */
-
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using PersonalIntranetBot.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
-using Microsoft.AspNetCore.Hosting;
-using PersonalIntranetBot.Services;
-using Microsoft.AspNetCore.Http;
+using PersonalIntranetBot.Helpers;
+using PersonalIntranetBot.Interfaces;
+using System.Threading.Tasks;
 
 namespace PersonalIntranetBot.Controllers
 {
@@ -31,7 +30,6 @@ namespace PersonalIntranetBot.Controllers
         }
 
         [AllowAnonymous]
-        // Load user's profile.
         public async Task<IActionResult> Index(string email)
         {
             if (User.Identity.IsAuthenticated)
@@ -46,9 +44,9 @@ namespace PersonalIntranetBot.Controllers
                 // Initialize the GraphServiceClient.
                 var graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
 
-                ViewData["Response"] = await _graphService.GetUserJson(graphClient, email, HttpContext);
+                ViewData["Response"] = await _graphService.GetGraphUserJson(graphClient, email, HttpContext);
 
-                ViewData["Picture"] = await _graphService.GetPictureBase64(graphClient, email, HttpContext);
+                ViewData["Picture"] = await _graphService.GetGraphPictureBase64(graphClient, email, HttpContext);
             }
 
             return View();
@@ -74,7 +72,7 @@ namespace PersonalIntranetBot.Controllers
                 var graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
 
                 // Send the email.
-                await _graphService.SendEmail(graphClient, _env, recipients, HttpContext, "Mein Kommentar", "Neues Meeting", Request.Path);
+                await _graphService.SendGraphEmail(graphClient, _env, recipients, HttpContext, "Mein Kommentar", "Neues Meeting", Request.Path);
                 
                 // Reset the current user's email address and the status to display when the page reloads.
                 TempData["Message"] = "Success! Your mail was sent.";
@@ -92,5 +90,14 @@ namespace PersonalIntranetBot.Controllers
         {
             return View();
         }
+
+        public IGraphService IGraphService
+        {
+            get => default(IGraphService);
+            set
+            {
+            }
+        }
+
     }
 }

@@ -1,4 +1,9 @@
-﻿using System;
+﻿/* 
+*  Author: Kevin Suter
+*  Description: This class contains the whole view model for a meeting.
+*  
+*/
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 

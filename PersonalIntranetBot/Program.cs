@@ -1,8 +1,8 @@
 ﻿/* 
-*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
-*  See LICENSE in the source repository root for complete license information. 
+*  Author: Microsoft
+*  Description: The application is started from this class.
+*  
 */
-
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore;
 

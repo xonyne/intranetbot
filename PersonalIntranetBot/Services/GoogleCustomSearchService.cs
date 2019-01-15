@@ -1,63 +1,33 @@
 ﻿/* 
-*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
-*  See LICENSE in the source repository root for complete license information. 
+*  Author: Kevin Suter
+*  Description: This class is used to call the Google Custom Search API.
+*  
 */
-
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using PersonalIntranetBot.Models;
-using System.Text;
-using System.Net;
-using static PersonalIntranetBot.Helpers.BingWebSearchService;
-using PersonalIntranetBot.Extensions;
-using Microsoft.Extensions.Configuration;
 using Google.Apis.Customsearch.v1;
-using Google.Apis.Services;
 using Google.Apis.Customsearch.v1.Data;
-using PersonalIntranetBot.Services;
+using Google.Apis.Services;
+using Microsoft.Extensions.Configuration;
+using PersonalIntranetBot.Extensions;
+using PersonalIntranetBot.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace PersonalIntranetBot.Services
 {
-    public enum ImageType
-    {
-        COMPANY,
-        XING,
-        TWITTER,
-        RECTANGULAR
-    }
 
     public class GoogleCustomSearchService : IGoogleCustomSearchService
     {
         private readonly string _apiKey;
         private readonly string _searchEngineId;
 
-        public class BingSearchResult
-        {
-            public String JsonResult { get; set; }
-            public Dictionary<String, String> RelevantHeaders { get; set; }
-        }
-
-
-
-
         public GoogleCustomSearchService(IConfiguration configuration)
         {
-            var googleOptions = new GoogleOptions();
+            var googleOptions = new GoogleCustomSearchOptions();
             configuration.Bind("GoogleCustomSearchConfig", googleOptions);
             _apiKey = googleOptions.AccessKey;
             _searchEngineId = googleOptions.SearchEngineId;
         }
 
-        /// <summary>
-        /// Makes a request to the Bing Web Search API and returns data as a SearchResult.
-        /// </summary>
         public string DoGoogleImageSearch(string name, string company, ImageType imageType)
         {
             var customSearchService = new CustomsearchService(new BaseClientService.Initializer { ApiKey = _apiKey });
@@ -127,7 +97,7 @@ namespace PersonalIntranetBot.Services
             }
             bool imageRectangular = item.Image.Height == item.Image.Width;
 
-            return (someLinkContainsCompany && imageURLContainsNamepart && imageRectangular);
+            return (someLinkContainsCompany && imageRectangular);
         }
 
         private bool IsXingImage(Result item)
@@ -153,13 +123,16 @@ namespace PersonalIntranetBot.Services
             return imageRectangular;
         }
 
+        public GoogleCustomSearchOptions GoogleCustomSearchOptions
+        {
+            get => default(GoogleCustomSearchOptions);
+            set
+            {
+            }
+        }
+
     }
 
-}
-
-public interface IGoogleCustomSearchService
-{
-    string DoGoogleImageSearch(string name, string company, ImageType imageType);
 }
 
 

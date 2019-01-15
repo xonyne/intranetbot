@@ -1,9 +1,10 @@
-﻿using Microsoft.Graph;
+﻿/* 
+*  Author: Kevin Suter
+*  Description: This class is used to generate the Google Maps URL link for travel information.
+*  
+*/
+using PersonalIntranetBot.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonalIntranetBot.Services
 {
@@ -16,10 +17,5 @@ namespace PersonalIntranetBot.Services
             String travelmode = "travelmode=transit";
             return BASE_URL + destinationEncoded + travelmode;
         }
-    }
-
-    public interface IGoogleMapsService
-    {
-        String GetGoogleMapsURL(String destination);
     }
 }

@@ -1,4 +1,9 @@
-﻿<div>
+﻿<!--
+*  Author: Kevin Suter
+*  Description: This view contains the settings page of the application.
+*
+-->
+<div>
     @{
         ViewData["Title"] = "Settings";
     }
@@ -11,7 +16,7 @@
     @if (User.Identity.IsAuthenticated)
     {
         <h2>Settings</h2>
-        <button id="deleteAllDatabaseContentButton" class="btn btn-danger">Delete all database content</button>
+        <p><button id="deleteAllDatabaseContentButton" class="btn btn-danger">Delete all database content</button></p>
 
         <form id="__AjaxAntiForgeryForm" action="#" method="post">
             @Html.AntiForgeryToken()

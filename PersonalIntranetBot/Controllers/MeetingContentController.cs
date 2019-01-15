@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿/* 
+*  Author: Kevin Suter
+*  Description: This class is used to handle all actions regarding the meeting content (e.g. meeting comments).
+*  
+*/
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PersonalIntranetBot.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalIntranetBot.Controllers
 {
     public class MeetingContentController : Controller
     {
         private readonly DBModelContext _context;
-
+        
         public MeetingContentController(DBModelContext context)
         {
             _context = context;
@@ -34,10 +37,11 @@ namespace PersonalIntranetBot.Controllers
                     {
                         _context.Add(meetingComment);
                     }
-                    else {
+                    else
+                    {
                         _context.Update(meetingComment);
                     }
-                    
+
                     await _context.SaveChangesAsync();
 
                 }
@@ -72,6 +76,14 @@ namespace PersonalIntranetBot.Controllers
             }
 
             return Json(meetingComment);
+        }
+
+        public DBModelContext DBModelContext
+        {
+            get => default(DBModelContext);
+            set
+            {
+            }
         }
     }
 }

@@ -1,28 +1,27 @@
 ﻿/* 
-*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
-*  See LICENSE in the source repository root for complete license information. 
+*  Author: Kevin Suter
+*  Description: This class is used to call the Microsoft Graph API and to perform all actions within O365.
+*  
 */
-
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Graph;
 using Newtonsoft.Json;
+using PersonalIntranetBot.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using PersonalIntranetBot.Models;
-using System.Text;
-using System.Threading;
 
 namespace PersonalIntranetBot.Services
 {
     public class GraphService : IGraphService
     {
+
         // Load user's profile in formatted JSON.
-        public async Task<string> GetUserJson(GraphServiceClient graphClient, string email, HttpContext httpContext)
+        public async Task<string> GetGraphUserJson(GraphServiceClient graphClient, string email, HttpContext httpContext)
         {
             if (email == null) return JsonConvert.SerializeObject(new { Message = "Email address cannot be null." }, Formatting.Indented);
 
@@ -55,7 +54,7 @@ namespace PersonalIntranetBot.Services
         }
 
         // Load user's profile picture in base64 string.
-        public async Task<string> GetPictureBase64(GraphServiceClient graphClient, string email, HttpContext httpContext)
+        public async Task<string> GetGraphPictureBase64(GraphServiceClient graphClient, string email, HttpContext httpContext)
         {
             try
             {
@@ -90,7 +89,7 @@ namespace PersonalIntranetBot.Services
         }
 
         // Send an email message from the current user.
-        public async Task SendEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext, string comment, string meetingTitle, string name)
+        public async Task SendGraphEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext, string comment, string meetingTitle, string name)
         {
             if (recipients == null) return;
 
@@ -217,20 +216,19 @@ namespace PersonalIntranetBot.Services
             return pictureStream;
         }
 
-        public List<Event> GetCalendarEvents(GraphServiceClient graphClient)
+        public List<Event> GetGraphCalendarEvents(GraphServiceClient graphClient)
         {
             Task<IUserEventsCollectionPage> eventTask = graphClient.Me.Events.Request().GetAsync();
             eventTask.Wait();
             return eventTask.Result.ToList();
         }
-    }
 
-    public interface IGraphService
-    {
-        List<Event> GetCalendarEvents(GraphServiceClient graphClient);
-        Task<string> GetUserJson(GraphServiceClient graphClient, string email, HttpContext httpContext);
-        Task<string> GetPictureBase64(GraphServiceClient graphClient, string email, HttpContext httpContext);
-        Task SendEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext, string comment, string meetingTitle, string name);
+        public List<Microsoft.Graph.DriveItem> GetGraphFiles(GraphServiceClient graphClient)
+        {
+            Task<IDriveSearchCollectionPage> driveItems = graphClient.Me.Drive.Search("cse").Request().GetAsync();
+            driveItems.Wait();
+            return driveItems.Result.ToList();
+        }
     }
 }
 

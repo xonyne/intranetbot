@@ -1,4 +1,9 @@
-﻿namespace PersonalIntranetBot.Extensions
+﻿/* 
+*  Author: Microsoft
+*  Description: This class stores the authentication parameters for the Azure Active Directory.
+*  
+*/
+namespace PersonalIntranetBot.Extensions
 {
     public class AzureAdOptions
     {

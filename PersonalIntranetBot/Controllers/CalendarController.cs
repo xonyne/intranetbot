@@ -1,19 +1,20 @@
 ﻿/* 
-*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
-*  See LICENSE in the source repository root for complete license information. 
+*  Author: Kevin Suter
+*  Description: This class is used to handle the page with list of all meetings. 
+*  It triggers the loading of the calendar events from the Graph API.
+*  
 */
-
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using PersonalIntranetBot.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
-using Microsoft.AspNetCore.Hosting;
-using System.Collections.Generic;
+using PersonalIntranetBot.Helpers;
+using PersonalIntranetBot.Interfaces;
 using PersonalIntranetBot.Models;
-using System;
 using PersonalIntranetBot.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PersonalIntranetBot.Controllers
 {
@@ -37,8 +38,6 @@ namespace PersonalIntranetBot.Controllers
         }
 
         [AllowAnonymous]
-        // Load user's profile.
-        // Get events in all the current user's mail folders.
         public async Task<IActionResult> Index()
         {
             List<PersonalIntranetBotMeetingViewModel> items = new List<PersonalIntranetBotMeetingViewModel>();
@@ -51,6 +50,14 @@ namespace PersonalIntranetBot.Controllers
                 items = _personalIntranetBotService.GetOutlookCalendarEvents(_graphClient);
             }
             return View(items);
+        }
+
+        public IPersonalIntranetBotService IPersonalIntranetBotService
+        {
+            get => default(IPersonalIntranetBotService);
+            set
+            {
+            }
         }
     }
 }

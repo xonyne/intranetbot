@@ -1,31 +1,20 @@
-﻿using HtmlAgilityPack;
+﻿/* 
+*  Author: Kevin Suter
+*  Description: This class is used to obtain the social media links for the meeting attendees. 
+*  It uses the BingWebSearchService to fullfil that task.
+*  
+*/
 using Newtonsoft.Json.Linq;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
-using PersonalIntranetBot.Helpers;
+using PersonalIntranetBot.Interfaces;
 using PersonalIntranetBot.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 
 
 namespace PersonalIntranetBot.Services
 {
-
-    class BingSearchResult
-    {
-        public string Id { get; set; }
-        public string Description { get; set; }
-        public string URL { get; set; }
-    }
-
-   
-
-    public class SocialLinksService : ISocialLinkService
+    public class SocialLinksService : ISocialLinksService
     {
         private readonly IBingWebSearchService _bingWebSearchService;
 
@@ -45,8 +34,7 @@ namespace PersonalIntranetBot.Services
             _bingWebSearchService = bingWebSearchService;
         }
 
-        private List<BingSearchResult> PerformBingWebSearch(string searchString) {
-            Thread.Sleep(500);         
+        private List<BingSearchResult> PerformBingWebSearch(string searchString) {      
             string bingWebSearchJSON = _bingWebSearchService.DoBingWebSearch(searchString).JsonResult;
             return ConvertBingWebSearchJSONResultToBingSearchResultObjects(bingWebSearchJSON);
         }
@@ -108,12 +96,13 @@ namespace PersonalIntranetBot.Services
             return results;
         }
 
+        public IBingWebSearchService IBingWebSearchService
+        {
+            get => default(IBingWebSearchService);
+            set
+            {
+            }
+        }
     }
 
-    public interface ISocialLinkService
-    {
-       string GetLinkedInAccountURLFromNameAndCompany(string name, string company);
-       string GetTwitterAccountURLFromNameAndCompany(string name, string company);
-       string GetXingAccountURLFromNameAndCompany(string name, string company);
-    }
 }

@@ -1,8 +1,8 @@
 ﻿/* 
-*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
-*  See LICENSE in the source repository root for complete license information. 
+*  Author: Microsoft
+*  Description: This class stores the access token received from the Graph API after authentication for later use.
+*  
 */
-
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Identity.Client;
 using System.Text;

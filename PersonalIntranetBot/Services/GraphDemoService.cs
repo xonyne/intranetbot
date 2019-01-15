@@ -1,25 +1,27 @@
-﻿/*
-*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
-*  See LICENSE in the source repository root for complete license information.
+﻿/* 
+*  Author: Kevin Suter
+*  Description: This class is for testing purposes only. It can be used to mock the GraphService. It will always return a fixed 
+*  set of calendar events. Furthermore, notifications are sent to a predefined email address instead of meeting attendees.
+*  
 */
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Graph;
 using Newtonsoft.Json;
+using PersonalIntranetBot.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalIntranetBot.Services
 {
     public class GraphDemoService : IGraphService
     {
         // Load user's profile in formatted JSON.
-        public async Task<string> GetUserJson(GraphServiceClient graphClient, string email, HttpContext httpContext)
+        public async Task<string> GetGraphUserJson(GraphServiceClient graphClient, string email, HttpContext httpContext)
         {
             if (email == null) return JsonConvert.SerializeObject(new { Message = "Email address cannot be null." }, Formatting.Indented);
 
@@ -52,7 +54,7 @@ namespace PersonalIntranetBot.Services
         }
 
         // Load user's profile picture in base64 string.
-        public async Task<string> GetPictureBase64(GraphServiceClient graphClient, string email, HttpContext httpContext)
+        public async Task<string> GetGraphPictureBase64(GraphServiceClient graphClient, string email, HttpContext httpContext)
         {
             try
             {
@@ -87,7 +89,7 @@ namespace PersonalIntranetBot.Services
         }
 
         // Send an email message from the current user.
-        public async Task SendEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext, string comment, string meetingTitle, string name)
+        public async Task SendGraphEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext, string comment, string meetingTitle, string name)
         {
             if (recipients == null) return;
 
@@ -214,14 +216,14 @@ namespace PersonalIntranetBot.Services
             return pictureStream;
         }
 
-        List<Event> IGraphService.GetCalendarEvents(GraphServiceClient graphClient)
+        public List<Event> GetGraphCalendarEvents(GraphServiceClient graphClient)
         {
             List<Event> graphDemoEvents = new List<Event> {
           new Event {
            Id = "4d4gDDerwesf",
             Subject = "Training - Certified Scrum Master (CSM)®",
             Body = new ItemBody {
-Content="<div>Scrum is a popular Agile software development method. In this two-day certification course, prepared in accordance with the <a href=\"\\&quot;https://www.scrumalliance.org/\\&quot;\" target=\"\\&quot;_blank\\&quot;\">Scrum Alliances</a> requirements, you will learn the Scrum basics through practical exercises. <br /><br />Contents:<br />\n<ul>\n<li>What are the foundations and principles of Scrum?</li>\n<li>Scrum Framework and meetings: what is time-boxing? What are the roles, rules and artefacts?</li>\n<li>What's the impact of Scrum on my project and organisation? How can I best introduce Scrum considering the required change?</li>\n<li>How can the total cost of ownership (TCO) be measured and optimised?</li>\n<li>What's the best Scrum team composition? What effects of team dynamics need to be considered? What is the influence on team productivity?</li>\n<li>Scrum project planning, predictability, risk management and reporting.</li>\n<li>How can Scrum be applied to large or distributed teams? How can Scrum best be scaled?</li>\n</ul>\n</div>"
+            Content="<div>Scrum is a popular Agile software development method. In this two-day certification course, prepared in accordance with the <a href=\"\\&quot;https://www.scrumalliance.org/\\&quot;\" target=\"\\&quot;_blank\\&quot;\">Scrum Alliances</a> requirements, you will learn the Scrum basics through practical exercises. <br /><br />Contents:<br />\n<ul>\n<li>What are the foundations and principles of Scrum?</li>\n<li>Scrum Framework and meetings: what is time-boxing? What are the roles, rules and artefacts?</li>\n<li>What's the impact of Scrum on my project and organisation? How can I best introduce Scrum considering the required change?</li>\n<li>How can the total cost of ownership (TCO) be measured and optimised?</li>\n<li>What's the best Scrum team composition? What effects of team dynamics need to be considered? What is the influence on team productivity?</li>\n<li>Scrum project planning, predictability, risk management and reporting.</li>\n<li>How can Scrum be applied to large or distributed teams? How can Scrum best be scaled?</li>\n</ul>\n</div>"
             },
             Location = new Microsoft.Graph.Location {
              Address = new PhysicalAddress() {
@@ -437,6 +439,11 @@ Content="<div>Scrum is a popular Agile software development method. In this two-
          },
             };
          return graphDemoEvents;
+        }
+
+        public List<DriveItem> GetGraphFiles(GraphServiceClient graphClient)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿/* 
+*  Author: Kevin Suter
+*  Description: This class is used to handle all user actions regarding meeting attendees.
+*  
+*/
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PersonalIntranetBot.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalIntranetBot.Controllers
 {
@@ -109,6 +112,15 @@ namespace PersonalIntranetBot.Controllers
         private bool AttendeeExists(int id)
         {
             return _context.Attendees.Any(e => e.AttendeeId == id);
+        }
+
+
+        public DBModelContext DBModelContext
+        {
+            get => default(DBModelContext);
+            set
+            {
+            }
         }
     }
 }

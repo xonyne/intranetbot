@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/* 
+*  Author: Kevin Suter
+*  Description: This class contains all database tables and models of the application.
+*  
+*/
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PersonalIntranetBot.Models
 {
@@ -17,6 +18,30 @@ namespace PersonalIntranetBot.Models
         public DbSet<Attendee> Attendees { get; set; }
         public DbSet<SocialLink> SocialLinks { get; set; }
         public DbSet<MeetingComment> MeetingComments { get; set; }
+
+        public MeetingComment MeetingComment
+        {
+            get => default(MeetingComment);
+            set
+            {
+            }
+        }
+
+        public SocialLink SocialLink
+        {
+            get => default(SocialLink);
+            set
+            {
+            }
+        }
+
+        public Attendee Attendee
+        {
+            get => default(Attendee);
+            set
+            {
+            }
+        }
     }
 
     public class Location {

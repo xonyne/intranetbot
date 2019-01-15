@@ -1,16 +1,20 @@
-﻿using HtmlAgilityPack;
+﻿/* 
+*  Author: Kevin Suter
+*  Description: This class contains the main functionality for enriching calendar meetings with additional information. 
+*  It uses the other services of the application accessing external systems for obtaining the information needed.
+*  
+*/
+using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph;
-using PersonalIntranetBot.Helpers;
+using PersonalIntranetBot.Interfaces;
 using PersonalIntranetBot.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using Location = PersonalIntranetBot.Models.Location;
 
 namespace PersonalIntranetBot.Services
@@ -20,11 +24,11 @@ namespace PersonalIntranetBot.Services
         private readonly DBModelContext _dbContext;
         private readonly IGoogleMapsService _googleMapsService;
         private readonly IGoogleCustomSearchService _googleCustomSearchService;
-        private readonly ISocialLinkService _socialLinksService;
+        private readonly ISocialLinksService _socialLinksService;
         private readonly IGraphService _graphService;
         private static string _personalIntranetBotName = "Personal Intranet Bot";
 
-        public PersonalIntranetBotService(DBModelContext dbContext, IGoogleMapsService googleMapsService, ISocialLinkService socialLinksService, IGoogleCustomSearchService googleCustomSearchService, IGraphService graphService) {
+        public PersonalIntranetBotService(DBModelContext dbContext, IGoogleMapsService googleMapsService, ISocialLinksService socialLinksService, IGoogleCustomSearchService googleCustomSearchService, IGraphService graphService) {
             _dbContext = dbContext;
             _graphService = graphService;
             _googleMapsService = googleMapsService;
@@ -34,8 +38,9 @@ namespace PersonalIntranetBot.Services
 
         public List<PersonalIntranetBotMeetingViewModel> GetOutlookCalendarEvents(GraphServiceClient graphClient)
         {
+            GetHTMLAgilityLinkedInBla();
             List<PersonalIntranetBotMeetingViewModel> meetingViewItems = new List<PersonalIntranetBotMeetingViewModel>();
-            List<Event> meetingGraphItems = _graphService.GetCalendarEvents(graphClient);
+            List<Event> meetingGraphItems = _graphService.GetGraphCalendarEvents(graphClient);
             if (meetingGraphItems?.Count > 0)
             {
                 foreach (Event graphMeeting in meetingGraphItems)
@@ -88,13 +93,13 @@ namespace PersonalIntranetBot.Services
 
             List<Models.Attendee> results = new List<Models.Attendee>();
             foreach (Microsoft.Graph.Attendee graphAttendee in meetingAttendees) {
-                string meetingAttendeeEmailAddress = graphAttendee.EmailAddress.Address.ToString();
-                List<SocialLink> socialLinks = GetSocialLinksForEmailAddress(meetingAttendeeEmailAddress);
-                string imageURL = GetImageURL(meetingAttendeeEmailAddress, socialLinks);
+                string meetingAttendeeEmailAddress = graphAttendee.EmailAddress.Address.ToString(); 
                 if (meetingAttendeeEmailAddress != null)
                 {
                     if (!dbAttendees.Any(dbAttendee => dbAttendee.EmailAddress.ToLower() == meetingAttendeeEmailAddress.ToLower()))
                     {
+                        List<SocialLink> socialLinks = GetSocialLinksForEmailAddress(meetingAttendeeEmailAddress);
+                        string imageURL = GetImageURL(meetingAttendeeEmailAddress, socialLinks);
                         var attendee = new Models.Attendee
                         {
                             EmailAddress = meetingAttendeeEmailAddress,
@@ -286,15 +291,61 @@ namespace PersonalIntranetBot.Services
             return meetingLocation.Contains(",") && meetingLocation.Any(char.IsDigit);
         }
 
-        public string ToTitleCase(string title)
+        private string ToTitleCase(string title)
         {
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title);
         }
 
-    }
+        private void GetHTMLAgilityLinkedInBla() {
+            var url = "https://www.xing.com/profile/Kevin_Suter4";
+            var web = new HtmlWeb();
+            var doc = web.Load(url);
 
-    public interface IPersonalIntranetBotService
-    {
-        List<PersonalIntranetBotMeetingViewModel> GetOutlookCalendarEvents(GraphServiceClient graphClient);
+            string name = doc.DocumentNode.SelectNodes("//*[@id=\"person\"]/div/div[1]/div[2]/div[2]/div[2]/span").First().InnerHtml;
+            Console.WriteLine(name);
+        }
+
+
+        public IGoogleCustomSearchService IGoogleCustomSearchService
+        {
+            get => default(IGoogleCustomSearchService);
+            set
+            {
+            }
+        }
+
+        public IGoogleMapsService IGoogleMapsService
+        {
+            get => default(IGoogleMapsService);
+            set
+            {
+            }
+        }
+
+        public DBModelContext DBModelContext
+        {
+            get => default(DBModelContext);
+            set
+            {
+            }
+        }
+
+        public ISocialLinksService ISocialLinksService
+        {
+            get => default(ISocialLinksService);
+            set
+            {
+            }
+        }
+
+        public IGraphService IGraphService
+        {
+            get => default(IGraphService);
+            set
+            {
+            }
+        }
+
+
     }
 }

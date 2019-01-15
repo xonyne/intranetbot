@@ -1,50 +1,50 @@
 ﻿/* 
-*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
-*  See LICENSE in the source repository root for complete license information. 
+*  Author: Kevin Suter
+*  Description: This class is used to call the Microsoft Bing Web Search API.
+*  
 */
-
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using PersonalIntranetBot.Models;
-using System.Text;
-using System.Net;
-using static PersonalIntranetBot.Helpers.BingWebSearchService;
-using PersonalIntranetBot.Extensions;
 using Microsoft.Extensions.Configuration;
+using PersonalIntranetBot.Extensions;
+using PersonalIntranetBot.Interfaces;
+using PersonalIntranetBot.Models;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Threading;
 
 namespace PersonalIntranetBot.Helpers
 {
-    public class BingWebSearchService : IBingWebSearchService
+    public class MicrosoftBingWebSearchService : IBingWebSearchService
     {
         private readonly string _accessKey;
         private readonly string _uriBase;
+        private readonly int _searchDelay;
 
-        public class BingSearchResult
+        public MicrosoftBingWebSearchService(IConfiguration configuration)
         {
-            public String JsonResult { get; set; }
-            public Dictionary<String, String> RelevantHeaders { get; set; }
-        }
-
-        public BingWebSearchService(IConfiguration configuration)
-        {
-            var bingOptions = new BingOptions();
+            var bingOptions = new MicrosoftBingWebSearchOptions();
             configuration.Bind("BingWebSearchConfig", bingOptions);
             _accessKey = bingOptions.AccessKey;
             _uriBase = bingOptions.UriBase;
+            _searchDelay = bingOptions.SearchDelay;
+        }
+
+        public MicrosoftBingWebSearchOptions BingWebSearchOptions
+        {
+            get => default(MicrosoftBingWebSearchOptions);
+            set
+            {
+            }
         }
 
         /// <summary>
         /// Makes a request to the Bing Web Search API and returns data as a SearchResult.
         /// </summary>
-        public BingSearchResult DoBingWebSearch(string searchQuery)
+        public BingJSONResult DoBingWebSearch(string searchQuery)
         {
+            Thread.Sleep(_searchDelay);   
+
             // Construct the search request URI.
             var uriQuery = _uriBase + "?q=" + Uri.EscapeDataString(searchQuery);
 
@@ -55,7 +55,7 @@ namespace PersonalIntranetBot.Helpers
             string json = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
             // Create a result object.
-            var searchResult = new BingSearchResult()
+            var searchResult = new BingJSONResult()
             {
                 JsonResult = json,
                 RelevantHeaders = new Dictionary<String, String>()
@@ -70,11 +70,6 @@ namespace PersonalIntranetBot.Helpers
             return searchResult;
         }
     }
-}
-
-public interface IBingWebSearchService
-    {
-        BingSearchResult DoBingWebSearch(string searchQuery);
 }
 
 

@@ -1,10 +1,15 @@
-﻿// Meeting content
+﻿/* 
+*  Author: Kevin Suter
+*  Description: This JavaScript files contains all the client side logic of the application (modals, create, edit or delete dialogs).
+*  
+*/
+
+// Meeting content
 $(".showMeetingContentButton").click(function () {
     $("#" + $(this).attr("meetingContent-modal-id")).modal("show");
 });
 
 // Meeting comments
-
 $(".addMeetingCommentButton").click(function () {
     $("#addMeetingCommentModal").find("#InputMeetingCommentMeetingId").val($(this).attr("meeting-id"));
     $("#addMeetingCommentModal").find("#InputMeetingComment").val("");
@@ -36,15 +41,6 @@ $("body").on("click", ".deleteMeetingCommentIcon", function () {
     }
 })
 
-/* c shortcut um Kommentar zur erfassen
-$(document).keypress(function (e) {
-    if ($('.modal').is(':visible') && $('.modal').is(':visible')) {
-        $(".addMeetingCommentButton").click();
-    }
-});*/
-
-
-
 $("#saveMeetingCommentButton").click(function () {
     $.ajax({
         type: "POST",
@@ -53,7 +49,7 @@ $("#saveMeetingCommentButton").click(function () {
         success: function (result) {
             $("#meetingComments-" + $("#InputMeetingCommentMeetingId").val()).append(
                 '<div id=\"comment-' + result.meetingCommentId + '\" class=\"panel panel-default\"><div class=\"panel-body\">' + result.comment +
-                '<br /><span><i class=\"glyphicon glyphicon-remove deleteMeetingCommentIcon\" style=\"vertical-align:middle;margin-top: -5px\" meeting-comment-id=\"' + result.meetingCommentId + '\"></span></i>' +
+                ' <span><i class=\"glyphicon glyphicon-remove deleteMeetingCommentIcon\" style=\"vertical-align:middle;margin-top: -5px\" meeting-comment-id=\"' + result.meetingCommentId + '\"></i></span>' +
                 '</div><small class=\"form-text text-muted\">' + getFullDateStringFromDate(new Date(result.lastUpdated)) + ' by ' + result.lastUpdatedBy + '</small></div>' 
             );
         },
@@ -75,7 +71,6 @@ function checkEnterAndClickSave(e, buttonId) {
         return false;
     }
 }
-
 
 // Attendee details
 $(".showAttendeeDetailsButton").click(function () {
@@ -118,7 +113,7 @@ $("#saveSocialLinkButton").click(function () {
     });
 });
 
-// Image URL
+// Profile image URL
 $(".editImageUrl").click(function () {
     $("#editImageURLModal").find("#InputImageURL").val($(this).attr("src"));
     $("#editImageURLModal").find("#InputImageUrlAttendeeID").val($(this).attr("image-url-attendee-id"));

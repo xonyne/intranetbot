@@ -1,8 +1,8 @@
 ﻿/* 
-*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
-*  See LICENSE in the source repository root for complete license information. 
+*  Author: Microsoft
+*  Description: This class is used to get a Graph client after the user has authenticated with the Graph API.
+*  
 */
-
 using System.Net.Http.Headers;
 using Microsoft.Graph;
 

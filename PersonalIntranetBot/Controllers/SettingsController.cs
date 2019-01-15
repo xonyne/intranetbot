@@ -1,15 +1,10 @@
 ﻿/* 
-*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
-*  See LICENSE in the source repository root for complete license information. 
+*  Author: Kevin Suter
+*  Description: This class is used to handle the settings page in the application.
+*  
 */
-
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PersonalIntranetBot.Helpers;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Graph;
-using Microsoft.AspNetCore.Hosting;
 using PersonalIntranetBot.Models;
 using Attendee = PersonalIntranetBot.Models.Attendee;
 
@@ -45,6 +40,14 @@ namespace PersonalIntranetBot.Controllers
             _context.SaveChanges();
 
             return Content("All database content successfully deleted!");
+        }
+
+        public DBModelContext DBModelContext
+        {
+            get => default(DBModelContext);
+            set
+            {
+            }
         }
 
     }

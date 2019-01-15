@@ -1,8 +1,8 @@
 ﻿/* 
-*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
-*  See LICENSE in the source repository root for complete license information. 
+*  Author: Microsoft
+*  Description: This class is used to authenticate a user to the Microsoft Graph API.
+*  
 */
-
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;

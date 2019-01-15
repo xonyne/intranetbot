@@ -1,4 +1,10 @@
-﻿@model List<PersonalIntranetBot.Models.PersonalIntranetBotMeetingViewModel>;
+﻿<!--
+*  Author: Kevin Suter
+*  Description: This view component contains the table with all upcoming calendar events of the signed in user 
+   enriched with additional information searched by the bot.
+*
+-->
+@model List<PersonalIntranetBot.Models.PersonalIntranetBotMeetingViewModel>;
 <table class="eventsTable" style="border: 1px solid black;">
     <colgroup>
         <col class="twentyfive" />
@@ -22,7 +28,7 @@
             <td style="border: 1px solid black;padding: 5px;">
                 @if (item.Location.IsAddress)
                 {
-                <a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" target="_blank" class="eventsTableElement infoBox btn btn-default"><span class="glyphicon glyphicon-map-marker" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.Location.LocationString) ...</a>
+                    <a href="@Html.DisplayFor(modelItem => item.GoogleMapsURL)" target="_blank" class="eventsTableElement infoBox btn btn-default"><span class="glyphicon glyphicon-map-marker" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.Location.LocationString) ...</a>
                 }
                 else
                 {
@@ -30,7 +36,7 @@
                 }
             </td>
             <td style="border: 1px solid black;padding: 5px">
-                <div class="infoBox"> 
+                <div class="infoBox">
                     <span class="glyphicon glyphicon-time" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.Start)<br />
                     <span class="glyphicon glyphicon-time" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.End)<br />
                 </div>
@@ -38,9 +44,9 @@
             <td style="border: 1px solid black;padding: 5px">
                 @for (int i = 0; i < item.Attendees.Count; i++)
                 {
-                <p><button class="eventsTableElement showAttendeeDetailsButton btn btn-default" attendee-modal-id="attendee-@item.Attendees[i].AttendeeId"><span class="glyphicon glyphicon-user" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(m => item.Attendees[i].DisplayName)</button></p>
-                
-                Html.RenderPartial("AttendeeDetailsModal", item.Attendees[i]);
+                    <p><button class="eventsTableElement showAttendeeDetailsButton btn btn-default" attendee-modal-id="attendee-@item.Attendees[i].AttendeeId"><span class="glyphicon glyphicon-user" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(m => item.Attendees[i].DisplayName)</button></p>
+
+                    Html.RenderPartial("AttendeeDetailsModal", item.Attendees[i]);
                 }
             </td>
         </tr>

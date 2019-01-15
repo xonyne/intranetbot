@@ -1,18 +1,20 @@
 ﻿/* 
-*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
-*  See LICENSE in the source repository root for complete license information. 
+*  Author: Kevin Suter
+*  Description: This class contains all startup logic for the application 
+   (loading of application settings, establishing the database connection, instantiating of services).
+*  
 */
-
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PersonalIntranetBot.Extensions;
 using PersonalIntranetBot.Helpers;
-using Microsoft.EntityFrameworkCore;
+using PersonalIntranetBot.Interfaces;
 using PersonalIntranetBot.Models;
 using PersonalIntranetBot.Services;
 
@@ -21,15 +23,6 @@ namespace PersonalIntranetBot
 
     public class Startup
     {
-        /* Mac */
-        /*
-        private static string _connStr = @"
-            Server=127.0.0.1,1401;
-            Database=personalintranetbot;
-            User Id=SA;
-            Password=1StrongPassword!
-        ";*/
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -52,10 +45,11 @@ namespace PersonalIntranetBot
             .AddCookie();
 
             services.AddMvc();
-            /* Mac */
-            /*var connection = _connStr;*/
+            /* macOS */
+            /* var connection = @"Server=127.0.0.1,1401;Database=personalintranetbot;User Id=SA;Password=1StrongPassword!"; */
             /* Windows */
             var connection = @"Server=localhost\SQLEXPRESS;Database=personalintranetbot;Trusted_Connection=True;ConnectRetryCount=0";
+
             services.AddDbContext<DBModelContext>
                 (options => options.UseSqlServer(connection));
 
@@ -67,11 +61,16 @@ namespace PersonalIntranetBot
             //services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<IGraphAuthProvider, GraphAuthProvider>();
             services.AddTransient<IGraphSdkHelper, GraphSdkHelper>();
-            services.AddTransient<IBingWebSearchService, BingWebSearchService>();
+            services.AddTransient<IBingWebSearchService, MicrosoftBingWebSearchService>();
             services.AddTransient<IGoogleMapsService, GoogleMapsService>();
             services.AddTransient<IPersonalIntranetBotService, PersonalIntranetBotService>();
-            services.AddTransient<ISocialLinkService, SocialLinksService>();
+            services.AddTransient<ISocialLinksService, SocialLinksService>();
             services.AddTransient<IGoogleCustomSearchService, GoogleCustomSearchService>();
+            
+            // Uncomment the line below for the use of productive data from O365 Outlook.
+            //services.AddTransient<IGraphService, GraphService>();
+            
+            // Uncomment the line below for testing the application with demo data.
             services.AddTransient<IGraphService, GraphDemoService>();
 
         }
