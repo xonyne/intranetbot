@@ -1,0 +1,28 @@
+﻿<!--
+*  Author: Kevin Suter
+*  Description: This view is the view for the calendar events table. It is shown when "My upcoming events" in the top menu is clicked.
+*
+-->
+<div>
+    @model List<PersonalIntranetBot.Models.PersonalIntranetBotMeetingViewModel>;
+    @{
+        ViewData["Title"] = "My Calendar";
+    }
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <br />
+        <p>Choose <b>Sign in</b> at the top of the page and sign in with your work or school account.</p>
+    }
+    @if (User.Identity.IsAuthenticated)
+    {
+        <h2>My upcoming events</h2>
+        @await Component.InvokeAsync("EventTable", new
+        {
+            eventList = Model
+        })
+        Html.RenderPartial("EditSocialLinkModal");
+        Html.RenderPartial("EditImageURLModal");
+        Html.RenderPartial("AddMeetingCommentModal");
+    }
+</div>

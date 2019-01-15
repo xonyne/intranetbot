@@ -1,0 +1,41 @@
+﻿<!--
+*  Author: Kevin Suter
+*  Description: This view contains all information visible in the meeting details popup (subject, description, comments).
+*
+-->
+@model PersonalIntranetBot.Models.PersonalIntranetBotMeetingContentViewModel
+@{
+    ViewData["Title"] = @Html.DisplayFor(model => model.Subject);
+}
+<div id="meetingContent-@Html.DisplayFor(model => model.MeetingId)" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@Html.DisplayFor(model => model.Subject)</h4>
+                <button type="button" class="close hideMeetingContentModal" aria-label="Close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span>@Html.Raw(Model.Description)</span>
+            </div>
+            <hr />
+            <div id="meetingComments-@Html.DisplayFor(model => model.MeetingId)" class="meetingComments">
+                    <h4>Comments</h4>
+                    @for (int i = 0; i < Model.Comments.Count; i++)
+                    {
+
+                        <div class="panel panel-default meetingCommentPanel" id="comment-@Html.DisplayFor(model => model.Comments[i].MeetingCommentId)">
+                            <div class="panel-body">@Html.DisplayFor(model => model.Comments[i].Comment) <span><i class="glyphicon glyphicon-remove deleteMeetingCommentIcon" style="vertical-align:middle;margin-top: -5px" meeting-comment-id="@Html.DisplayFor(model => model.Comments[i].MeetingCommentId)"></i></span></div>
+                            <small class="form-text text-muted">@Html.DisplayFor(model => model.Comments[i].LastUpdated) by  @Html.DisplayFor(model => model.Comments[i].LastUpdatedBy)</small>
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-default addMeetingCommentButton" meeting-id="@Html.DisplayFor(model => model.MeetingId)">Add comment</button>
+                    <button type="button" class="btn btn-default hideMeetingContentModal" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>

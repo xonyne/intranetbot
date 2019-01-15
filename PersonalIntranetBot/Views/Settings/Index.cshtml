@@ -1,0 +1,25 @@
+﻿<!--
+*  Author: Kevin Suter
+*  Description: This view contains the settings page of the application.
+*
+-->
+<div>
+    @{
+        ViewData["Title"] = "Settings";
+    }
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <br />
+        <p>Choose <b>Sign in</b> at the top of the page and sign in with your work or school account.</p>
+    }
+    @if (User.Identity.IsAuthenticated)
+    {
+        <h2>Settings</h2>
+        <p><button id="deleteAllDatabaseContentButton" class="btn btn-danger">Delete all database content</button></p>
+
+        <form id="__AjaxAntiForgeryForm" action="#" method="post">
+            @Html.AntiForgeryToken()
+        </form>
+    }
+</div>

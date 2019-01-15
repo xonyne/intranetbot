@@ -1,0 +1,372 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
+  <Comment CommentText="DBModelContext stellt die Datenbankverbindung her.">
+    <Position X="7.688" Y="0.5" Height="0.458" Width="1.7" />
+  </Comment>
+  <Comment CommentText="PersonalIntranetBotService enthält die Hauptlogik der Applikation zur Anreicherung der Kalendertermine mit Zusatzdaten.">
+    <Position X="7.709" Y="5.635" Height="0.479" Width="4.138" />
+  </Comment>
+  <Comment CommentText="GraphService machte den Zugriff auf 0365 Outlook und ruft die Kalendertermine ab.">
+    <Position X="15.761" Y="3.312" Height="0.479" Width="2.721" />
+  </Comment>
+  <Class Name="PersonalIntranetBot.Controllers.AccountController">
+    <Position X="0.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAACCAIAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\AccountController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PersonalIntranetBot.Controllers.MeetingContentController">
+    <Position X="0.5" Y="2.75" Width="2.25" />
+    <Members>
+      <Field Name="_context" Hidden="true" />
+    </Members>
+    <AssociationLine Name="DBModelContext" Type="PersonalIntranetBot.Models.DBModelContext" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.5" Y="2.75" />
+        <Point X="1.5" Y="2.51" />
+        <Point X="5.34" Y="2.51" />
+        <Point X="5.34" Y="2.371" />
+        <Point X="8.09" Y="2.371" />
+        <Point X="8.09" Y="3.127" />
+        <Point X="9.875" Y="3.127" />
+        <Point X="9.875" Y="2.887" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="6.977" Y="-0.339" Height="0.182" Width="1.337" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAACIAQAAAAAAA=</HashCode>
+      <FileName>Controllers\MeetingContentController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="DBModelContext" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PersonalIntranetBot.Controllers.HomeController">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <Members>
+      <Field Name="_configuration" Hidden="true" />
+      <Field Name="_env" Hidden="true" />
+      <Field Name="_graphSdkHelper" Hidden="true" />
+      <Field Name="_graphService" Hidden="true" />
+    </Members>
+    <AssociationLine Name="IGraphService" Type="PersonalIntranetBot.Services.IGraphService">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="11.36" Y="1.081" Height="0.182" Width="1.568" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAQAgAAAAAAAAAgAAAAAAAAECAAAAEAA=</HashCode>
+      <FileName>Controllers\HomeController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="IGraphService" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PersonalIntranetBot.Controllers.CalendarController">
+    <Position X="3.25" Y="2.75" Width="1.75" />
+    <Members>
+      <Field Name="_configuration" Hidden="true" />
+      <Field Name="_context" Hidden="true" />
+      <Field Name="_env" Hidden="true" />
+      <Field Name="_graphClient" Hidden="true" />
+      <Field Name="_graphSdkHelper" Hidden="true" />
+      <Field Name="_personalIntranetBotService" Hidden="true" />
+    </Members>
+    <AssociationLine Name="IPersonalIntranetBotService" Type="PersonalIntranetBot.Services.IPersonalIntranetBotService" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.125" Y="4.175" />
+        <Point X="4.125" Y="4.621" />
+        <Point X="7.592" Y="4.621" />
+        <Point X="7.592" Y="6.465" />
+        <Point X="8.385" Y="6.465" Type="JumpStart" />
+        <Point X="8.552" Y="6.465" Type="JumpEnd" />
+        <Point X="9.562" Y="6.465" />
+        <Point X="9.562" Y="7" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="3.357" Y="2.457" Height="0.182" Width="2.008" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAABAAAAAAAAAAAAAAAAAgAAAEAAAAAEAA=</HashCode>
+      <FileName>Controllers\CalendarController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="IPersonalIntranetBotService" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PersonalIntranetBot.Services.PersonalIntranetBotService">
+    <Position X="8.25" Y="4" Width="3" />
+    <Members>
+      <Field Name="_dbContext" Hidden="true" />
+      <Field Name="_googleCustomSearchService" Hidden="true" />
+      <Field Name="_googleMapsService" Hidden="true" />
+      <Field Name="_graphService" Hidden="true" />
+      <Field Name="_personalIntranetBotName" Hidden="true" />
+      <Field Name="_socialLinksService" Hidden="true" />
+      <Method Name="CheckMeetingLocationIsAddress" Hidden="true" />
+      <Method Name="GetAddressFromGraphLocation" Hidden="true" />
+      <Method Name="GetAndUpdateMeetingAttendees" Hidden="true" />
+      <Method Name="GetAttendeeEmailAddressesAsList" Hidden="true" />
+      <Method Name="GetAttendeeEmailAddressesAsString" Hidden="true" />
+      <Method Name="GetCompanyFromEMailAddress" Hidden="true" />
+      <Method Name="GetImageURL" Hidden="true" />
+      <Method Name="GetNameFromEMailAddress" Hidden="true" />
+      <Method Name="GetSocialLinksForEmailAddress" Hidden="true" />
+      <Method Name="LoadMeetingComments" Hidden="true" />
+      <Method Name="MeetingIsNotInPast" Hidden="true" />
+      <Method Name="MeetingIsNotRecurringAndNotAllDay" Hidden="true" />
+      <Method Name="RemoveMeetingIdSpecialChars" Hidden="true" />
+      <Method Name="ToTitleCase" Hidden="true" />
+    </Members>
+    <AssociationLine Name="IGoogleCustomSearchService" Type="IGoogleCustomSearchService" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="10.562" Y="5.296" />
+        <Point X="10.562" Y="6.524" />
+        <Point X="12.75" Y="6.524" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.162" Y="0.06" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="IGoogleMapsService" Type="PersonalIntranetBot.Services.IGoogleMapsService" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.438" Y="4" />
+        <Point X="8.438" Y="3.568" />
+        <Point X="10.292" Y="3.568" Type="JumpStart" />
+        <Point X="10.458" Y="3.568" Type="JumpEnd" />
+        <Point X="11.796" Y="3.568" />
+        <Point X="11.796" Y="2.438" />
+        <Point X="13.25" Y="2.438" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="3.277" Y="-1.534" Height="0.182" Width="1.482" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="DBModelContext" Type="PersonalIntranetBot.Models.DBModelContext">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-1.546" Y="0.904" Height="0.182" Width="1.493" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="ISocialLinksService" Type="PersonalIntranetBot.Services.ISocialLinksService">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="1.777" Y="2.935" Height="0.182" Width="1.451" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="IGraphService" Type="PersonalIntranetBot.Services.IGraphService">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="4.391" Y="1.258" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>gBAFCEACAAAAIAAgABAAAACAKgAAAAAAAAYSghQIBIA=</HashCode>
+      <FileName>Services\PersonalIntranetBotService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="IGoogleCustomSearchService" />
+      <Property Name="IGoogleMapsService" />
+      <Property Name="DBModelContext" />
+      <Property Name="ISocialLinksService" />
+      <Property Name="IGraphService" />
+    </ShowAsAssociation>
+    <Lollipop Orientation="Bottom" Position="2.439" />
+  </Class>
+  <Class Name="PersonalIntranetBot.Services.GraphService">
+    <Position X="15.75" Y="4.5" Width="2" />
+    <Members>
+      <Method Name="GetMyPictureStream" Hidden="true" />
+      <Method Name="GetPictureStream" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAACAAAEAAAAAAAEQAAAAACAA=</HashCode>
+      <FileName>Services\GraphService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PersonalIntranetBot.Services.GoogleMapsService">
+    <Position X="13.25" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\GoogleMapsService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Orientation="Bottom" Position="0.304" />
+  </Class>
+  <Class Name="PersonalIntranetBot.Services.GraphDemoService">
+    <Position X="15.75" Y="6.75" Width="2.5" />
+    <Members>
+      <Method Name="GetMyPictureStream" Hidden="true" />
+      <Method Name="GetPictureStream" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAACAAAEAAAAAAAEQAAAAACAA=</HashCode>
+      <FileName>Services\GraphDemoService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PersonalIntranetBot.Services.SocialLinksService" BaseTypeListCollapsed="true">
+    <Position X="3" Y="4.75" Width="4.25" />
+    <Members>
+      <Field Name="_bingWebSearchService" Hidden="true" />
+      <Method Name="ConvertBingWebSearchJSONResultToBingSearchResultObjects" Hidden="true" />
+      <Method Name="GetSocialLinkURL" Hidden="true" />
+      <Field Name="LINKEDIN_SEARCH_STRING" Hidden="true" />
+      <Field Name="LINKEDIN_URL_STRING" Hidden="true" />
+      <Method Name="PerformBingWebSearch" Hidden="true" />
+      <Field Name="TWITTER_SEARCH_STRING" Hidden="true" />
+      <Field Name="TWITTER_URL_STRING" Hidden="true" />
+      <Field Name="XING_SEARCH_STRING" Hidden="true" />
+      <Field Name="XING_URL_STRING" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Enum Name="PersonalIntranetBot.Services.SocialLinksService.LinkedInPublicProfileInformation">
+        <Members>
+          <Field Name="CURRENTJOBTITLE" Hidden="true" />
+        </Members>
+        <TypeIdentifier>
+          <NewMemberFileName>Services\SocialLinksService.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <AssociationLine Name="IBingWebSearchService" Type="IBingWebSearchService">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-2.064" Y="0.37" Height="0.182" Width="1.986" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AIEAgAAIAAGAAAAAAAAABACAAEAABAAAAAAAgAggACI=</HashCode>
+      <FileName>Services\SocialLinksService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="IBingWebSearchService" />
+    </ShowAsAssociation>
+    <Lollipop Orientation="Bottom" Position="1.721" />
+  </Class>
+  <Class Name="PersonalIntranetBot.Services.GoogleCustomSearchService" BaseTypeListCollapsed="true">
+    <Position X="12.75" Y="3.75" Width="2.5" />
+    <Members>
+      <Field Name="_apiKey" Hidden="true" />
+      <Field Name="_searchEngineId" Hidden="true" />
+      <Method Name="IsCompanyImage" Hidden="true" />
+      <Method Name="IsRectangularImage" Hidden="true" />
+      <Method Name="IsTwitterImage" Hidden="true" />
+      <Method Name="IsXingImage" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAACAAAAAAAAAAAAgCACAgAAAAACAAQAA=</HashCode>
+      <FileName>Services\GoogleCustomSearchService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Orientation="Bottom" Position="0.502" />
+  </Class>
+  <Class Name="PersonalIntranetBot.Controllers.SettingsController">
+    <Position X="4.75" Y="0.5" Width="2.25" />
+    <Members>
+      <Field Name="_context" Hidden="true" />
+    </Members>
+    <AssociationLine Name="DBModelContext" Type="PersonalIntranetBot.Models.DBModelContext" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7" Y="1.625" />
+        <Point X="8.25" Y="1.625" />
+        <Point X="8.25" Y="1.625" />
+        <Point X="9.5" Y="1.625" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="1.216" Y="-0.244" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAEQAAAAAAA=</HashCode>
+      <FileName>Controllers\SettingsController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="DBModelContext" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PersonalIntranetBot.Helpers.BingWebSearchService">
+    <Position X="0.5" Y="4.75" Width="2" />
+    <Members>
+      <Field Name="_accessKey" Hidden="true" />
+      <Field Name="_uriBase" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAgAAACBA=</HashCode>
+      <FileName>Services\BingWebSearchService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Orientation="Bottom" Position="0.294" />
+  </Class>
+  <Class Name="PersonalIntranetBot.Controllers.AttendeeController">
+    <Position X="5.5" Y="2.5" Width="2" />
+    <Members>
+      <Field Name="_context" Hidden="true" />
+      <Method Name="AttendeeExists" Hidden="true" />
+      <Method Name="SocialLinkExists" Hidden="true" />
+    </Members>
+    <AssociationLine Name="DBModelContext" Type="PersonalIntranetBot.Models.DBModelContext">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.696" Y="-0.265" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABABAABAAAAgAAAAAAAAAIAAAAQAAAAAAA=</HashCode>
+      <FileName>Controllers\AttendeeController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="DBModelContext" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PersonalIntranetBot.Models.DBModelContext">
+    <Position X="9.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAQAAAAAAAAAACAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\DBModelContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="PersonalIntranetBot.Services.IPersonalIntranetBotService">
+    <Position X="8.75" Y="7" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>Services\PersonalIntranetBotService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PersonalIntranetBot.Services.IGraphService">
+    <Position X="15.75" Y="1.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAACAAAEAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Services\GraphService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PersonalIntranetBot.Services.IGoogleMapsService">
+    <Position X="13.25" Y="2" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\GoogleMapsService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PersonalIntranetBot.Services.ISocialLinksService">
+    <Position X="3.5" Y="7.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAEAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\SocialLinksService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IGoogleCustomSearchService">
+    <Position X="12.75" Y="5.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Services\GoogleCustomSearchService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IBingWebSearchService">
+    <Position X="0.5" Y="7.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Services\BingWebSearchService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

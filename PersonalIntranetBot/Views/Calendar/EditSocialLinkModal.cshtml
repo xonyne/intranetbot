@@ -1,0 +1,32 @@
+﻿<!--
+*  Author: Kevin Suter
+*  Description: This view is shown when a user wants to edit a social media link for a meeting attendee.
+*
+-->
+<div id="editSocialLinkModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Social Media Link</h4>
+                <button type="button" class="close hideEditSocialLinkModal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="InputSocialLinkURL">URL</label>
+                        <input class="form-control" id="InputSocialLinkURL" size="1024" onClick="this.setSelectionRange(0, this.value.length)" onkeypress="return checkEnterAndClickSave(event, 'saveSocialLinkButton')">
+
+                        <input id="InputSocialLinkID" hidden />
+                        <input id="InputSocialLinkAttendeeID" hidden />
+                    </div>
+                </form>
+                <button id="saveSocialLinkButton" class="btn btn-primary hideEditSocialLinkModal">Save</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default hideEditSocialLinkModal" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

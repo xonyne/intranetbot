@@ -1,0 +1,30 @@
+﻿<!--
+*  Author: Kevin Suter
+*  Description: This view is shown when a user wants to add a comment to a meeting.
+*
+-->
+<div id="addMeetingCommentModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add meeting comment</h4>
+                <button type="button" class="close hideAddMeetingCommentModal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="InputMeetingComment">Comment</label>
+                        <input class="form-control" id="InputMeetingComment" size="1024" onClick="this.setSelectionRange(0, this.value.length)" onkeypress="return checkEnterAndClickSave(event, 'saveMeetingCommentButton')">
+                        <input id="InputMeetingCommentMeetingId" hidden />
+                    </div>
+                </form>
+                <button id="saveMeetingCommentButton" class="btn btn-primary hideAddMeetingCommentModal">Save</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default hideAddMeetingCommentModal" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

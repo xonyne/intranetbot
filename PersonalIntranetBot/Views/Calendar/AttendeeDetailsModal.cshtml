@@ -1,0 +1,102 @@
+﻿<!--
+*  Author: Kevin Suter
+*  Description: This view contains all the details concerning a meeting attendee (general information, social media links).
+*
+-->
+@model PersonalIntranetBot.Models.Attendee
+@{
+    ViewData["Title"] = @Html.DisplayFor(model => model.DisplayName);
+}
+<div id="attendee-@Html.DisplayFor(model => model.AttendeeId)" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@Html.DisplayFor(model => model.DisplayName)</h4>
+                <button type="button" class="close hideAttendeeDetailsModal" aria-label="Close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                    <img id="attendee-img-@Html.DisplayFor(model => model.AttendeeId)" class="attendeeImage editImageUrl" src="@Html.DisplayFor(model => model.ImageURL)" width="200" height="200" image-url-attendee-id="@Html.DisplayFor(model => model.AttendeeId)" />
+                            </td>
+                            <td class="attendeeDetailsRightInfoTable">
+                                <p>
+                                    <h4>Person Info</h4>
+                                    <span style="line-height:1.7em">Company website: <a href="@Html.DisplayFor(model => model.CurrentJobCompany)" target="_blank">@Html.DisplayFor(model => model.CurrentJobCompany)</a></span><br />
+                                    <span style="line-height:1.7em">Job title: @Html.DisplayFor(model => model.CurrentJobTitle)</span><br />
+                                    <span style="line-height:1.7em">E-Mail: <a href="mailto:@Html.DisplayFor(model => model.EmailAddress)">@Html.DisplayFor(model => model.EmailAddress)</a></span>
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
+                <p><button type="button" class="btn btn-sm editImageUrl" src="@Html.DisplayFor(model => model.ImageURL)" image-url-attendee-id="@Html.DisplayFor(model => model.AttendeeId)">Edit profile image URL</button></p>
+
+                <br />
+                <h4>Social Media Links</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>URL</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var socialLink in Model.SocialLinks)
+                        {
+                            <tr>
+                                <td>
+                                    @{
+                                        string iconUrl = "";
+                                        switch (socialLink.Type)
+                                        {
+                                            case PersonalIntranetBot.Models.SocialLink.LinkType.LINKEDIN:
+                                                iconUrl = "/images/linkedin-icon.ico";
+                                                break;
+                                            case PersonalIntranetBot.Models.SocialLink.LinkType.XING:
+                                                iconUrl = "/images/xing-icon.png";
+                                                break;
+                                            case PersonalIntranetBot.Models.SocialLink.LinkType.TWITTER:
+                                                iconUrl = "/images/twitter-icon.ico";
+                                                break;
+
+                                        }
+                                    }
+                                    <img class="socialLinkIcon" src="@iconUrl" height="16" width="16" />
+                                </td>
+                                <td>
+                                    <a id="socialLink-@Html.DisplayFor(link => socialLink.SocialLinkId)" href="@Html.DisplayFor(modelItem => socialLink.URL)" target="_blank">@Html.DisplayFor(modelItem => socialLink.URL)</a>
+                                </td>
+                                <td>
+                                    <button id="socialLinkEditButton-@Html.DisplayFor(link => socialLink.SocialLinkId)" type="button" class="editSocialLinkButton btn btn-sm" social-link-url="@Html.DisplayFor(modelItem => socialLink.URL)" social-link-id="@Html.DisplayFor(modelItem => socialLink.SocialLinkId)" social-link-attendee-id="@Html.DisplayFor(modelItem => socialLink.AttendeeId)">Edit</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <small id="lastupdated-@Html.DisplayFor(model => model.AttendeeId)" class="form-text text-muted">Last updated: @Html.DisplayFor(model => model.LastUpdated) by  @Html.DisplayFor(model => model.LastUpdatedBy)</small>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default hideAttendeeDetailsModal" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
