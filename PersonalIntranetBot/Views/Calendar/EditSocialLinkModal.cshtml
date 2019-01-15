@@ -16,7 +16,7 @@
                 <form>
                     <div class="form-group">
                         <label for="InputSocialLinkURL">URL</label>
-                        <input class="form-control" id="InputSocialLinkURL" size="1024" onClick="this.setSelectionRange(0, this.value.length)">
+                        <input class="form-control" id="InputSocialLinkURL" size="1024" onClick="this.setSelectionRange(0, this.value.length)" onkeypress="return checkEnterAndClickSave(event, 'saveSocialLinkButton')">
 
                         <input id="InputSocialLinkID" hidden />
                         <input id="InputSocialLinkAttendeeID" hidden />

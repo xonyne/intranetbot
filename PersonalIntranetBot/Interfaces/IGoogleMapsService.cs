@@ -7,6 +7,6 @@ namespace PersonalIntranetBot.Interfaces
 {
     public interface IGoogleMapsService
     {
-        String GetGoogleMapsURL(String destination);
+        string GetGoogleMapsURL(string destination);
     }
 }

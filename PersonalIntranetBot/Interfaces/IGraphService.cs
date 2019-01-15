@@ -8,7 +8,6 @@ namespace PersonalIntranetBot.Interfaces
 {
     public interface IGraphService
     {
-        List<Microsoft.Graph.DriveItem> GetGraphFiles(GraphServiceClient graphClient);
         List<Event> GetGraphCalendarEvents(GraphServiceClient graphClient);
         Task<string> GetGraphUserJson(GraphServiceClient graphClient, string email, HttpContext httpContext);
         Task<string> GetGraphPictureBase64(GraphServiceClient graphClient, string email, HttpContext httpContext);

@@ -440,11 +440,6 @@ namespace PersonalIntranetBot.Services
             };
          return graphDemoEvents;
         }
-
-        public List<DriveItem> GetGraphFiles(GraphServiceClient graphClient)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
 

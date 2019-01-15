@@ -1,6 +1,6 @@
 ﻿/* 
 *  Author: Kevin Suter
-*  Description: This class contains the main functionality for enriching calendar meetings with additional information. 
+*  Description: This class contains the main functionality for enriching calendar events with additional information. 
 *  It uses the other services of the application accessing external systems for obtaining the information needed.
 *  
 */
@@ -26,7 +26,9 @@ namespace PersonalIntranetBot.Services
         private readonly IGoogleCustomSearchService _googleCustomSearchService;
         private readonly ISocialLinksService _socialLinksService;
         private readonly IGraphService _graphService;
-        private static string _personalIntranetBotName = "Personal Intranet Bot";
+        public static readonly string APPLICATON_NAME = "Personal Intranet Bot";
+        public static readonly string JOB_NOT_FOUND = "Not found";
+        public static readonly string EMPTY_IMG_URL = "/images/blank-profile-picture.svg";
 
         public PersonalIntranetBotService(DBModelContext dbContext, IGoogleMapsService googleMapsService, ISocialLinksService socialLinksService, IGoogleCustomSearchService googleCustomSearchService, IGraphService graphService) {
             _dbContext = dbContext;
@@ -38,7 +40,6 @@ namespace PersonalIntranetBot.Services
 
         public List<PersonalIntranetBotMeetingViewModel> GetOutlookCalendarEvents(GraphServiceClient graphClient)
         {
-            GetHTMLAgilityLinkedInBla();
             List<PersonalIntranetBotMeetingViewModel> meetingViewItems = new List<PersonalIntranetBotMeetingViewModel>();
             List<Event> meetingGraphItems = _graphService.GetGraphCalendarEvents(graphClient);
             if (meetingGraphItems?.Count > 0)
@@ -69,8 +70,6 @@ namespace PersonalIntranetBot.Services
             }
             // Order events by start date ascending
             meetingViewItems = meetingViewItems.OrderBy(e => e.Start).ToList();
-
-            //Save attendees to database
 
             return meetingViewItems;
         }
@@ -106,12 +105,12 @@ namespace PersonalIntranetBot.Services
                             DisplayName = ToTitleCase(GetNameFromEMailAddress(meetingAttendeeEmailAddress)),
                             IsPerson = true,
                             SocialLinks = socialLinks,
-                            ImageURL =imageURL,
-                            CurrentJobTitle = "",
-                            CurrentJobCompany = ToTitleCase(GetCompanyFromEMailAddress(meetingAttendeeEmailAddress)),
+                            ImageURL = imageURL,
+                            CurrentJobTitle = GetJobTitleForAttendee(socialLinks),
+                            CurrentJobCompany = GetCompanyWebsiteFromEmailAddress(meetingAttendeeEmailAddress),
                             EducationLocation = "",
                             LastUpdated = DateTime.Now,
-                            LastUpdatedBy = _personalIntranetBotName
+                            LastUpdatedBy = APPLICATON_NAME
                         };
                         results.Add(attendee);
                         _dbContext.Add(attendee);
@@ -123,21 +122,49 @@ namespace PersonalIntranetBot.Services
                 }
 
             }
+            //Save attendees in database
             _dbContext.SaveChanges();
 
             return results;
         }
 
+
+            // Try to get job title from Xing. If not possible, return 'Not found' string.
+        private string GetJobTitleForAttendee(List<SocialLink> socialLinks)
+            {
+            string xingURL = socialLinks.Find(x => x.Type == SocialLink.LinkType.XING).URL;
+ 
+            if (xingURL != SocialLinksService.NO_SOCIAL_LINK)
+            {
+                var web = new HtmlWeb();
+                var doc = web.Load(xingURL);
+
+                IEnumerable<HtmlNode> node = doc.DocumentNode.SelectNodes("//*[@class=\"title ProfilesvCard-jobTitle\"]");
+                if (node != null)
+                {
+                    return node.First().InnerHtml.Replace("\n", "").Trim();
+                }
+                else
+                {
+                    return JOB_NOT_FOUND;
+                }
+            }
+            else {
+                return JOB_NOT_FOUND;
+            }
+
+        }
+
         private string GetImageURL(string meetingAttendee, List<SocialLink> socialLinks)
         {
-            //LinkedIn exluded, as it won't return good results
+            //LinkedIn image search excluded, as it won't return good results!
             bool hasTwitter = !socialLinks.Single(l =>  l.Type == SocialLink.LinkType.TWITTER).URL.Equals(SocialLinksService.NO_SOCIAL_LINK);
             bool hasXing = !socialLinks.Single(l => l.Type == SocialLink.LinkType.XING).URL.Equals(SocialLinksService.NO_SOCIAL_LINK);
 
             string name = GetNameFromEMailAddress(meetingAttendee);
             string company = GetCompanyFromEMailAddress(meetingAttendee);
 
-            string imgURL = "";
+            string imgURL = EMPTY_IMG_URL;
 
             //search for company image first, then xing, then twitter, then for just some rectangular image
             imgURL = _googleCustomSearchService.DoGoogleImageSearch(name, company, ImageType.COMPANY);
@@ -175,13 +202,6 @@ namespace PersonalIntranetBot.Services
             
             // get first part of email address and replace . by space (split first and last name)
             string name = emailAddress.Split("@")[0].Replace(".", " ").Trim();
-            
-            // set Umlauts
-            /*
-            name = name.Replace("ue", "ü");
-            name = name.Replace("ae", "ä");
-            name = name.Replace("oe", "ö");
-            */
 
             return name;
         }
@@ -192,6 +212,10 @@ namespace PersonalIntranetBot.Services
             return emailAddress.Split("@")[1].Split(".")[0];
         }
 
+        private string GetCompanyWebsiteFromEmailAddress(string emailAddress)
+        {
+            return "https://www." + emailAddress.Split("@")[1];
+        }
 
         private bool MeetingIsNotRecurringAndNotAllDay(Event meeting)
         {
@@ -295,16 +319,6 @@ namespace PersonalIntranetBot.Services
         {
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title);
         }
-
-        private void GetHTMLAgilityLinkedInBla() {
-            var url = "https://www.xing.com/profile/Kevin_Suter4";
-            var web = new HtmlWeb();
-            var doc = web.Load(url);
-
-            string name = doc.DocumentNode.SelectNodes("//*[@id=\"person\"]/div/div[1]/div[2]/div[2]/div[2]/span").First().InnerHtml;
-            Console.WriteLine(name);
-        }
-
 
         public IGoogleCustomSearchService IGoogleCustomSearchService
         {

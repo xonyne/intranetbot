@@ -16,7 +16,7 @@
                 <form>
                     <div class="form-group">
                         <label for="InputImageURL">URL</label>
-                        <input class="form-control" id="InputImageURL" size="1024" onClick="this.setSelectionRange(0, this.value.length)">
+                        <input class="form-control" id="InputImageURL" size="1024" onClick="this.setSelectionRange(0, this.value.length)" onkeypress="return checkEnterAndClickSave(event, 'saveImageURLButton')">
                         <input id="InputImageUrlAttendeeID" hidden />
                     </div>
                 </form>

@@ -21,45 +21,47 @@
             </div>
             <hr />
             <div id="meetingComments-@Html.DisplayFor(model => model.MeetingId)" class="meetingComments">
-                <table>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="padding-right:10px;">
-                                <h4>Content Links</h4>
-                                <span style="line-height:1.7em"><a href=""><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px" /> external_training_application_form.pdf</a></span><br />
-                                <span style="line-height:1.7em"><a href=""><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px" /> company_scrum_masters.xlsx</a></span><br />
-                                <span style="line-height:1.7em"><a href=""><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px" /> external_training_regulations.pdf</a></span><br />
-                            </td>
-                            <td>
-                                <h4>Tasks</h4>
-                                <span style="line-height:1.7em"><span class="glyphicon glyphicon-unchecked" style="vertical-align:middle;margin-top: -5px" /> Sign in application form</span><br />
-                                <span style="line-height:1.7em"><span class="glyphicon glyphicon-unchecked" style="vertical-align:middle;margin-top: -5px" /> Check your training budget</span><br />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <!-- Document links and tasks not implemented yet. Might be considered for future versions.
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding-right:10px;">
+                                    <h4>Content Links</h4>
+                                    <span style="line-height:1.7em"><a href=""><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px" /> external_training_application_form.pdf</a></span><br />
+                                    <span style="line-height:1.7em"><a href=""><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px" /> company_scrum_masters.xlsx</a></span><br />
+                                    <span style="line-height:1.7em"><a href=""><span class="glyphicon glyphicon-file" style="vertical-align:middle;margin-top: -5px" /> external_training_regulations.pdf</a></span><br />
+                                </td>
+                                <td>
+                                    <h4>Tasks</h4>
+                                    <span style="line-height:1.7em"><span class="glyphicon glyphicon-unchecked" style="vertical-align:middle;margin-top: -5px" /> Sign in application form</span><br />
+                                    <span style="line-height:1.7em"><span class="glyphicon glyphicon-unchecked" style="vertical-align:middle;margin-top: -5px" /> Check your training budget</span><br />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    -->
 
-                <h4>Comments</h4>
-                @for (int i = 0; i < Model.Comments.Count; i++)
-                {
+                    <h4>Comments</h4>
+                    @for (int i = 0; i < Model.Comments.Count; i++)
+                    {
 
-                    <div class="panel panel-default" id="comment-@Html.DisplayFor(model => model.Comments[i].MeetingCommentId)">
-                        <div class="panel-body">@Html.DisplayFor(model => model.Comments[i].Comment) <span><i class="glyphicon glyphicon-remove deleteMeetingCommentIcon" style="vertical-align:middle;margin-top: -5px" meeting-comment-id="@Html.DisplayFor(model => model.Comments[i].MeetingCommentId)"></i></span></div>
-                        <small class="form-text text-muted">@Html.DisplayFor(model => model.Comments[i].LastUpdated) by  @Html.DisplayFor(model => model.Comments[i].LastUpdatedBy)</small>
-                    </div>
-                }
-            </div>
-            <div class="modal-footer">
+                        <div class="panel panel-default meetingCommentPanel" id="comment-@Html.DisplayFor(model => model.Comments[i].MeetingCommentId)">
+                            <div class="panel-body">@Html.DisplayFor(model => model.Comments[i].Comment) <span><i class="glyphicon glyphicon-remove deleteMeetingCommentIcon" style="vertical-align:middle;margin-top: -5px" meeting-comment-id="@Html.DisplayFor(model => model.Comments[i].MeetingCommentId)"></i></span></div>
+                            <small class="form-text text-muted">@Html.DisplayFor(model => model.Comments[i].LastUpdated) by  @Html.DisplayFor(model => model.Comments[i].LastUpdatedBy)</small>
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
 
-                <button type="button" class="btn btn-default addMeetingCommentButton" meeting-id="@Html.DisplayFor(model => model.MeetingId)">Add comment</button>
-                <button type="button" class="btn btn-default hideMeetingContentModal" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default addMeetingCommentButton" meeting-id="@Html.DisplayFor(model => model.MeetingId)">Add comment</button>
+                    <button type="button" class="btn btn-default hideMeetingContentModal" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>

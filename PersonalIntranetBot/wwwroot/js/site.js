@@ -128,11 +128,15 @@ $(".hideEditImageURLModal").click(function () {
 $("#saveImageURLButton").click(function () {
     $.ajax({
         type: "POST",
-        url: "/Attendee/SaveImageURL",
+        url: "/Attendee/SaveProfileImageURL",
         data: "AttendeeId=" + $("#InputImageUrlAttendeeID").val() + "&ImageURL=" + $("#InputImageURL").val(),
         success: function (msg) {
-            // update information in attendee details dialog
-            $("#attendee-img-" + $("#InputImageUrlAttendeeID").val()).attr("src", $("#InputImageURL").val());
+            if ($("#InputImageURL").val() === "") {
+                $("#attendee-img-" + $("#InputImageUrlAttendeeID").val()).attr("src", "/images/blank-profile-picture.svg");
+            } else {
+                // update information in attendee details dialog
+                $("#attendee-img-" + $("#InputImageUrlAttendeeID").val()).attr("src", $("#InputImageURL").val());
+            }
             // update last updated hint
             $("#lastupdated-" + $("#InputImageUrlAttendeeID").val()).text(msg);
         },

@@ -30,17 +30,7 @@ namespace PersonalIntranetBot.Helpers
             _searchDelay = bingOptions.SearchDelay;
         }
 
-        public MicrosoftBingWebSearchOptions BingWebSearchOptions
-        {
-            get => default(MicrosoftBingWebSearchOptions);
-            set
-            {
-            }
-        }
-
-        /// <summary>
         /// Makes a request to the Bing Web Search API and returns data as a SearchResult.
-        /// </summary>
         public BingJSONResult DoBingWebSearch(string searchQuery)
         {
             Thread.Sleep(_searchDelay);   
@@ -68,6 +58,14 @@ namespace PersonalIntranetBot.Helpers
                     searchResult.RelevantHeaders[header] = response.Headers[header];
             }
             return searchResult;
+        }
+
+        public MicrosoftBingWebSearchOptions BingWebSearchOptions
+        {
+            get => default(MicrosoftBingWebSearchOptions);
+            set
+            {
+            }
         }
     }
 }

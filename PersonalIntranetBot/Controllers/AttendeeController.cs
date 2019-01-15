@@ -6,6 +6,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PersonalIntranetBot.Models;
+using PersonalIntranetBot.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -65,7 +66,7 @@ namespace PersonalIntranetBot.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveImageURL(Attendee incomingAttendee)
+        public async Task<IActionResult> SaveProfileImageURL(Attendee incomingAttendee)
         {
             Attendee affectedAttendee = new Attendee();
             if (ModelState.IsValid)
@@ -83,7 +84,13 @@ namespace PersonalIntranetBot.Controllers
                         affectedAttendee.LastUpdatedBy = "anonymous";
 
                     }
-                    affectedAttendee.ImageURL = incomingAttendee.ImageURL;
+                    if (String.IsNullOrEmpty(incomingAttendee.ImageURL))
+                    {
+                        affectedAttendee.ImageURL = PersonalIntranetBotService.EMPTY_IMG_URL;
+                    }
+                    else {
+                        affectedAttendee.ImageURL = incomingAttendee.ImageURL;
+                    }
                     _context.Update(affectedAttendee);
                     await _context.SaveChangesAsync();
 

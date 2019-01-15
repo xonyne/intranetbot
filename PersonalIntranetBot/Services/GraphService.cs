@@ -222,13 +222,6 @@ namespace PersonalIntranetBot.Services
             eventTask.Wait();
             return eventTask.Result.ToList();
         }
-
-        public List<Microsoft.Graph.DriveItem> GetGraphFiles(GraphServiceClient graphClient)
-        {
-            Task<IDriveSearchCollectionPage> driveItems = graphClient.Me.Drive.Search("cse").Request().GetAsync();
-            driveItems.Wait();
-            return driveItems.Result.ToList();
-        }
     }
 }
 

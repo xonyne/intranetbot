@@ -1,9 +1,25 @@
-﻿/* Meeting comments */
+﻿/* 
+*  Author: Kevin Suter
+*  Description: This CSS file contains all the stylesheet information for the application.
+*  
+*/
 
+/* Attendee details */
+.attendeeDetailsRightInfoTable {
+    padding-left: 30px;
+    vertical-align: top;
+}
+
+/* Meeting comments */
 .meetingComments {
     max-height: 300px;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
     padding: 15px;
+}
+
+.meetingCommentPanel {
+    word-break:break-all;
 }
 
 .panel > .panel-body {
@@ -19,12 +35,9 @@ margin: 0 !important;
 }
 
 /* Meeting table */
-
-
 .btn-default {
     white-space: normal !important
 }
-
 
 .eventsTable {
     width: 100%;
@@ -70,7 +83,6 @@ body {
     padding-bottom: 20px;
 }
 
-/* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
@@ -78,7 +90,6 @@ body {
 }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
-
 .attendeeImage {
     border: 1px solid black;
     border-radius: 5px;
@@ -111,10 +122,9 @@ textarea {
     background-size: auto;
 }
 
-    .navbar a, .navbar li {
+.navbar a, .navbar li {
         color: white !important;
-    }
-
+ }
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {

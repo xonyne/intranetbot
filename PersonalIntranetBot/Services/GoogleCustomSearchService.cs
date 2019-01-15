@@ -50,7 +50,7 @@ namespace PersonalIntranetBot.Services
             string emptyImageUrl = "";
             var count = 0;
             Console.WriteLine("---- Google image search starts ----");
-            // max. 100 results are returned for JSON API requests (see https://developers.google.com/custom-search/v1/cse/list, start parameter)
+            // max. 100 results are returned for JSON API requests (see https://developers.google.com/custom-search/v1/cse/list, 'start' parameter)
             Console.WriteLine("Searching for '" + searchString + "' (" + name + ", " + company + ")");
             while (count < 1)
             {
