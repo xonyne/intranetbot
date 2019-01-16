@@ -14,6 +14,7 @@ namespace PersonalIntranetBot.Models
         public string MeetingId { get; set; }
         public string Subject { get; internal set; }
         public string Description { get; set; }
+        public string NotificationRecipients { get; set; }
         public List<MeetingComment> Comments { get; set; }
     }
 }

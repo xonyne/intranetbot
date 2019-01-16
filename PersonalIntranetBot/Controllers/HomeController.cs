@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
 using PersonalIntranetBot.Helpers;
 using PersonalIntranetBot.Interfaces;
+using PersonalIntranetBot.Services;
 using System.Threading.Tasks;
 
 namespace PersonalIntranetBot.Controllers
@@ -72,7 +73,7 @@ namespace PersonalIntranetBot.Controllers
                 var graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
 
                 // Send the email.
-                await _graphService.SendGraphEmail(graphClient, _env, recipients, HttpContext, "Mein Kommentar", "Neues Meeting", Request.Path);
+                await _graphService.SendGraphEmail(graphClient, _env, recipients, HttpContext, "Test email sent from " + PersonalIntranetBotService.APPLICATON_NAME + ".", "Test", Request.Path);
                 
                 // Reset the current user's email address and the status to display when the page reloads.
                 TempData["Message"] = "Success! Your mail was sent.";

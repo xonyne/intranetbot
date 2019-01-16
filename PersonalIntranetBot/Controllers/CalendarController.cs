@@ -38,7 +38,7 @@ namespace PersonalIntranetBot.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             List<PersonalIntranetBotMeetingViewModel> items = new List<PersonalIntranetBotMeetingViewModel>();
 
@@ -46,7 +46,6 @@ namespace PersonalIntranetBot.Controllers
             {
                 var identifier = User.FindFirst(Startup.ObjectIdentifierType)?.Value;
                 _graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
-                IUserEventsCollectionPage events = await _graphClient.Me.Events.Request().GetAsync();
                 items = _personalIntranetBotService.GetOutlookCalendarEvents(_graphClient);
             }
             return View(items);

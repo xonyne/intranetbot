@@ -3,8 +3,12 @@
 *  Description: This class is used to handle all actions regarding the meeting content (e.g. meeting comments).
 *  
 */
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Graph;
+using PersonalIntranetBot.Helpers;
+using PersonalIntranetBot.Interfaces;
 using PersonalIntranetBot.Models;
 using System;
 using System.Linq;
@@ -15,10 +19,17 @@ namespace PersonalIntranetBot.Controllers
     public class MeetingContentController : Controller
     {
         private readonly DBModelContext _context;
-        
-        public MeetingContentController(DBModelContext context)
+        private readonly IHostingEnvironment _env;
+        private readonly IGraphSdkHelper _graphSdkHelper;
+        private GraphServiceClient _graphClient;
+        private readonly IGraphService _graphService;
+
+        public MeetingContentController(DBModelContext context, IGraphSdkHelper graphSdkHelper, IGraphService graphService, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
+            _env = hostingEnvironment;
+            _graphSdkHelper = graphSdkHelper;
+            _graphService = graphService;
         }
 
         [HttpPost]
@@ -43,6 +54,15 @@ namespace PersonalIntranetBot.Controllers
                     }
 
                     await _context.SaveChangesAsync();
+
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        var identifier = User.FindFirst(Startup.ObjectIdentifierType)?.Value;
+                        _graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
+                        // Remove author and external attendees from recipients (attendees with different domain)
+                        //incomingMeetingComment.NotificationRecipients;
+                        await _graphService.SendGraphEmail(_graphClient, _env, "", HttpContext, incomingMeetingComment.Comment, "New comment: ", User.Identity.Name);
+                    }
 
                 }
                 catch (DbUpdateConcurrencyException)

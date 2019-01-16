@@ -31,11 +31,11 @@
                         </div>
                     }
                 </div>
-                <div class="modal-footer">
-
-                    <button type="button" class="btn btn-default addMeetingCommentButton" meeting-id="@Html.DisplayFor(model => model.MeetingId)">Add comment</button>
-                    <button type="button" class="btn btn-default hideMeetingContentModal" data-dismiss="modal">Close</button>
-                </div>
+            <div class="modal-footer">
+                <input hidden class="notificationRecipients-@Html.DisplayFor(model => model.MeetingId)">@Html.DisplayFor(model => model.NotificationRecipients)>
+                <button type="button" class="btn btn-default addMeetingCommentButton" meeting-id="@Html.DisplayFor(model => model.MeetingId)">Add comment</button>
+                <button type="button" class="btn btn-default hideMeetingContentModal" data-dismiss="modal">Close</button>
+            </div>
             </div>
         </div>
     </div>

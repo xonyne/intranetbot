@@ -89,7 +89,7 @@ namespace PersonalIntranetBot.Services
         }
 
         // Send an email message from the current user.
-        public async Task SendGraphEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext, string comment, string meetingTitle, string name)
+        public async Task SendGraphEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext, string comment, string subject, string author)
         {
             if (recipients == null) return;
 
@@ -108,10 +108,10 @@ namespace PersonalIntranetBot.Services
             {
                 Body = new ItemBody
                 {
-                    Content = System.IO.File.ReadAllText(hostingEnvironment.WebRootPath + "/email_template.html").Replace("@comment", comment).Replace("@name", name).Replace("@url", hostingEnvironment.WebRootPath),
+                    Content = System.IO.File.ReadAllText(hostingEnvironment.WebRootPath + "/email_template.html").Replace("@comment", comment).Replace("@author", author).Replace("@url", hostingEnvironment.WebRootPath),
                     ContentType = BodyType.Html,
                 },
-                Subject = "New comment added for " + meetingTitle,
+                Subject = subject,
                 ToRecipients = recipientList,
             };
 

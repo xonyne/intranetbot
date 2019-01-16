@@ -6,6 +6,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PersonalIntranetBot.Models
 {
@@ -72,6 +73,8 @@ namespace PersonalIntranetBot.Models
         public string Comment { get; set; }
         public DateTime LastUpdated { get; set; }
         public string LastUpdatedBy { get; set; }
+        [NotMapped]
+        public string NotificationRecipients { set; get; }
     }
 
     public class SocialLink

@@ -11,6 +11,6 @@ namespace PersonalIntranetBot.Interfaces
         List<Event> GetGraphCalendarEvents(GraphServiceClient graphClient);
         Task<string> GetGraphUserJson(GraphServiceClient graphClient, string email, HttpContext httpContext);
         Task<string> GetGraphPictureBase64(GraphServiceClient graphClient, string email, HttpContext httpContext);
-        Task SendGraphEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext, string comment, string meetingTitle, string name);
+        Task SendGraphEmail(GraphServiceClient graphClient, IHostingEnvironment hostingEnvironment, string recipients, HttpContext httpContext, string comment, string subject, string name);
     }
 }

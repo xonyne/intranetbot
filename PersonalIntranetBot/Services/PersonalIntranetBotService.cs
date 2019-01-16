@@ -62,7 +62,8 @@ namespace PersonalIntranetBot.Services
                                 MeetingId = meetingIdWithNoSpecialChars,
                                 Subject = graphMeeting.Subject,
                                 Description = graphMeeting.Body.Content,
-                                Comments = LoadMeetingComments(meetingIdWithNoSpecialChars)
+                                Comments = LoadMeetingComments(meetingIdWithNoSpecialChars),
+                                NotificationRecipients = getNotificationRecipients(graphMeeting.Attendees)
                             }
                         });
                     }
@@ -72,6 +73,11 @@ namespace PersonalIntranetBot.Services
             meetingViewItems = meetingViewItems.OrderBy(e => e.Start).ToList();
 
             return meetingViewItems;
+        }
+
+        private string getNotificationRecipients(IEnumerable<Microsoft.Graph.Attendee> attendees)
+        {
+            return string.Join(";",attendees.ToArray().ToString());
         }
 
         private string RemoveMeetingIdSpecialChars(string id) {
@@ -129,7 +135,7 @@ namespace PersonalIntranetBot.Services
         }
 
 
-            // Try to get job title from Xing. If not possible, return 'Not found' string.
+        // Try to get job title from Xing. If not possible, return 'Not found' string.
         private string GetJobTitleForAttendee(List<SocialLink> socialLinks)
             {
             string xingURL = socialLinks.Find(x => x.Type == SocialLink.LinkType.XING).URL;
