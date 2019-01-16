@@ -23,6 +23,7 @@ namespace PersonalIntranetBot.Controllers
         private readonly IGraphSdkHelper _graphSdkHelper;
         private GraphServiceClient _graphClient;
         private readonly IGraphService _graphService;
+        private readonly string NOTIFICATION_EMAIL_ADDRESS = "kevinchristian.suter@students.bfh.ch";
 
         public MeetingContentController(DBModelContext context, IGraphSdkHelper graphSdkHelper, IGraphService graphService, IHostingEnvironment hostingEnvironment)
         {
@@ -61,7 +62,7 @@ namespace PersonalIntranetBot.Controllers
                         _graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
                         // Remove author and external attendees from recipients (attendees with different domain)
                         //incomingMeetingComment.NotificationRecipients;
-                        await _graphService.SendGraphEmail(_graphClient, _env, "", HttpContext, incomingMeetingComment.Comment, "New comment: ", User.Identity.Name);
+                        await _graphService.SendGraphEmail(_graphClient, _env, NOTIFICATION_EMAIL_ADDRESS, HttpContext, incomingMeetingComment.Comment, "New meeting comment added", User.Identity.Name);
                     }
 
                 }

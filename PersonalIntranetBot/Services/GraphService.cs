@@ -108,7 +108,7 @@ namespace PersonalIntranetBot.Services
             {
                 Body = new ItemBody
                 {
-                    Content = System.IO.File.ReadAllText(hostingEnvironment.WebRootPath + "/email_template.html").Replace("@comment", comment).Replace("@author", author).Replace("@url",hostingEnvironment.ContentRootPath),
+                    Content = System.IO.File.ReadAllText(hostingEnvironment.WebRootPath + "/comment_template.html").Replace("@comment", comment).Replace("@author", author).Replace("@url",hostingEnvironment.ContentRootPath),
                     ContentType = BodyType.Html,
                 },
                 Subject = subject,

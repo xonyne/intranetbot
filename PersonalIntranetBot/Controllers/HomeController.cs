@@ -73,7 +73,7 @@ namespace PersonalIntranetBot.Controllers
                 var graphClient = _graphSdkHelper.GetAuthenticatedClient(identifier);
 
                 // Send the email.
-                await _graphService.SendGraphEmail(graphClient, _env, recipients, HttpContext, "Test email sent from " + PersonalIntranetBotService.APPLICATON_NAME + ".", "Test", Request.Path);
+                await _graphService.SendGraphEmail(graphClient, _env, recipients, HttpContext, "Test email sent from " + PersonalIntranetBotService.APPLICATON_NAME + ".", "Test", User.Identity.Name);
                 
                 // Reset the current user's email address and the status to display when the page reloads.
                 TempData["Message"] = "Success! Your mail was sent.";

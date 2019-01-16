@@ -45,7 +45,7 @@ $("#saveMeetingCommentButton").click(function () {
     $.ajax({
         type: "POST",
         url: "/MeetingContent/SaveMeetingComment",
-        data: "MeetingId=" + $("#InputMeetingCommentMeetingId").val() + "&Comment=" + $("#InputMeetingComment").val() + "&Comment=" + $("#InputMeetingComment").val() ,
+        data: "MeetingId=" + $("#InputMeetingCommentMeetingId").val() + "&Comment=" + $("#InputMeetingComment").val(),
         success: function (result) {
             $("#meetingComments-" + $("#InputMeetingCommentMeetingId").val()).append(
                 '<div id=\"comment-' + result.meetingCommentId + '\" class=\"panel panel-default\"><div class=\"panel-body\">' + result.comment +

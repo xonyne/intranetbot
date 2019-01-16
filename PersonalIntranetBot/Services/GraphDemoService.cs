@@ -94,6 +94,7 @@ namespace PersonalIntranetBot.Services
             if (recipients == null) return;
 
             // Prepare the recipient list.
+            // Prepare the recipient list.
             var splitRecipientsString = recipients.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
             var recipientList = splitRecipientsString.Select(recipient => new Recipient
             {
@@ -108,7 +109,7 @@ namespace PersonalIntranetBot.Services
             {
                 Body = new ItemBody
                 {
-                    Content = System.IO.File.ReadAllText(hostingEnvironment.WebRootPath + "/email_template.html").Replace("@comment", comment).Replace("@author", author).Replace("@url", hostingEnvironment.WebRootPath),
+                    Content = System.IO.File.ReadAllText(hostingEnvironment.WebRootPath + "/comment_template.html").Replace("@comment", comment).Replace("@author", author).Replace("@url", hostingEnvironment.WebRootPath),
                     ContentType = BodyType.Html,
                 },
                 Subject = subject,
