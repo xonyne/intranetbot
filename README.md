@@ -1,5 +1,5 @@
 # Personal Intranet Bot
-.NET Core web application which delivers context information for your Office 365calendar events. 
+.NET Core web application which delivers context information for your Office 365 calendar events. 
 
 Needs Microsoft work or school account to run.
 
