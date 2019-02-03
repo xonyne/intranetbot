@@ -5,14 +5,29 @@
 */
 
 /* Attendee details */
-.attendeeDetailsRightInfoTable {
+.attendeeDetailsRightColumn {
     padding-left: 30px;
     vertical-align: top;
 }
 
+/* Meeting Content modal */
+.contentmodaldivmaincontent {
+    max-height: 230px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.contentmodaldiv {
+    padding: 15px;
+}
+
+.meetinContentModalRightColumn {
+    padding-left: 30px;
+    vertical-align: top;
+}
 /* Meeting comments */
 .meetingComments {
-    max-height: 300px;
+    max-height: 130px;
     overflow-x: hidden;
     overflow-y: scroll;
     padding: 15px;
@@ -61,7 +76,15 @@ margin: 0 !important;
 }
 
 .twentyfive {
-    width: 25%;
+    width: 25% !important;
+}
+
+.ten {
+    width: 10% !important;
+}
+
+.forty {
+    width: 40% !important;
 }
 
 .modal-title {

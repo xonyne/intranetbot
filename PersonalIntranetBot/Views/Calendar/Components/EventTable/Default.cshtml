@@ -13,10 +13,10 @@
         <col class="twentyfive" />
     </colgroup>
     <tr>
-        <th style="border: 1px solid black; padding: 5px;">Content</th>
-        <th style="border: 1px solid black; padding: 5px;">Directions</th>
-        <th style="border: 1px solid black; padding: 5px;">Time</th>
-        <th style="border: 1px solid black; padding: 5px;">People</th>
+        <th class="twentyfive" style="border: 1px solid black; padding: 5px;">Content</th>
+        <th class="twentyfive" style="border: 1px solid black; padding: 5px;">Directions</th>
+        <th class="ten" style="border: 1px solid black; padding: 5px;">Time</th>
+        <th class="forty" style="border: 1px solid black; padding: 5px;">People</th>
     </tr>
     @foreach (var item in Model)
     {
@@ -32,7 +32,7 @@
                 }
                 else
                 {
-                    <div class=""><span class="glyphicon glyphicon-map-marker" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.Location.LocationString)</div>
+                    <div><span class="glyphicon glyphicon-map-marker" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.Location.LocationString)</div>
                 }
             </td>
             <td style="border: 1px solid black;padding: 5px">
@@ -41,11 +41,10 @@
                     <span class="glyphicon glyphicon-time" style="vertical-align:middle;margin-top: -5px"></span> @Html.DisplayFor(modelItem => item.End)<br />
                 </div>
             </td>
-            <td style="border: 1px solid black;padding: 5px">
+            <td style="border: 1px solid black;padding: 5px;">
                 @for (int i = 0; i < item.Attendees.Count; i++)
                 {
-                    <p><button class="eventsTableElement showAttendeeDetailsButton btn btn-default" attendee-modal-id="attendee-@item.Attendees[i].AttendeeId"><span class="glyphicon glyphicon-user" style="vertical-align:middle;margin-top: -5px"></span>  @Html.DisplayFor(m => item.Attendees[i].DisplayName)</button></p>
-
+                    <img class="eventsTableElement showAttendeeDetailsButton" src="@item.Attendees[i].ImageURL" height="100" width="100" style="border-radius:50%" attendee-modal-id="attendee-@item.Attendees[i].AttendeeId"/>
                     Html.RenderPartial("AttendeeDetailsModal", item.Attendees[i]);
                 }
             </td>
