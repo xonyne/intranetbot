@@ -16,26 +16,60 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body contentmodaldivmaincontent" style="border-bottom:10px solid groove;">
                 <span>@Html.Raw(Model.Description)</span>
             </div>
-            <hr />
-            <div id="meetingComments-@Html.DisplayFor(model => model.MeetingId)" class="meetingComments">
-                    <h4>Comments</h4>
-                    @for (int i = 0; i < Model.Comments.Count; i++)
-                    {
-
-                        <div class="panel panel-default meetingCommentPanel" id="comment-@Html.DisplayFor(model => model.Comments[i].MeetingCommentId)">
-                            <div class="panel-body">@Html.DisplayFor(model => model.Comments[i].Comment) <span><i class="glyphicon glyphicon-remove deleteMeetingCommentIcon" style="vertical-align:middle;margin-top: -5px" meeting-comment-id="@Html.DisplayFor(model => model.Comments[i].MeetingCommentId)"></i></span></div>
-                            <small class="form-text text-muted">@Html.DisplayFor(model => model.Comments[i].LastUpdated) by  @Html.DisplayFor(model => model.Comments[i].LastUpdatedBy)</small>
-                        </div>
-                    }
-                </div>
-            <div class="modal-footer">
-                <input hidden class="notificationRecipients-@Html.DisplayFor(model => model.MeetingId)" value="@Html.DisplayFor(model => model.NotificationRecipients)" />
-                <button type="button" class="btn btn-default addMeetingCommentButton" meeting-id="@Html.DisplayFor(model => model.MeetingId)">Add comment</button>
-                <button type="button" class="btn btn-default hideMeetingContentModal" data-dismiss="modal">Close</button>
+            <hr style="color:forestgreen" />
+            <div class="contentmodaldiv">
+                <!-- Document links and similar meetings not implemented yet. Might be considered for future versions.        -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <h4>Document links</h4>
+                                <p><a href=""><span class="glyphicon glyphicon-folder-open" style="vertical-align:middle;margin-top: -5px"></span> External Training Application Form.pdf</a></p>
+                                <p><a href=""><span class="glyphicon glyphicon-folder-open" style="vertical-align:middle;margin-top: -5px"></span> Company Scrum Masters.xlsx</a> <span class="badge badge-info" style="background-color:green">Suggested</span></p>
+                                <p><a href=""><span class="glyphicon glyphicon-folder-open" style="vertical-align:middle;margin-top: -5px"></span> External Training Annual Budget.xlsx</a></p>
+                                <button type="button" class="btn btn-default" meeting-id="@Html.DisplayFor(model => model.MeetingId)">Add document link</button>
+                            </td>
+                            
+                            <td class="meetinContentModalRightColumn">
+                                <h4>Similar meetings</h4>
+                                <p><a href=""><span class="glyphicon glyphicon-list-alt" style="vertical-align:middle;margin-top: -5px"></span> Training - SAFe course</a> <span class="badge badge-info" style="background-color:darkviolet">Suggested</span></p>
+                                <p><a href=""><span class="glyphicon glyphicon-list-alt" style="vertical-align:middle;margin-top: -5px"></span> Training - Less course</a> <span class="badge badge-info" style="background-color:darkviolet">Suggested</span></p>
+                                <p><a href=""><span class="glyphicon glyphicon-list-alt" style="vertical-align:middle;margin-top: -5px"></span> Internal Workshop - Kanban</a></p>
+                                <button type="button" class="btn btn-default" meeting-id="@Html.DisplayFor(model => model.MeetingId)">Add similar meeting</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+                
+            <div id="meetingComments-@Html.DisplayFor(model => model.MeetingId)" class="meetingComments">
+                <h4>Comments</h4>
+                @for (int i = 0; i < Model.Comments.Count; i++)
+                {
+
+                    <div class="panel panel-default meetingCommentPanel" id="comment-@Html.DisplayFor(model => model.Comments[i].MeetingCommentId)">
+                        <div class="panel-body">@Html.DisplayFor(model => model.Comments[i].Comment) <span><i class="glyphicon glyphicon-remove deleteMeetingCommentIcon" style="vertical-align:middle;margin-top: -5px" meeting-comment-id="@Html.DisplayFor(model => model.Comments[i].MeetingCommentId)"></i></span></div>
+                        <small class="form-text text-muted">@Html.DisplayFor(model => model.Comments[i].LastUpdated) by  @Html.DisplayFor(model => model.Comments[i].LastUpdatedBy)</small>
+                    </div>
+                }
+            </div>
+            <div class="contentmodaldiv">
+                <button type="button" class="btn btn-default addMeetingCommentButton" meeting-id="@Html.DisplayFor(model => model.MeetingId)">Add comment</button>
+            </div>
+
+                <div class="modal-footer">
+                    <input hidden class="notificationRecipients-@Html.DisplayFor(model => model.MeetingId)" value="@Html.DisplayFor(model => model.NotificationRecipients)" />
+                    <button type="button" class="btn btn-default hideMeetingContentModal" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
